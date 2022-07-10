@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Examples</title>
+
+    <style>
+        button {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Web Wallet</h2>
+    <div>
+        <button onclick="webWallet.login()">Login</button>
+        <button onclick="webWallet.showAddress()">Show address</button>
+        <button onclick="webWallet.signTransactions()">Sign transactions</button>
+        <button onclick="webWallet.showSignedTransactions()">Show signed transactions</button>
+        <button onclick="webWallet.logout()">Logout</button>
+    </div>
+
+    <h2>Extension (Maiar DeFi Wallet)</h2>
+    <div>
+        <button onclick="extension.login()">Login</button>
+        <button onclick="extension.signTransactions()">Sign transactions</button>
+        <button onclick="extension.signMessages()">Sign messages</button>
+    </div>
+
+    <h2>Wallet Connect</h2>
+    <div>
+        <button onclick="walletConnect.login()">Login</button>
+        <button onclick="walletConnect.signTransaction()">Sign transaction</button>
+        <button onclick="walletConnect.signTransactions()">Sign transactions</button>
+    </div>
+
+    <h2>Hardware Wallet</h2>
+    <div>
+        <button onclick="hw.init()">Initialize</button>
+    </div>
+    <div>
+        <input value="0" type="number" min="0" name="addressIndexForLogin" />
+        <button onclick="hw.login()">Login</button>
+    </div>
+    <div>
+        <input value="0" type="number" min="0" name="addressIndexForSetAddress" />
+        <button onclick="hw.setAddressIndex()">Set address index</button>
+    </div>
+    <div>
+        <button onclick="hw.signTransaction()">Sign transaction</button>
+    </div>
+    <div>
+        <button onclick="hw.signTransactions()">Sign transactions</button>
+    </div>
+
+    <script src="./out/app.js"></script>
+
+    <script>
+        const webWallet = new app.WebWallet();
+        // const extension = new app.Extension();
+        // const walletConnect = new app.WalletConnect();
+        // const hw = new app.HW();
+    </script>
+</body>
+
+</html>

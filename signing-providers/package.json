@@ -1,0 +1,24 @@
+{
+  "name": "examples",
+  "version": "0.1.0",
+  "description": "Examples",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "browserify src/index.js -o out/app.js --standalone app -p esmify"
+  },
+  "author": "ElrondNetwork",
+  "dependencies": {
+    "@elrondnetwork/erdjs": "10.2.7",
+    "@elrondnetwork/erdjs-extension-provider": "2.0.2",
+    "@elrondnetwork/erdjs-hw-provider": "2.0.4",
+    "@elrondnetwork/erdjs-wallet-connect-provider": "2.0.3",
+    "@elrondnetwork/erdjs-web-wallet-provider": "2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "18.0.3",
+    "@walletconnect/qrcode-modal": "1.7.8",
+    "browserify": "17.0.0",
+    "esmify": "2.1.1",
+    "typescript": "4.7.4"
+  }
+}
