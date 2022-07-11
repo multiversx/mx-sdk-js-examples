@@ -47,9 +47,9 @@ export class WebWallet {
         const plainSignedTransactions = this.provider.getTransactionsFromWalletUrl();
         alert(JSON.stringify(plainSignedTransactions, null, 4));
 
-        // Now let's convert them back to erdjs Transactions.
-        // Note that the Web Wallet provider returns the data field as a string. 
-        // However, erdjs' Transaction.fromPlainObject expects it to be base64 encoded.
+        // Now let's convert them back to erdjs' Transaction objects.
+        // Note that the Web Wallet provider returns the data field as a plain string. 
+        // However, erdjs' Transaction.fromPlainObject expects it to be base64-encoded.
         // Therefore, we need to apply a workaround (an additional conversion).
         for (const plainTransaction of plainSignedTransactions) {
             const plainTransactionClone = structuredClone(plainTransaction);
