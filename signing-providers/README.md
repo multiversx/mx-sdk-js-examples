@@ -26,5 +26,4 @@ Start the server (with a HTTPS binding):
 http-server -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=8080
 ```
 
-Afterwards, navigate to:
- - `https://localhost:8080/index.html`
+Afterwards, navigate to https://localhost:8080/index.html.
