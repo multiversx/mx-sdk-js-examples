@@ -20,13 +20,11 @@ When you are ready, build the examples:
 npm run build
 ```
 
-Start the server with both HTTP and HTTPS bindings:
+Start the server (with a HTTPS binding):
 
 ```
-http-server --port=8080
-http-server -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=8081
+http-server -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=8080
 ```
 
 Afterwards, navigate to:
- - `http://localhost:8080/index.html` or
- - `https://localhost:8081/index.html`
+ - `https://localhost:8080/index.html`

@@ -1,7 +1,7 @@
 import qs from "qs";
 import { WalletProvider } from "@elrondnetwork/erdjs-web-wallet-provider";
 import { WALLET_PROVIDER_TESTNET } from "@elrondnetwork/erdjs-web-wallet-provider";
-import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs"
+import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
 export class WebWallet {
     constructor() {

@@ -1,5 +1,5 @@
 import { ExtensionProvider } from "@elrondnetwork/erdjs-extension-provider";
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs"
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
 export class Extension {
     constructor() {
