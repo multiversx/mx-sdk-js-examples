@@ -47,7 +47,7 @@ export class Extension {
         alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
     }
 
-    async signMessages() {
+    async signMessage() {
         await this.provider.init();
 
         const message = new SignableMessage({
@@ -55,9 +55,6 @@ export class Extension {
         });
 
         await this.provider.signMessage(message);
-        console.log("Message, upon signing:");
-        console.log(message);
-
         alert(JSON.stringify(message.toJSON(), null, 4));
     }
 }

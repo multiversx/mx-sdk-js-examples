@@ -1,5 +1,5 @@
 import { HWProvider } from "@elrondnetwork/erdjs-hw-provider";
-import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
 export class HW {
     constructor() {
@@ -81,5 +81,16 @@ export class HW {
         await this.provider.signTransactions(transactions);
     
         alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
+    }
+
+    async signMessage() {
+        await this.provider.init();
+
+        const message = new SignableMessage({
+            message: Buffer.from("hello")
+        });
+
+        await this.provider.signMessage(message);
+        alert(JSON.stringify(message, null, 4));
     }
 }

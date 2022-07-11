@@ -1,7 +1,7 @@
 import qs from "qs";
 import { WalletProvider } from "@elrondnetwork/erdjs-web-wallet-provider";
 import { WALLET_PROVIDER_TESTNET } from "@elrondnetwork/erdjs-web-wallet-provider";
-import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
 export class WebWallet {
     constructor() {
@@ -10,6 +10,11 @@ export class WebWallet {
 
     async login() {
         await this.provider.login();
+    }
+
+    async logout() {
+        const callbackUrl = window.location.href.split("?")[0];
+        await this.provider.logout({ callbackUrl: callbackUrl, redirectDelayMilliseconds: 10 });
     }
 
     async showAddress() {
@@ -39,7 +44,7 @@ export class WebWallet {
             data: new TransactionPayload("world"),
             chainID: "T"
         });
-        
+
         await this.provider.signTransactions([firstTransaction, secondTransaction]);
     }
 
@@ -57,12 +62,11 @@ export class WebWallet {
             const transaction = Transaction.fromPlainObject(plainTransactionClone);
 
             console.log(transaction.toSendable());
-        } 
+        }
     }
 
-    async logout() {
-        const callbackUrl = window.location.href.split("?")[0];
-        await this.provider.logout({ callbackUrl: callbackUrl, redirectDelayMilliseconds: 10 });
+    async signMessage() {
+        console.error("Not yet supported by the provider.");
     }
 }
 

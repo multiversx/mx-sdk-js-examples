@@ -80,4 +80,8 @@ export class WalletConnect {
 
         alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
     }
+
+    async signMessage() {
+        console.error("Not yet supported by the provider.");
+    }
 }

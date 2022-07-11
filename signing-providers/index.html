@@ -4,56 +4,107 @@
     <meta charset="utf-8">
     <title>Examples</title>
 
-    <style>
-        button {
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <h2>Web Wallet</h2>
-    <div>
-        <button onclick="webWallet.login()">Login</button>
-        <button onclick="webWallet.showAddress()">Show address</button>
-        <button onclick="webWallet.signTransactions()">Sign transactions</button>
-        <button onclick="webWallet.showSignedTransactions()">Show signed transactions</button>
-        <button onclick="webWallet.logout()">Logout</button>
-    </div>
+    <div class="container mt-4">
+        <h1>Examples of using erdjs' signing providers</h1>
 
-    <h2>Extension (Maiar DeFi Wallet)</h2>
-    <div>
-        <button onclick="extension.login()">Login</button>
-        <button onclick="extension.signTransactions()">Sign transactions</button>
-        <button onclick="extension.signMessages()">Sign messages</button>
-    </div>
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Web Wallet</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="webWallet.login()">Login</button>
+                    <button class="btn btn-info" onclick="webWallet.showAddress()">Show address</button>
+                    <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">Show signed
+                        transactions</button>
+                    <button class="btn btn-info" disabled="disabled" onclick="webWallet.signMessage()">Sign
+                        message</button>
+                    <button class="btn btn-info" onclick="webWallet.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
 
-    <h2>Wallet Connect</h2>
-    <div>
-        <button onclick="walletConnect.login()">Login</button>
-        <button onclick="walletConnect.signTransaction()">Sign transaction</button>
-        <button onclick="walletConnect.signTransactions()">Sign transactions</button>
-        <button onclick="walletConnect.logout()">Logout</button>
-    </div>
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Extension (Maiar DeFi Wallet)</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="extension.login()">Login</button>
+                    <button class="btn btn-info" onclick="extension.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="extension.signMessage()">Sign message</button>
+                </div>
+            </div>
+        </div>
 
-    <h2>Hardware Wallet</h2>
-    <div>
-        <button onclick="hw.init()">Initialize</button>
-    </div>
-    <div>
-        <input value="0" type="number" min="0" name="addressIndexForLogin" />
-        <button onclick="hw.login()">Login</button>
-    </div>
-    <div>
-        <input value="0" type="number" min="0" name="addressIndexForSetAddress" />
-        <button onclick="hw.setAddressIndex()">Set address index</button>
-    </div>
-    <div>
-        <button onclick="hw.signTransaction()">Sign transaction</button>
-    </div>
-    <div>
-        <button onclick="hw.signTransactions()">Sign transactions</button>
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Wallet Connect</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="walletConnect.login()">Login</button>
+                    <button class="btn btn-info" onclick="walletConnect.signTransaction()">Sign transaction</button>
+                    <button class="btn btn-info" onclick="walletConnect.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" disabled="disabled" onclick="walletConnect.signMessage()">Sign
+                        message</button>
+                    <button class="btn btn-info" onclick="walletConnect.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Hardware Wallet</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <div>
+                        <button class="btn btn-info" onclick="hw.displayAddresses()">Display addresses</button>
+                    </div>
+                    <div class="form-group row mt-2">
+                        <div class="col-sm-2">
+                            <input class="form-control" value="0" type="number" min="0" id="addressIndexForLogin"
+                                title="Address index" />
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-info btn-block" onclick="hw.login()">Login with address
+                                index</button>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-2">
+                        <div class="col-sm-2">
+                            <input class="form-control" value="0" type="number" min="0" id="addressIndexForSetAddress"
+                                title="Address index" />
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-info btn-block" onclick="hw.setAddressIndex()">Set address
+                                index</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button class="btn btn-info" onclick="hw.signTransaction()">Sign transaction</button>
+                        <button class="btn btn-info" onclick="hw.signTransactions()">Sign transactions</button>
+                        <button class="btn btn-info" onclick="hw.signMessage()">Sign
+                            message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="./out/app.js"></script>
@@ -62,7 +113,7 @@
         const webWallet = new app.WebWallet();
         const extension = new app.Extension();
         const walletConnect = new app.WalletConnect();
-        // const hw = new app.HW();
+        const hw = new app.HW();
     </script>
 </body>
 
