@@ -61,7 +61,8 @@ export class WebWallet {
     }
 
     async logout() {
-        await this.provider.logout({ callbackUrl: window.location.href, redirectDelayMilliseconds: 10 });
+        const callbackUrl = window.location.href.split("?")[0];
+        await this.provider.logout({ callbackUrl: callbackUrl, redirectDelayMilliseconds: 10 });
     }
 }
 
