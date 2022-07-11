@@ -34,6 +34,7 @@
         <button onclick="walletConnect.login()">Login</button>
         <button onclick="walletConnect.signTransaction()">Sign transaction</button>
         <button onclick="walletConnect.signTransactions()">Sign transactions</button>
+        <button onclick="walletConnect.logout()">Logout</button>
     </div>
 
     <h2>Hardware Wallet</h2>
@@ -60,7 +61,7 @@
     <script>
         const webWallet = new app.WebWallet();
         const extension = new app.Extension();
-        // const walletConnect = new app.WalletConnect();
+        const walletConnect = new app.WalletConnect();
         // const hw = new app.HW();
     </script>
 </body>
