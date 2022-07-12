@@ -8,8 +8,8 @@ export function acquireThirdPartyAuthToken() {
 }
 
 // In a real-life implementation, this code should be located on the server-side.
-export function verifySignature(address, authToken, signature) {
-    console.log("verifySignature()");
+export function verifyAuthTokenSignature(address, authToken, signature) {
+    console.log("verifyAuthTokenSignature()");
     console.log("address:", address);
     console.log("authToken:", authToken);
     console.log("signature:", signature);

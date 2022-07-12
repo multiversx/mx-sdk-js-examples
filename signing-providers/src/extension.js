@@ -1,6 +1,6 @@
 import { ExtensionProvider } from "@elrondnetwork/erdjs-extension-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
-import { acquireThirdPartyAuthToken, verifySignature } from "./backendFacade";
+import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class Extension {
     constructor() {
@@ -24,7 +24,7 @@ export class Extension {
         const signature = this.provider.account.signature;
         alert(`Address: ${address};\nsignature of token = ${signature}`);
 
-        alert(verifySignature(address, authToken, signature));
+        alert(verifyAuthTokenSignature(address, authToken, signature));
     }
 
     async logout() {

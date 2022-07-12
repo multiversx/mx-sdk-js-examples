@@ -2,7 +2,7 @@ import qs from "qs";
 import { WalletProvider } from "@elrondnetwork/erdjs-web-wallet-provider";
 import { WALLET_PROVIDER_TESTNET } from "@elrondnetwork/erdjs-web-wallet-provider";
 import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
-import { acquireThirdPartyAuthToken, verifySignature } from "./backendFacade";
+import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class WebWallet {
     constructor() {
@@ -39,7 +39,7 @@ export class WebWallet {
         const authToken = sessionStorage.getItem("web-wallet-example:authToken");
         const signature = getUrlParams().signature;
         
-        alert(verifySignature(address, authToken, signature));
+        alert(verifyAuthTokenSignature(address, authToken, signature));
     }
 
     async signTransactions() {
