@@ -13,6 +13,18 @@ export class Extension {
         alert(`Address: ${address}`);
     }
 
+    async loginWithToken() {
+        const authToken = acquireThirdPartyAuthToken();
+        await this.provider.login({ token: authToken });
+
+        alert(`Address: ${this.provider.account.address};\nsignature of token = ${this.provider.account.signature}`);
+    }
+
+    async logout() {
+        await this.provider.init();
+        await this.provider.logout();
+    }
+
     async signTransactions() {
         await this.provider.init();
 
@@ -57,4 +69,9 @@ export class Extension {
         await this.provider.signMessage(message);
         alert(JSON.stringify(message.toJSON(), null, 4));
     }
+}
+
+function acquireThirdPartyAuthToken() {
+    // Such a token would be returned by a third party (e.g. a backend application related to the dApp).
+    return "aaaabbbbaaaabbbb";
 }
