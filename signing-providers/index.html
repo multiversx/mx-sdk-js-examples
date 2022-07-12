@@ -20,13 +20,19 @@
             <div class="card-body">
                 <div>
                     <button class="btn btn-info" onclick="webWallet.login()">Login</button>
-                    <button class="btn btn-info" onclick="webWallet.showAddress()">Show address</button>
+                    <button class="btn btn-info" onclick="webWallet.loginWithToken()">Login with token</button>
                     <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">Show signed
-                        transactions</button>
                     <button class="btn btn-info" disabled="disabled" onclick="webWallet.signMessage()">Sign
                         message</button>
                     <button class="btn btn-info" onclick="webWallet.logout()">Logout</button>
+                </div>
+                <div class="mt-4">
+                    <h5>Extract data from URL (query string)</h5>
+
+                    <button class="btn btn-info" onclick="webWallet.showAddress()">Show address</button>
+                    <button class="btn btn-info" onclick="webWallet.showTokenSignature()">Show token signature</button>
+                    <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">Show signed
+                        transactions</button>
                 </div>
             </div>
         </div>

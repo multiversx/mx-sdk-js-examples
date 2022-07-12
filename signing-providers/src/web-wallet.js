@@ -9,21 +9,27 @@ export class WebWallet {
     }
 
     async login() {
-        await this.provider.login();
+        const callbackUrl = getCurrentLocation();
+        await this.provider.login({ callbackUrl: callbackUrl });
+    }
+
+    async loginWithToken() {
+        const authToken = acquireThirdPartyAuthToken();
+        const callbackUrl = getCurrentLocation();
+        await this.provider.login({ callbackUrl: callbackUrl, token: authToken });
     }
 
     async logout() {
-        const callbackUrl = window.location.href.split("?")[0];
+        const callbackUrl = getCurrentLocation();
         await this.provider.logout({ callbackUrl: callbackUrl, redirectDelayMilliseconds: 10 });
     }
 
     async showAddress() {
-        alert(this.getAddress() || "Try to login first.");
+        alert(getUrlParams().address || "Try to login first.");
     }
 
-    getAddress() {
-        let params = qs.parse(getQueryString());
-        return params.address;
+    async showTokenSignature() {
+        alert(getUrlParams().signature || "Try to login (with token) first.");
     }
 
     async signTransactions() {
@@ -70,6 +76,17 @@ export class WebWallet {
     }
 }
 
-function getQueryString() {
-    return window.location.search.slice(1);
+function getUrlParams() {
+    const queryString = window.location.search.slice(1);
+    const params = qs.parse(queryString);
+    return params;
+}
+
+function getCurrentLocation() {
+    return window.location.href.split("?")[0];
+}
+
+function acquireThirdPartyAuthToken() {
+    // Such a token would be returned by a third party (e.g. a backend application related to the dApp).
+    return "aaaabbbbaaaabbbb";
 }
