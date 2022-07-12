@@ -10,11 +10,23 @@ export class HW {
         await this.provider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
-        console.log("Login with addressIndex", addressIndex);
+        console.log("AddressIndex", addressIndex);
 
         await this.provider.login({ addressIndex: addressIndex });
 
         alert(`Logged in. Address: ${await this.provider.getAddress()}`);
+    }
+
+    async loginWithToken() {
+        await this.provider.init();
+
+        const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
+        console.log("AddressIndex", addressIndex);
+
+        const authToken = acquireThirdPartyAuthToken();
+        const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: Buffer.from(authToken) });
+
+        alert(`Logged in.\nAddress: ${address}\nSignature: ${signature.hex()}`);
     }
 
     async displayAddresses() {
@@ -31,7 +43,7 @@ export class HW {
         console.log("Set addressIndex", addressIndex);
 
         await this.provider.setAddressIndex(addressIndex);
-    
+
         alert(`Address has been set: ${await this.provider.getAddress()}.`);
     }
 
@@ -48,10 +60,10 @@ export class HW {
         });
 
         await this.provider.signTransaction(transaction);
-    
+
         alert(JSON.stringify(transaction.toSendable(), null, 4));
     }
-    
+
     async signTransactions() {
         await this.provider.init();
 
@@ -79,7 +91,7 @@ export class HW {
 
         const transactions = [firstTransaction, secondTransaction];
         await this.provider.signTransactions(transactions);
-    
+
         alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
     }
 
@@ -93,4 +105,9 @@ export class HW {
         await this.provider.signMessage(message);
         alert(JSON.stringify(message, null, 4));
     }
+}
+
+function acquireThirdPartyAuthToken() {
+    // Such a token would be returned by a third party (e.g. a backend application related to the dApp).
+    return "aaaabbbbaaaabbbb";
 }
