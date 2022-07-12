@@ -1,5 +1,6 @@
 import { ExtensionProvider } from "@elrondnetwork/erdjs-extension-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { acquireThirdPartyAuthToken, verifySignature } from "./backendFacade";
 
 export class Extension {
     constructor() {
@@ -14,10 +15,16 @@ export class Extension {
     }
 
     async loginWithToken() {
+        await this.provider.init();
+        
         const authToken = acquireThirdPartyAuthToken();
         await this.provider.login({ token: authToken });
 
-        alert(`Address: ${this.provider.account.address};\nsignature of token = ${this.provider.account.signature}`);
+        const address = this.provider.account.address;
+        const signature = this.provider.account.signature;
+        alert(`Address: ${address};\nsignature of token = ${signature}`);
+
+        alert(verifySignature(address, authToken, signature));
     }
 
     async logout() {
@@ -71,7 +78,3 @@ export class Extension {
     }
 }
 
-function acquireThirdPartyAuthToken() {
-    // Such a token would be returned by a third party (e.g. a backend application related to the dApp).
-    return "aaaabbbbaaaabbbb";
-}

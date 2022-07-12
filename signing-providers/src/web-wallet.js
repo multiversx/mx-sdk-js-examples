@@ -1,7 +1,8 @@
 import qs from "qs";
 import { WalletProvider } from "@elrondnetwork/erdjs-web-wallet-provider";
 import { WALLET_PROVIDER_TESTNET } from "@elrondnetwork/erdjs-web-wallet-provider";
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { acquireThirdPartyAuthToken, verifySignature } from "./backendFacade";
 
 export class WebWallet {
     constructor() {
@@ -15,6 +16,7 @@ export class WebWallet {
 
     async loginWithToken() {
         const authToken = acquireThirdPartyAuthToken();
+        sessionStorage.setItem("web-wallet-example:authToken", authToken);
         const callbackUrl = getCurrentLocation();
         await this.provider.login({ callbackUrl: callbackUrl, token: authToken });
     }
@@ -30,6 +32,14 @@ export class WebWallet {
 
     async showTokenSignature() {
         alert(getUrlParams().signature || "Try to login (with token) first.");
+    }
+
+    validateTokenSignature() {
+        const address = getUrlParams().address;
+        const authToken = sessionStorage.getItem("web-wallet-example:authToken");
+        const signature = getUrlParams().signature;
+        
+        alert(verifySignature(address, authToken, signature));
     }
 
     async signTransactions() {
@@ -84,9 +94,4 @@ function getUrlParams() {
 
 function getCurrentLocation() {
     return window.location.href.split("?")[0];
-}
-
-function acquireThirdPartyAuthToken() {
-    // Such a token would be returned by a third party (e.g. a backend application related to the dApp).
-    return "aaaabbbbaaaabbbb";
 }

@@ -1,5 +1,6 @@
 import { HWProvider } from "@elrondnetwork/erdjs-hw-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { acquireThirdPartyAuthToken } from "./backendFacade";
 
 export class HW {
     constructor() {
@@ -105,9 +106,4 @@ export class HW {
         await this.provider.signMessage(message);
         alert(JSON.stringify(message, null, 4));
     }
-}
-
-function acquireThirdPartyAuthToken() {
-    // Such a token would be returned by a third party (e.g. a backend application related to the dApp).
-    return "aaaabbbbaaaabbbb";
 }
