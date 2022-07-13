@@ -1,4 +1,4 @@
-import QRCodeModal from "@walletconnect/qrcode-modal";
+import QRCode from "qrcode";
 import { WalletConnectProvider } from "@elrondnetwork/erdjs-wallet-connect-provider";
 import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
@@ -14,7 +14,7 @@ export class WalletConnect {
 
         return {
             onClientLogin: async function () {
-                QRCodeModal.close();
+                closeModal();
                 const address = await self.provider.getAddress();
                 alert(`onClientLogin(), address: ${address}`);
             },
@@ -27,7 +27,7 @@ export class WalletConnect {
     async login() {
         await this.provider.init();
         const connectorUri = await this.provider.login();
-        QRCodeModal.open(connectorUri);
+        await openModal(connectorUri);
     }
 
     async logout() {
@@ -84,4 +84,15 @@ export class WalletConnect {
     async signMessage() {
         console.error("Not yet supported by the provider.");
     }
+}
+
+async function openModal(connectorUri) {
+    const svg = await QRCode.toString(connectorUri, { type: "svg" });
+
+    $("#WalletConnectQRContainer").html(svg);
+    $("#MyWalletConnectModal").modal("show");
+}
+
+function closeModal() {
+    $("#MyWalletConnectModal").modal("hide");
 }
