@@ -102,7 +102,7 @@ export class HW {
         await this.provider.init();
 
         const message = new SignableMessage({
-            message: Buffer.from("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6thexample-auth-token{}")
+            message: Buffer.from("hello")
         });
 
         await this.provider.signMessage(message);
