@@ -89,7 +89,7 @@ export class WalletConnect {
 async function openModal(connectorUri) {
     const svg = await QRCode.toString(connectorUri, { type: "svg" });
 
-    $("#WalletConnectQRContainer").html(svg);
+    $("#MyWalletConnectQRContainer").html(svg);
     $("#MyWalletConnectModal").modal("show");
 }
 
