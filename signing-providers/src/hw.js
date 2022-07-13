@@ -1,6 +1,6 @@
 import { HWProvider } from "@elrondnetwork/erdjs-hw-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
-import { acquireThirdPartyAuthToken } from "./backendFacade";
+import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class HW {
     constructor() {
@@ -25,9 +25,11 @@ export class HW {
         console.log("AddressIndex", addressIndex);
 
         const authToken = acquireThirdPartyAuthToken();
-        const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: Buffer.from(authToken) });
+        const payloadToSign = Buffer.from(`${authToken}{}`);
+        const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
 
         alert(`Logged in.\nAddress: ${address}\nSignature: ${signature.hex()}`);
+        alert(verifyAuthTokenSignature(address, authToken, signature.hex()));
     }
 
     async displayAddresses() {
@@ -100,7 +102,7 @@ export class HW {
         await this.provider.init();
 
         const message = new SignableMessage({
-            message: Buffer.from("hello")
+            message: Buffer.from("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6thexample-auth-token{}")
         });
 
         await this.provider.signMessage(message);
