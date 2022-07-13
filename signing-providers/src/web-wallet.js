@@ -16,7 +16,9 @@ export class WebWallet {
 
     async loginWithToken() {
         const authToken = acquireThirdPartyAuthToken();
-        sessionStorage.setItem("web-wallet-example:authToken", authToken);
+        // This is just an example of how to store the "authToken" in-between page changes & redirects (in "sessionStorage"). 
+        // In real-life, use the approach that best suits your application.
+        await sessionStorage.setItem("web-wallet-example:authToken", authToken);
         const callbackUrl = getCurrentLocation();
         await this.provider.login({ callbackUrl: callbackUrl, token: authToken });
     }
@@ -34,9 +36,9 @@ export class WebWallet {
         alert(getUrlParams().signature || "Try to login (with token) first.");
     }
 
-    validateTokenSignature() {
+    async validateTokenSignature() {
         const address = getUrlParams().address;
-        const authToken = sessionStorage.getItem("web-wallet-example:authToken");
+        const authToken = await sessionStorage.getItem("web-wallet-example:authToken");
         const signature = getUrlParams().signature;
         
         alert(verifyAuthTokenSignature(address, authToken, signature));
