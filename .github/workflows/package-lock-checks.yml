@@ -1,0 +1,28 @@
+name: Check package-lock.json
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  compare-package-lock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js LTS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.14.2'
+
+      - name: Check package-lock.json for "signing-providers"
+        run: |
+          cd signing-providers
+          cp package-lock.json package-lock-copy.json
+          rm -f package-lock.json
+          npm install
+          cmp package-lock.json package-lock-copy.json
+
+      # TODO: replicate the step above for other folders, as necessary
