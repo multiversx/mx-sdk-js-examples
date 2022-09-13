@@ -1,5 +1,5 @@
 const { Mnemonic, UserSigner } = require("@elrondnetwork/erdjs-walletcore");
-const { Address, GasEstimator, Transaction, TokenPayment, TransactionPayload } = require("@elrondnetwork/erdjs");
+const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@elrondnetwork/erdjs");
 const axios = require("axios");
 
 // https://github.com/ElrondNetwork/elrond-sdk-testwallets/blob/main/users/mnemonic.txt
@@ -71,3 +71,24 @@ async function broadcastTransaction(transaction) {
 
     console.log(response.data);
 }
+
+module.exports.exampleSignMessage = async function () {
+    const mnemonic = Mnemonic.fromString(DummyMnemonic);
+    const userSecretKey = mnemonic.deriveKey(0);
+    const userPublicKey = userSecretKey.generatePublicKey();
+    const address = userPublicKey.toAddress().bech32();
+    const signer = new UserSigner(userSecretKey);
+
+    const dataExample = `${address}hello{}`;
+    const message = new SignableMessage({
+        message: Buffer.from(dataExample)
+    });
+
+    await signer.sign(message);
+    const signature = message.getSignature().hex();
+    console.log("Message signature", signature);
+
+    // In order to validate a message signature, follow:
+    // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-signing-providers/#verifying-the-signature-of-a-login-token
+}
+

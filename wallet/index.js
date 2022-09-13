@@ -1,4 +1,7 @@
-const { exampleDeriveAccountsFromMnemonic, exampleSignAndBroadcastTransaction } = require("./basic")
+const { exampleDeriveAccountsFromMnemonic, exampleSignAndBroadcastTransaction, exampleSignMessage } = require("./basic");
 
-exampleDeriveAccountsFromMnemonic();
-exampleSignAndBroadcastTransaction();
+(async () => {
+    exampleDeriveAccountsFromMnemonic();
+    await exampleSignAndBroadcastTransaction();
+    await exampleSignMessage();
+})();
