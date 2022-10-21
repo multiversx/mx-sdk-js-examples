@@ -1,0 +1,13 @@
+{
+  "name": "examples",
+  "version": "0.0.0",
+  "description": "Examples",
+  "scripts": {},
+  "author": "ElrondNetwork",
+  "dependencies": {
+    "axios": "0.24.0",
+    "@elrondnetwork/erdjs-walletcore": "2.1.0",
+    "@elrondnetwork/erdjs": "11.0.0"
+  },
+  "devDependencies": {}
+}
