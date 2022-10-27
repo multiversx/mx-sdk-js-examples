@@ -1,4 +1,4 @@
-const { Mnemonic, UserSigner } = require("@elrondnetwork/erdjs-walletcore");
+const { Mnemonic, UserSigner, UserVerifier } = require("@elrondnetwork/erdjs-walletcore");
 const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@elrondnetwork/erdjs");
 const axios = require("axios");
 
@@ -92,3 +92,31 @@ module.exports.exampleSignMessage = async function () {
     // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-signing-providers/#verifying-the-signature-of-a-login-token
 }
 
+module.exports.exampleVerifyTransactionSignature = async function () {
+    // First, let's prepare & sign a transaction
+    const mnemonic = Mnemonic.fromString(DummyMnemonic);
+    const userSecretKey = mnemonic.deriveKey(0);
+    const userPublicKey = userSecretKey.generatePublicKey();
+    const address = userPublicKey.toAddress();
+    const signer = new UserSigner(userSecretKey);
+    const transaction = new Transaction({
+        nonce: 42,
+        value: "12345",
+        sender: address,
+        receiver: new Address("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+        gasPrice: 1000000000,
+        gasLimit: 50000,
+        chainID: "D"
+    });
+
+    const serializedTransaction = transaction.serializeForSigning();
+    await signer.sign(transaction);
+
+    // Afterwards, let's verify the transaction signature
+    const verifier = UserVerifier.fromAddress(address);
+
+    console.log("verify() with good signature:", verifier.verify(transaction));
+    
+    transaction.setNonce(7);
+    console.log("verify() with bad signature (message altered):", verifier.verify(transaction));
+}
