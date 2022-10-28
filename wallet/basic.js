@@ -1,4 +1,4 @@
-const { Mnemonic, UserSigner } = require("@elrondnetwork/erdjs-walletcore");
+const { Mnemonic, UserSigner, UserVerifier } = require("@elrondnetwork/erdjs-walletcore");
 const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@elrondnetwork/erdjs");
 const axios = require("axios");
 
@@ -34,11 +34,14 @@ module.exports.exampleSignAndBroadcastTransaction = async function () {
     const address = userPublicKey.toAddress();
     const signer = new UserSigner(userSecretKey);
 
+    // https://docs.elrond.com/integrators/creating-transactions/#nonce-management
+    const nonce = await recallAccountNonce(address);
+
     // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-cookbook/#preparing-a-simple-transaction
     const data = "for the lunch"
     const gasLimit = new GasEstimator().forEGLDTransfer(data.length);
     const transaction = new Transaction({
-        nonce: 10500,
+        nonce: nonce,
         // 0.123456789000000000 EGLD
         value: TokenPayment.egldFromBigInteger("123456789000000000"),
         sender: address,
@@ -57,6 +60,12 @@ module.exports.exampleSignAndBroadcastTransaction = async function () {
     console.log(transaction.toSendable());
 
     await broadcastTransaction(transaction);
+}
+
+async function recallAccountNonce(address) {
+    const url = `${APIUrl}/accounts/${address.toString()}`;
+    const response = await axios.get(url);
+    return response.data.nonce;
 }
 
 async function broadcastTransaction(transaction) {
@@ -92,3 +101,31 @@ module.exports.exampleSignMessage = async function () {
     // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-signing-providers/#verifying-the-signature-of-a-login-token
 }
 
+module.exports.exampleVerifyTransactionSignature = async function () {
+    // First, let's prepare & sign a transaction
+    const mnemonic = Mnemonic.fromString(DummyMnemonic);
+    const userSecretKey = mnemonic.deriveKey(0);
+    const userPublicKey = userSecretKey.generatePublicKey();
+    const address = userPublicKey.toAddress();
+    const signer = new UserSigner(userSecretKey);
+    const transaction = new Transaction({
+        nonce: 42,
+        value: "12345",
+        sender: address,
+        receiver: new Address("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+        gasPrice: 1000000000,
+        gasLimit: 50000,
+        chainID: "D"
+    });
+
+    const serializedTransaction = transaction.serializeForSigning();
+    await signer.sign(transaction);
+
+    // Afterwards, let's verify the transaction signature
+    const verifier = UserVerifier.fromAddress(address);
+
+    console.log("verify() with good signature:", verifier.verify(transaction));
+    
+    transaction.setNonce(7);
+    console.log("verify() with bad signature (message altered):", verifier.verify(transaction));
+}
