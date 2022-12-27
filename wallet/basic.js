@@ -118,26 +118,20 @@ module.exports.exampleVerifyMessage = async function () {
 }
 
 module.exports.exampleVerifyTransactionSignature = async function () {
-    // First, let's prepare & sign a transaction
-    const mnemonic = Mnemonic.fromString(DummyMnemonic);
-    const userSecretKey = mnemonic.deriveKey(0);
-    const userPublicKey = userSecretKey.generatePublicKey();
-    const address = userPublicKey.toAddress();
-    const signer = new UserSigner(userSecretKey);
-    const transaction = new Transaction({
+    const addressBech32 = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th";
+    const transaction = Transaction.fromPlainObject({
         nonce: 42,
         value: "12345",
-        sender: address,
-        receiver: new Address("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+        sender: addressBech32,
+        receiver: "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx",
         gasPrice: 1000000000,
         gasLimit: 50000,
-        chainID: "D"
+        chainID: "D",
+        version: 1,
+        signature: "3c5eb2d1c9b3ab2f578541e62dcfa5008976d11f85644a48884a8a6c4d2980fa14954ab2924d6e67c051562488096d2e79cd3c0378edf234a52e648e672d1b0a"
     });
 
-    await signer.sign(transaction);
-
-    // Afterwards, let's verify the transaction signature
-    const verifier = UserVerifier.fromAddress(address);
+    const verifier = UserVerifier.fromAddress(Address.fromBech32(addressBech32));
 
     console.log("verify() with good signature:", verifier.verify(transaction));
 
