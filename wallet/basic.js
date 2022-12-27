@@ -101,6 +101,22 @@ module.exports.exampleSignMessage = async function () {
     // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-signing-providers/#verifying-the-signature-of-a-login-token
 }
 
+module.exports.exampleVerifyMessage = async function () {
+    const addressBech32 = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th";
+    const dataExample = `${addressBech32}hello{}`;
+    const message = new SignableMessage({
+        message: Buffer.from(dataExample),
+        signature: { hex: () => "5a7de64fb45bb11fc540839bff9de5276e1b17de542e7750b002e4663aea327b9834d4ac46b2c9531653113b7eb3eb000aef89943bd03fd96353fbcf03512809" }
+    });
+
+    const verifier = UserVerifier.fromAddress(Address.fromBech32(addressBech32));
+
+    console.log("verify() with good signature:", verifier.verify(message));
+
+    message.message = Buffer.from("bye");
+    console.log("verify() with bad signature (message altered):", verifier.verify(message));
+}
+
 module.exports.exampleVerifyTransactionSignature = async function () {
     // First, let's prepare & sign a transaction
     const mnemonic = Mnemonic.fromString(DummyMnemonic);
@@ -118,14 +134,13 @@ module.exports.exampleVerifyTransactionSignature = async function () {
         chainID: "D"
     });
 
-    const serializedTransaction = transaction.serializeForSigning();
     await signer.sign(transaction);
 
     // Afterwards, let's verify the transaction signature
     const verifier = UserVerifier.fromAddress(address);
 
     console.log("verify() with good signature:", verifier.verify(transaction));
-    
+
     transaction.setNonce(7);
     console.log("verify() with bad signature (message altered):", verifier.verify(transaction));
 }
