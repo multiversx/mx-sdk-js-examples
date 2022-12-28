@@ -101,31 +101,40 @@ module.exports.exampleSignMessage = async function () {
     // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-signing-providers/#verifying-the-signature-of-a-login-token
 }
 
-module.exports.exampleVerifyTransactionSignature = async function () {
-    // First, let's prepare & sign a transaction
-    const mnemonic = Mnemonic.fromString(DummyMnemonic);
-    const userSecretKey = mnemonic.deriveKey(0);
-    const userPublicKey = userSecretKey.generatePublicKey();
-    const address = userPublicKey.toAddress();
-    const signer = new UserSigner(userSecretKey);
-    const transaction = new Transaction({
-        nonce: 42,
-        value: "12345",
-        sender: address,
-        receiver: new Address("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
-        gasPrice: 1000000000,
-        gasLimit: 50000,
-        chainID: "D"
+module.exports.exampleVerifyMessage = async function () {
+    const addressBech32 = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th";
+    const dataExample = `${addressBech32}hello{}`;
+    const message = new SignableMessage({
+        message: Buffer.from(dataExample),
+        signature: { hex: () => "5a7de64fb45bb11fc540839bff9de5276e1b17de542e7750b002e4663aea327b9834d4ac46b2c9531653113b7eb3eb000aef89943bd03fd96353fbcf03512809" }
     });
 
-    const serializedTransaction = transaction.serializeForSigning();
-    await signer.sign(transaction);
+    const verifier = UserVerifier.fromAddress(Address.fromBech32(addressBech32));
 
-    // Afterwards, let's verify the transaction signature
-    const verifier = UserVerifier.fromAddress(address);
+    console.log("verify() with good signature:", verifier.verify(message));
+
+    message.message = Buffer.from("bye");
+    console.log("verify() with bad signature (message altered):", verifier.verify(message));
+}
+
+module.exports.exampleVerifyTransactionSignature = async function () {
+    const addressBech32 = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th";
+    const transaction = Transaction.fromPlainObject({
+        nonce: 42,
+        value: "12345",
+        sender: addressBech32,
+        receiver: "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx",
+        gasPrice: 1000000000,
+        gasLimit: 50000,
+        chainID: "D",
+        version: 1,
+        signature: "3c5eb2d1c9b3ab2f578541e62dcfa5008976d11f85644a48884a8a6c4d2980fa14954ab2924d6e67c051562488096d2e79cd3c0378edf234a52e648e672d1b0a"
+    });
+
+    const verifier = UserVerifier.fromAddress(Address.fromBech32(addressBech32));
 
     console.log("verify() with good signature:", verifier.verify(transaction));
-    
+
     transaction.setNonce(7);
     console.log("verify() with bad signature (message altered):", verifier.verify(transaction));
 }
