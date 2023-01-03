@@ -1,0 +1,525 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "## Creating network providers"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Creating an API provider:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { ApiNetworkProvider } from \"@elrondnetwork/erdjs-network-providers\";\n\nconst apiNetworkProvider = new ApiNetworkProvider(\"https://devnet-api.elrond.com\");"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Creating a Proxy provider:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { ProxyNetworkProvider } from \"@elrondnetwork/erdjs-network-providers\";\n\nconst proxyNetworkProvider = new ProxyNetworkProvider(\"https://devnet-gateway.elrond.com\");"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Use the classes from `@elrondnetwork/erdjs-network-providers` **only as a starting point**. As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the Elrond API (or Gateway).\n\nOn this topic, please see [extending erdjs](https://docs.elrond.com/sdk-and-tools/erdjs/extending-erdjs)."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Fetching network parameters"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const networkConfig = await apiNetworkProvider.getNetworkConfig();\nconsole.log(networkConfig.MinGasPrice);\nconsole.log(networkConfig.ChainID);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "1000000000",
+                                "D",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Working with accounts"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Synchronizing an account object"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "The following snippet fetches (from the Network) the **nonce** and the **balance** of an account, and updates the local representation of the account."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { Address, Account } from \"@elrondnetwork/erdjs\";\n\nconst addressOfAlice = Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\");\nconst alice = new Account(addressOfAlice);\nconst aliceOnNetwork = await apiNetworkProvider.getAccount(addressOfAlice);\nalice.update(aliceOnNetwork);\n\nconsole.log(\"Nonce:\", alice.nonce);\nconsole.log(\"Balance:\", alice.balance.toString());"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "Nonce: 11599",
+                                "Balance: 35023367304501071841",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Managing the sender nonce locally"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "When sending a bunch of transactions, you usually have to first fetch the account nonce from the network (see above), then manage it locally (e.g. increment upon signing & broadcasting a transaction):"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "alice.incrementNonce();\nconsole.log(\"Nonce:\", alice.nonce);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "Nonce: 11600",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Alternatively, you can also use:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "transaction.setNonce(alice.getNonceThenIncrement());"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "ReferenceError",
+                                "message": "transaction is not defined",
+                                "stack": "    at <Cell 17> [1, 11]\n    at <Cell 17> [4, 46]\n    at Script.runInContext (node:vm:139:12)\n    at Script.runInNewContext (node:vm:144:17)\n    at Object.runInNewContext (node:vm:298:38)\n    at C (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)\n    at k.emit (node:events:526:28)\n    at k.emit (node:domain:475:12)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "For further reference, please see [nonce management](https://docs.elrond.com/integrators/creating-transactions/#nonce-management)."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Preparing payment objects"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "A `TokenPayment` object for **EGLD transfers** (value movements):"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { TokenPayment } from \"@elrondnetwork/erdjs\";\n\nconst firstPayment = TokenPayment.egldFromAmount(\"1.5\");\nconst secondPayment = TokenPayment.egldFromBigInteger(\"1500000000000000000\");\n\nconsole.log(firstPayment.valueOf(), secondPayment.valueOf());\nconsole.log(firstPayment.toPrettyString(), secondPayment.toPrettyString());"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "BigNumber { s: 1, e: 18, c: [ 15000 ] } BigNumber { s: 1, e: 18, c: [ 15000 ] }",
+                                "1.500000000000000000 EGLD 1.500000000000000000 EGLD",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "A `TokenPayment` object for transferring **fungible** tokens:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const identifier = \"FOO-123456\";\nconst numDecimals = 2;\nconst firstPayment = TokenPayment.fungibleFromAmount(identifier, \"1.5\", numDecimals);\nconst secondPayment = TokenPayment.fungibleFromBigInteger(identifier, \"4000\", numDecimals);\n\nconsole.log(firstPayment.toString()); // Will output: 150.\nconsole.log(firstPayment.toPrettyString()); // Will output: 1.50 FOO-123456.\nconsole.log(secondPayment.toString()); // Will output: 4000.\nconsole.log(secondPayment.toPrettyString()); // Will output: 40.00 FOO-123456."
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "150",
+                                "1.50 FOO-123456",
+                                "40.00 FOO-123456",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "A `TokenPayment` object for transferring **semi-fungible** tokens:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const nonce = 3;\nconst quantity = 50;\nconst payment = TokenPayment.semiFungible(identifier, nonce, quantity);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "A `TokenPayment` object for transferring **non-fungible** tokens (the quantity doesn't need to be specified for NFTs, as the token is only one of its kind):"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const nonce = 7;\nconst payment = TokenPayment.nonFungible(identifier, nonce);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "A `TokenPayment` object for transferring **meta-esdt** tokens:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const payment = TokenPayment.metaEsdtFromAmount(identifier, nonce, \"0.1\", numDecimals);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Broadcasting transactions"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Preparing a simple transaction"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { Address, Transaction, TransactionPayload, TokenPayment } from \"@elrondnetwork/erdjs\";\n\nconst tx = new Transaction({\n    data: new TransactionPayload(\"helloWorld\"),\n    gasLimit: 70000,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    receiver: Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"),\n    value: TokenPayment.egldFromAmount(1),\n    chainID: \"D\"\n});\n\ntx.setNonce(alice.getNonceThenIncrement());"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Broadcast using a network provider"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const txHash = await proxyNetworkProvider.sendTransaction(tx);\nconsole.log(\"Hash:\", txHash);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "Error",
+                                "message": "Request error on url [transaction/send]: [transaction generation failed: nil signature]",
+                                "stack": "    at ProxyNetworkProvider.handleApiError (/home/andrei/Desktop/workspace/ERDJS/elrond-sdk-erdjs-examples/notebooks/node_modules/@elrondnetwork/erdjs-network-providers/src/proxyNetworkProvider.ts:229:15)\n    at ProxyNetworkProvider.<anonymous> (/home/andrei/Desktop/workspace/ERDJS/elrond-sdk-erdjs-examples/notebooks/node_modules/@elrondnetwork/erdjs-network-providers/src/proxyNetworkProvider.ts:206:18)\n    at Generator.throw (<anonymous>)\n    at rejected (/home/andrei/Desktop/workspace/ERDJS/elrond-sdk-erdjs-examples/notebooks/node_modules/@elrondnetwork/erdjs-network-providers/out/proxyNetworkProvider.js:6:65)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "Note that the transaction **must to be signed before being broadcasted**. Signing can be achieved using a signing provider."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                ":::important\nNote that, for all purposes, **we recommend using [dapp-core](https://github.com/ElrondNetwork/dapp-core)** instead of integrating the signing providers on your own.\n:::"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Broadcast using `axios`"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const data = tx.toSendable();\nconst url = \"https://devnet-api.elrond.com/transactions\";\nconst response = await axios.post(url, data, {\n    headers: {\n        \"Content-Type\": \"application/json\",\n    },\n});\nconst txHash = response.data.txHash;"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "ReferenceError",
+                                "message": "axios is not defined",
+                                "stack": "    at <Cell 38> [3, 0]\n    at <Cell 38> [11, 46]\n    at Script.runInContext (node:vm:139:12)\n    at Script.runInNewContext (node:vm:144:17)\n    at Object.runInNewContext (node:vm:298:38)\n    at C (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)\n    at k.emit (node:events:526:28)\n    at k.emit (node:domain:475:12)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Wait for transaction completion"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { TransactionWatcher } from \"@elrondnetwork/erdjs\";\n\nconst watcher = new TransactionWatcher(networkProvider);\nconst transactionOnNetwork = await watcher.awaitCompleted(tx);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "ReferenceError",
+                                "message": "networkProvider is not defined",
+                                "stack": "    at <Cell 40> [3, 0]\n    at <Cell 40> [7, 46]\n    at Script.runInContext (node:vm:139:12)\n    at Script.runInNewContext (node:vm:144:17)\n    at Object.runInNewContext (node:vm:298:38)\n    at C (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)\n    at k.emit (node:events:526:28)\n    at k.emit (node:domain:475:12)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "If only the `txHash` is available, then:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash });\nconsole.log(transactionOnNetwork);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "TypeError",
+                                "message": "Cannot read properties of undefined (reading 'awaitCompleted')",
+                                "stack": "    at <Cell 42> [1, 0]\n    at <Cell 42> [5, 46]\n    at Script.runInContext (node:vm:139:12)\n    at Script.runInNewContext (node:vm:144:17)\n    at Object.runInNewContext (node:vm:298:38)\n    at C (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)\n    at k.emit (node:events:526:28)\n    at k.emit (node:domain:475:12)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "In order to wait for multiple transactions:"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "For a different awaiting strategy, also see [extending erdjs](https://docs.elrond.com/sdk-and-tools/erdjs/extending-erdjs)."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "## Token transfers"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Single ESDT transfer"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { ESDTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst payment = TokenPayment.fungibleFromAmount(\"COUNTER-8b028f\", \"100.00\", 2);\nconst data = new ESDTTransferPayloadBuilder()\n    .setPayment(payment)\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    receiver: Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 300000,\n    chainID: \"D\"\n});"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Single NFT transfer"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { ESDTNFTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst payment = TokenPayment.nonFungible(\"ERDJS-38f249\", 1);\nconst data = new ESDTNFTTransferPayloadBuilder()\n    .setPayment(payment)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000,\n    chainID: \"D\"\n});"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "ReferenceError",
+                                "message": "transactions is not defined",
+                                "stack": "    at <Cell 50> [9, 12]\n    at <Cell 50> [18, 46]\n    at Script.runInContext (node:vm:139:12)\n    at Script.runInNewContext (node:vm:144:17)\n    at Object.runInNewContext (node:vm:298:38)\n    at C (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/home/andrei/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)\n    at k.emit (node:events:526:28)\n    at k.emit (node:domain:475:12)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Single SFT transfer"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { ESDTNFTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst payment = TokenPayment.semiFungible(\"SEMI-9efd0f\", 1, 5);\nconst data = new ESDTNFTTransferPayloadBuilder()\n    .setPayment(payment)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000,\n    chainID: \"D\"\n});"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Multi ESDT / NFT transfer"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "import { MultiESDTNFTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst paymentOne = TokenPayment.nonFungible(\"ERDJS-38f249\", 1);\nconst paymentTwo = TokenPayment.fungibleFromAmount(\"BAR-c80d29\", \"10.00\", 18);\nconst payments = [paymentOne, paymentTwo];\nconst data = new MultiESDTNFTTransferPayloadBuilder()\n    .setPayments(payments)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000 * payments.length,\n    chainID: \"D\"\n});"
+            ],
+            "outputs": []
+        }
+    ]
+}

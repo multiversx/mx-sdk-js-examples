@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@elrondnetwork/erdjs": "11.1.2",
+    "@elrondnetwork/erdjs-network-providers": "1.2.0",
+    "@elrondnetwork/erdjs-walletcore": "2.1.0"
+  }
+}
