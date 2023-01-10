@@ -6,7 +6,7 @@
   "scripts": {
     "build": "browserify src/index.js -o out/app.js --standalone app -p esmify"
   },
-  "author": "ElrondNetwork",
+  "author": "MultiversX",
   "dependencies": {
     "@elrondnetwork/erdjs": "10.2.7",
     "@elrondnetwork/erdjs-extension-provider": "2.0.2",
