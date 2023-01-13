@@ -1,5 +1,3 @@
-# elrond-sdk-erdjs-examples
-
-**(Work in progress)**
+# mx-sdk-erdjs-examples
 
 Examples of using erdjs and its satellite packages.

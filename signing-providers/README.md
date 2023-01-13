@@ -2,10 +2,10 @@
 
 This example (a simple, frontend-only web application) depicts the usage of different signing providers for dApps, such as:
 
- - [Elrond (Web) Wallet provider](https://github.com/ElrondNetwork/elrond-sdk-erdjs-web-wallet-provider)
- - [Maiar DeFi Wallet provider](https://github.com/ElrondNetwork/elrond-sdk-erdjs-extension-provider)
- - [Wallet Connect provider](https://github.com/ElrondNetwork/elrond-sdk-erdjs-wallet-connect-provider)
- - [Hardware Wallet (Ledger) provider](https://github.com/ElrondNetwork/elrond-sdk-erdjs-hw-provider)
+ - [(Web) Wallet provider](https://github.com/multiversx/mx-sdk-erdjs-web-wallet-provider)
+ - [DeFi Wallet provider](https://github.com/multiversx/mx-sdk-erdjs-extension-provider)
+ - [Wallet Connect provider](https://github.com/multiversx/mx-sdk-erdjs-wallet-connect-provider)
+ - [Hardware Wallet (Ledger) provider](https://github.com/multiversx/mx-sdk-erdjs-hw-provider)
 
 ## Prerequisites
 
