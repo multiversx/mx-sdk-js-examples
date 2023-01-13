@@ -1,5 +1,5 @@
 import QRCode from "qrcode";
-import { WalletConnectProviderV2 } from "@elrondnetwork/erdjs-wallet-connect-provider";
+import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
 const relayUrl = "wss://relay.walletconnect.com";
@@ -9,7 +9,7 @@ const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
 
 export class WalletConnectV2 {
     constructor() {
-        this.provider = new WalletConnectProviderV2(this.prepareCallbacks(), "T", relayUrl, projectId);
+        this.provider = new WalletConnectV2Provider(this.prepareCallbacks(), "T", relayUrl, projectId);
     }
 
     prepareCallbacks() {
