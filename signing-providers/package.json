@@ -13,7 +13,9 @@
     "@elrondnetwork/erdjs-hw-provider": "2.0.4",
     "@elrondnetwork/erdjs-wallet-connect-provider": "2.0.3",
     "@elrondnetwork/erdjs-walletcore": "1.0.0",
-    "@elrondnetwork/erdjs-web-wallet-provider": "2.1.1"
+    "@elrondnetwork/erdjs-web-wallet-provider": "2.1.1",
+    "@multiversx/sdk-opera-provider": "^1.0.0-alpha.1",
+    "qrcode": "^1.5.1"
   },
   "devDependencies": {
     "@types/node": "18.0.3",
