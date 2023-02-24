@@ -24,6 +24,7 @@ Furthermore, make sure you install the browser extension `Maiar DeFi Wallet` in 
 When you are ready, build the examples:
 
 ```
+npm install
 npm run build
 ```
 
