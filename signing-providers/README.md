@@ -4,7 +4,7 @@ This example (a simple, frontend-only web application) depicts the usage of diff
 
  - [(Web) Wallet provider](https://github.com/multiversx/mx-sdk-erdjs-web-wallet-provider)
  - [DeFi Wallet provider](https://github.com/multiversx/mx-sdk-erdjs-extension-provider)
- - [Wallet Connect provider](https://github.com/multiversx/mx-sdk-erdjs-wallet-connect-provider)
+ - [Wallet Connect (xPortal) provider](https://github.com/multiversx/mx-sdk-erdjs-wallet-connect-provider)
  - [Hardware Wallet (Ledger) provider](https://github.com/multiversx/mx-sdk-erdjs-hw-provider)
 
 ## Prerequisites

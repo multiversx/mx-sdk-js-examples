@@ -1,12 +1,15 @@
 import QRCode from "qrcode";
-import { WalletConnectProvider } from "@multiversx/sdk-wallet-connect-provider";
-import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
-const bridgeUrl = "https://bridge.walletconnect.org";
+// Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
+const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
+const relayUrl = "wss://relay.walletconnect.com";
 
-export class WalletConnect {
+export class WalletConnectV2 {
     constructor() {
-        this.provider = new WalletConnectProvider(bridgeUrl, this.prepareCallbacks());
+        this.provider = new WalletConnectV2Provider(this.prepareCallbacks(), "T", relayUrl, projectId);
     }
 
     prepareCallbacks() {
@@ -18,16 +21,51 @@ export class WalletConnect {
                 const address = await self.provider.getAddress();
                 alert(`onClientLogin(), address: ${address}`);
             },
-            onClientLogout: async function () {
+            onClientLogout: function () {
                 alert("onClientLogout()");
+            },
+            onClientEvent: function (event) {
+                alert("onClientEvent()", event);
             }
         };
     }
 
     async login() {
         await this.provider.init();
-        const connectorUri = await this.provider.login();
-        await openModal(connectorUri);
+        const { uri, approval } = await this.provider.connect();        
+
+        await openModal(uri);        
+        await this.provider.login({ approval });
+
+        try {
+            await this.provider.login({ approval, token });
+        } catch (err) {
+            console.log(err);
+            alert('Connection Proposal Refused')
+        }
+    }
+
+    async loginWithToken() {
+        await this.provider.init();
+        
+        const authToken = acquireThirdPartyAuthToken();
+
+        const { uri, approval } = await this.provider.connect();        
+
+        await openModal(uri);     
+        
+        try {
+            await this.provider.login({ approval, token: authToken });
+
+            const address = await this.provider.getAddress();
+            const signature = await this.provider.getSignature();
+            alert(`Address: ${address};\nsignature of token = ${signature}`);
+    
+            alert(verifyAuthTokenSignature(address, authToken, signature));
+        } catch (err) {
+            console.log(err);
+            alert('Rejected by user')
+        }
     }
 
     async logout() {
@@ -82,17 +120,24 @@ export class WalletConnect {
     }
 
     async signMessage() {
-        console.error("Not yet supported by the provider.");
+      await this.provider.init();
+
+      const message = new SignableMessage({
+          message: Buffer.from("hello")
+      });
+
+      await this.provider.signMessage(message);
+      alert(JSON.stringify(message.toJSON(), null, 4));
     }
 }
 
 async function openModal(connectorUri) {
     const svg = await QRCode.toString(connectorUri, { type: "svg" });
 
-    $("#MyWalletConnectQRContainer").html(svg);
-    $("#MyWalletConnectModal").modal("show");
+    $("#MyWalletConnectV2QRContainer").html(svg);
+    $("#MyWalletConnectV2Modal").modal("show");
 }
 
 function closeModal() {
-    $("#MyWalletConnectModal").modal("hide");
+    $("#MyWalletConnectV2Modal").modal("hide");
 }
