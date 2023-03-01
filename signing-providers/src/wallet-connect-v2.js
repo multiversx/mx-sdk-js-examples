@@ -1,6 +1,7 @@
 import QRCode from "qrcode";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 // Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
 const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
@@ -20,8 +21,11 @@ export class WalletConnectV2 {
                 const address = await self.provider.getAddress();
                 alert(`onClientLogin(), address: ${address}`);
             },
-            onClientLogout: async function () {
+            onClientLogout: function () {
                 alert("onClientLogout()");
+            },
+            onClientEvent: function (event) {
+                alert("onClientEvent()", event);
             }
         };
     }
@@ -32,6 +36,36 @@ export class WalletConnectV2 {
 
         await openModal(uri);        
         await this.provider.login({ approval });
+
+        try {
+            await this.provider.login({ approval, token });
+        } catch (err) {
+            console.log(err);
+            alert('Connection Proposal Refused')
+        }
+    }
+
+    async loginWithToken() {
+        await this.provider.init();
+        
+        const authToken = acquireThirdPartyAuthToken();
+
+        const { uri, approval } = await this.provider.connect();        
+
+        await openModal(uri);     
+        
+        try {
+            await this.provider.login({ approval, token: authToken });
+
+            const address = await this.provider.getAddress();
+            const signature = await this.provider.getSignature();
+            alert(`Address: ${address};\nsignature of token = ${signature}`);
+    
+            alert(verifyAuthTokenSignature(address, authToken, signature));
+        } catch (err) {
+            console.log(err);
+            alert('Rejected by user')
+        }
     }
 
     async logout() {
