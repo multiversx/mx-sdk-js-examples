@@ -2,10 +2,9 @@ import QRCode from "qrcode";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 
-const relayUrl = "wss://relay.walletconnect.com";
+// Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
 const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
-
-
+const relayUrl = "wss://relay.walletconnect.com";
 
 export class WalletConnectV2 {
     constructor() {
