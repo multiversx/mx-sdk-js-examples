@@ -35,10 +35,9 @@ export class WalletConnectV2 {
         const { uri, approval } = await this.provider.connect();        
 
         await openModal(uri);        
-        await this.provider.login({ approval });
 
         try {
-            await this.provider.login({ approval, token });
+            await this.provider.login({ approval });
         } catch (err) {
             console.log(err);
             alert('Connection Proposal Refused')
@@ -46,10 +45,8 @@ export class WalletConnectV2 {
     }
 
     async loginWithToken() {
-        await this.provider.init();
-        
+        await this.provider.init();        
         const authToken = acquireThirdPartyAuthToken();
-
         const { uri, approval } = await this.provider.connect();        
 
         await openModal(uri);     
