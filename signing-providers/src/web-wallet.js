@@ -1,4 +1,4 @@
-import { Address, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletProvider, WALLET_PROVIDER_TESTNET } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
@@ -104,7 +104,9 @@ export class WebWallet {
     }
 
     async signMessage() {
-        await this.provider.signMessage({ message: Buffer.from("hello") });
+        const message = new SignableMessage({ message: "hello" });
+        const callbackUrl = getCurrentLocation();
+        await this.provider.signMessage(message, { callbackUrl });
     }
 
     async showMessageSignature() {
