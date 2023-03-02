@@ -2,16 +2,16 @@
 
 This example (a simple, frontend-only web application) depicts the usage of different signing providers for dApps, such as:
 
- - [(Web) Wallet provider](https://github.com/multiversx/mx-sdk-erdjs-web-wallet-provider)
- - [DeFi Wallet provider](https://github.com/multiversx/mx-sdk-erdjs-extension-provider)
- - [Wallet Connect (xPortal) provider](https://github.com/multiversx/mx-sdk-erdjs-wallet-connect-provider)
- - [Hardware Wallet (Ledger) provider](https://github.com/multiversx/mx-sdk-erdjs-hw-provider)
+- [(Web) Wallet provider](https://github.com/multiversx/mx-sdk-js-web-wallet-provider)
+- [DeFi Wallet provider](https://github.com/multiversx/mx-sdk-js-extension-provider)
+- [Wallet Connect (xPortal) provider](https://github.com/multiversx/mx-sdk-js-wallet-connect-provider)
+- [Hardware Wallet (Ledger) provider](https://github.com/multiversx/mx-sdk-js-hw-provider)
 
 ## Prerequisites
 
 Make sure you have the package `http-server` installed globally.
 
-```
+```bash
 npm install --global http-server
 ```
 
@@ -23,14 +23,14 @@ Furthermore, make sure you install the browser extension `Maiar DeFi Wallet` in 
 
 When you are ready, build the examples:
 
-```
+```bash
 npm run build
 ```
 
 Start the server (with a HTTPS binding):
 
-```
+```bash
 http-server -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=8080
 ```
 
-Afterwards, navigate to https://localhost:8080/index.html.
+Afterwards, navigate to [https://localhost:8080/index.html](https://localhost:8080/index.html).

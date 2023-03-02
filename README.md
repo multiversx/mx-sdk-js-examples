@@ -1,3 +1,3 @@
-# mx-sdk-erdjs-examples
+# mx-sdk-js-examples
 
-Examples of using erdjs and its satellite packages.
+Examples of using sdk-js and its satellite packages.

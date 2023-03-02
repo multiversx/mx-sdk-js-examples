@@ -9,7 +9,7 @@
 
 <body>
     <div class="container mt-4">
-        <h1>Examples of using erdjs' signing providers</h1>
+        <h1>Examples of using sdk-js' signing providers</h1>
 
         <div class="card mt-3 mb-3">
             <div class="card-header">
@@ -21,6 +21,7 @@
                 <div>
                     <button class="btn btn-info" onclick="webWallet.login()">Login</button>
                     <button class="btn btn-info" onclick="webWallet.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="webWallet.signTransaction()">Sign transaction</button>
                     <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
                     <button class="btn btn-info" disabled="disabled" onclick="webWallet.signMessage()">Sign
                         message</button>
@@ -35,6 +36,8 @@
                         signature</button>
                     <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">Show signed
                         transactions</button>
+                    <button class="btn btn-info" onclick="webWallet.showSignedMessage()">Show signed
+                        message</button>
                 </div>
             </div>
         </div>
@@ -49,6 +52,7 @@
                 <div>
                     <button class="btn btn-info" onclick="extension.login()">Login</button>
                     <button class="btn btn-info" onclick="extension.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="extension.signTransaction()">Sign transaction</button>
                     <button class="btn btn-info" onclick="extension.signTransactions()">Sign transactions</button>
                     <button class="btn btn-info" onclick="extension.signMessage()">Sign message</button>
                     <button class="btn btn-info" onclick="extension.logout()">Logout</button>
@@ -97,7 +101,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Wallet Connect ( Maiar )</h3>
+                    <h3>Wallet Connect ( Maiar ) ( Deprecated )</h3>
                 </div>
             </div>
             <div class="card-body">
