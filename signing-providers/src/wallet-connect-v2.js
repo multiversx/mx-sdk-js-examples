@@ -70,9 +70,13 @@ export class WalletConnectV2 {
     }
 
     async signTransaction() {
+        await this.provider.init();
+
+        const sender = await this.provider.getAddress();
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
@@ -87,9 +91,13 @@ export class WalletConnectV2 {
     }
 
     async signTransactions() {
+        await this.provider.init();
+
+        const sender = await this.provider.getAddress();
         const firstTransaction = new Transaction({
             nonce: 43,
             value: "1",
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
@@ -101,6 +109,7 @@ export class WalletConnectV2 {
         const secondTransaction = new Transaction({
             nonce: 44,
             value: "100000000",
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,

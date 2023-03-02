@@ -43,14 +43,31 @@ export class WebWallet {
         alert(verifyAuthTokenSignature(address, authToken, signature));
     }
 
+    async signTransaction() {
+        const sender = getUrlParams().address;
+        const transaction = new Transaction({
+            nonce: 42,
+            value: "1",
+            sender: new Address(sender),
+            receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
+            gasPrice: 1000000000,
+            gasLimit: 50000,
+            data: new TransactionPayload(),
+            chainID: "T",
+            version: 1
+        });
+
+        await this.provider.signTransaction(transaction);
+    }
+
     async signTransactions() {
-        const sender = new Address(getUrlParams().address);
+        const sender = getUrlParams().address;
 
         const firstTransaction = new Transaction({
             nonce: 42,
             value: "1",
             gasLimit: 70000,
-            sender: sender,
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
             chainID: "T"
@@ -60,7 +77,7 @@ export class WebWallet {
             nonce: 43,
             value: "1",
             gasLimit: 70000,
-            sender: sender,
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("world"),
             chainID: "T"
@@ -73,9 +90,9 @@ export class WebWallet {
         const plainSignedTransactions = this.provider.getTransactionsFromWalletUrl();
         alert(JSON.stringify(plainSignedTransactions, null, 4));
 
-        // Now let's convert them back to erdjs' Transaction objects.
+        // Now let's convert them back to sdk-js' Transaction objects.
         // Note that the Web Wallet provider returns the data field as a plain string. 
-        // However, erdjs' Transaction.fromPlainObject expects it to be base64-encoded.
+        // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
         // Therefore, we need to apply a workaround (an additional conversion).
         for (const plainTransaction of plainSignedTransactions) {
             const plainTransactionClone = structuredClone(plainTransaction);
