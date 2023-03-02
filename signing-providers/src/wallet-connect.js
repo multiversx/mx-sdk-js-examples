@@ -1,6 +1,5 @@
-import QRCode from "qrcode";
-import { WalletConnectProvider } from "@multiversx/sdk-wallet-connect-provider";
 import { Address, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { WalletConnectProvider } from "@multiversx/sdk-wallet-connect-provider";
 
 const bridgeUrl = "https://bridge.walletconnect.org";
 

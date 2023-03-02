@@ -1,6 +1,5 @@
-import QRCode from "qrcode";
-import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 // Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
@@ -72,7 +71,7 @@ export class WalletConnectV2 {
 
     async signTransaction() {
         await this.provider.init();
-        
+
         const sender = await this.provider.getAddress();
         const transaction = new Transaction({
             nonce: 42,

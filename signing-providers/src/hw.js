@@ -1,5 +1,5 @@
-import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class HW {

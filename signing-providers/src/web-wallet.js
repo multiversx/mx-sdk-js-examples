@@ -1,7 +1,6 @@
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { WalletProvider, WALLET_PROVIDER_TESTNET } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
-import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
-import { WALLET_PROVIDER_TESTNET } from "@multiversx/sdk-web-wallet-provider";
-import { Address, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class WebWallet {
@@ -40,7 +39,7 @@ export class WebWallet {
         const address = getUrlParams().address;
         const authToken = await sessionStorage.getItem("web-wallet-example:authToken");
         const signature = getUrlParams().signature;
-        
+
         alert(verifyAuthTokenSignature(address, authToken, signature));
     }
 
@@ -63,6 +62,7 @@ export class WebWallet {
 
     async signTransactions() {
         const sender = getUrlParams().address;
+
         const firstTransaction = new Transaction({
             nonce: 42,
             value: "1",
@@ -104,7 +104,14 @@ export class WebWallet {
     }
 
     async signMessage() {
-        console.error("Not yet supported by the provider.");
+        const message = new SignableMessage({ message: "hello" });
+        const callbackUrl = getCurrentLocation();
+        await this.provider.signMessage(message, { callbackUrl });
+    }
+
+    async showMessageSignature() {
+        const signature = this.provider.getMessageSignatureFromWalletUrl();
+        alert(`Signature: ${signature}`);
     }
 }
 

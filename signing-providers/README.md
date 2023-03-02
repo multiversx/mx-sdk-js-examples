@@ -17,7 +17,7 @@ npm install --global http-server
 
 Note that some providers (such as `hw-provider`) have to be used in pages served via HTTPS in order to work properly (a dummy certificate is included here).
 
-Furthermore, make sure you install the browser extension `Maiar DeFi Wallet` in advance.
+Furthermore, make sure you install the browser extension `MultiversX DeFi Wallet` in advance.
 
 ## Running the examples
 

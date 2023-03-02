@@ -1,5 +1,5 @@
-import { UserVerifier } from "@multiversx/sdk-wallet";
 import { Address, SignableMessage } from "@multiversx/sdk-core";
+import { UserVerifier } from "@multiversx/sdk-wallet";
 
 // In a real-life implementation, this code should be located on the server-side.
 export function acquireThirdPartyAuthToken() {
@@ -17,7 +17,7 @@ export function verifyAuthTokenSignature(address, authToken, signature) {
     // Note that the verification API will be improved in a future version of @multiversx/sdk-wallet
     // As of @multiversx/sdk-wallet@v3.0.0, this API is a bit tedious:
     const verifier = UserVerifier.fromAddress(new Address(address));
-    
+
     const message = new SignableMessage({
         signature: { hex: () => signature },
         message: Buffer.from(`${address}${authToken}{}`)
