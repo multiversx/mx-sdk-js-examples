@@ -104,10 +104,10 @@ export class WebWallet {
     }
 
     async signMessage() {
-        await this.provider.signMessage("hello");
+        await this.provider.signMessage({ message: Buffer.from("hello") });
     }
 
-    async showSignedMessage() {
+    async showMessageSignature() {
         const signature = this.provider.getMessageSignatureFromWalletUrl();
         alert(`Signature: ${signature}`);
     }
