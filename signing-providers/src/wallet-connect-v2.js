@@ -1,6 +1,5 @@
-import QRCode from "qrcode";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 // Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app

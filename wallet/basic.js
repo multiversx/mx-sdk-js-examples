@@ -1,5 +1,5 @@
 const { Mnemonic, UserSigner, UserVerifier } = require("@elrondnetwork/erdjs-walletcore");
-const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@elrondnetwork/erdjs");
+const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@multiversx/sdk-core");
 const axios = require("axios");
 
 // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/mnemonic.txt

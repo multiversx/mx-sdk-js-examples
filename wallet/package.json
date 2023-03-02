@@ -7,7 +7,7 @@
   "dependencies": {
     "axios": "0.24.0",
     "@elrondnetwork/erdjs-walletcore": "2.1.0",
-    "@elrondnetwork/erdjs": "11.0.0"
+    "@multiversx/sdk-core": "11.4.0"
   },
   "devDependencies": {}
 }

@@ -1,5 +1,5 @@
 import { HWProvider } from "@elrondnetwork/erdjs-hw-provider";
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class HW {

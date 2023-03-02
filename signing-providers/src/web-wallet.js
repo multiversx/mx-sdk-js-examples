@@ -1,7 +1,6 @@
+import { Address, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { WalletProvider, WALLET_PROVIDER_TESTNET } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
-import { WalletProvider } from "@elrondnetwork/erdjs-web-wallet-provider";
-import { WALLET_PROVIDER_TESTNET } from "@elrondnetwork/erdjs-web-wallet-provider";
-import { Address, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class WebWallet {
@@ -40,15 +39,18 @@ export class WebWallet {
         const address = getUrlParams().address;
         const authToken = await sessionStorage.getItem("web-wallet-example:authToken");
         const signature = getUrlParams().signature;
-        
+
         alert(verifyAuthTokenSignature(address, authToken, signature));
     }
 
     async signTransactions() {
+        const sender = new Address(getUrlParams().address);
+
         const firstTransaction = new Transaction({
             nonce: 42,
             value: "1",
             gasLimit: 70000,
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
             chainID: "T"
@@ -58,6 +60,7 @@ export class WebWallet {
             nonce: 43,
             value: "1",
             gasLimit: 70000,
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("world"),
             chainID: "T"
@@ -84,7 +87,12 @@ export class WebWallet {
     }
 
     async signMessage() {
-        console.error("Not yet supported by the provider.");
+        await this.provider.signMessage("hello");
+    }
+
+    async showSignedMessage() {
+        const signature = this.provider.getMessageSignatureFromWalletUrl();
+        alert(`Signature: ${signature}`);
     }
 }
 

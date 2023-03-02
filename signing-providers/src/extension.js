@@ -1,5 +1,5 @@
 import { ExtensionProvider } from "@elrondnetwork/erdjs-extension-provider";
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class Extension {
@@ -16,7 +16,7 @@ export class Extension {
 
     async loginWithToken() {
         await this.provider.init();
-        
+
         const authToken = acquireThirdPartyAuthToken();
         await this.provider.login({ token: authToken });
 
@@ -58,10 +58,8 @@ export class Extension {
         });
 
         await this.provider.signTransactions([firstTransaction, secondTransaction]);
-        console.log("First transaction, upon signing:");
-        console.log(firstTransaction);
-        console.log("Second transaction, upon signing:");
-        console.log(secondTransaction);
+        console.log("First transaction, upon signing:", firstTransaction);
+        console.log("Second transaction, upon signing:", secondTransaction);
 
         alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
     }

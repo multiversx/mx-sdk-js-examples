@@ -8,13 +8,14 @@
   },
   "author": "MultiversX",
   "dependencies": {
-    "@elrondnetwork/erdjs": "10.2.7",
+    "@multiversx/sdk-core": "11.4.1",
     "@elrondnetwork/erdjs-extension-provider": "2.0.2",
     "@elrondnetwork/erdjs-hw-provider": "2.0.4",
     "@elrondnetwork/erdjs-walletcore": "1.0.0",
-    "@elrondnetwork/erdjs-web-wallet-provider": "2.1.1",
+    "@multiversx/sdk-web-wallet-provider": "2.3.0-beta.1",
     "@multiversx/sdk-wallet-connect-provider": "3.1.0",
-    "qrcode": "1.5.1"
+    "qrcode": "1.5.1",
+    "qs": "6.10.3"
   },
   "devDependencies": {
     "@types/node": "18.0.3",
