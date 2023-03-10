@@ -9,7 +9,7 @@
 
 <body>
     <div class="container mt-4">
-        <h1>Examples of using erdjs' signing providers</h1>
+        <h1>Examples of using sdk-js' signing providers</h1>
 
         <div class="card mt-3 mb-3">
             <div class="card-header">
@@ -21,8 +21,9 @@
                 <div>
                     <button class="btn btn-info" onclick="webWallet.login()">Login</button>
                     <button class="btn btn-info" onclick="webWallet.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="webWallet.signTransaction()">Sign transaction</button>
                     <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" disabled="disabled" onclick="webWallet.signMessage()">Sign
+                    <button class="btn btn-info" onclick="webWallet.signMessage()">Sign
                         message</button>
                     <button class="btn btn-info" onclick="webWallet.logout()">Logout</button>
                 </div>
@@ -35,6 +36,8 @@
                         signature</button>
                     <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">Show signed
                         transactions</button>
+                    <button class="btn btn-info" onclick="webWallet.showMessageSignature()">Show message
+                        signature</button>
                 </div>
             </div>
         </div>
@@ -42,13 +45,14 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Extension (Maiar DeFi Wallet)</h3>
+                    <h3>Extension (MultiversX DeFi Wallet)</h3>
                 </div>
             </div>
             <div class="card-body">
                 <div>
                     <button class="btn btn-info" onclick="extension.login()">Login</button>
                     <button class="btn btn-info" onclick="extension.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="extension.signTransaction()">Sign transaction</button>
                     <button class="btn btn-info" onclick="extension.signTransactions()">Sign transactions</button>
                     <button class="btn btn-info" onclick="extension.signMessage()">Sign message</button>
                     <button class="btn btn-info" onclick="extension.logout()">Logout</button>
@@ -59,7 +63,45 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Wallet Connect</h3>
+                    <h3>Wallet Connect V2 ( xPortal )</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="walletConnectV2.login()">Login</button>
+                    <button class="btn btn-info" onclick="walletConnectV2.loginWithToken()">Login with
+                        token</button>
+                    <button class="btn btn-info" onclick="walletConnectV2.signTransaction()">Sign transaction</button>
+                    <button class="btn btn-info" onclick="walletConnectV2.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="walletConnectV2.signMessage()">Sign
+                        message</button>
+                    <button class="btn btn-info" onclick="walletConnectV2.logout()">Logout</button>
+                </div>
+            </div>
+            <div class="modal" id="MyWalletConnectV2Modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Connect using xPortal on your phone</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div id="MyWalletConnectV2QRContainer"></div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Wallet Connect ( Maiar ) ( Deprecated )</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -153,6 +195,7 @@
         const webWallet = new app.WebWallet();
         const extension = new app.Extension();
         const walletConnect = new app.WalletConnect();
+        const walletConnectV2 = new app.WalletConnectV2();
         const hw = new app.HW();
     </script>
 </body>

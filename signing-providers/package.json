@@ -6,14 +6,16 @@
   "scripts": {
     "build": "browserify src/index.js -o out/app.js --standalone app -p esmify"
   },
-  "author": "ElrondNetwork",
+  "author": "MultiversX",
   "dependencies": {
-    "@elrondnetwork/erdjs": "10.2.7",
-    "@elrondnetwork/erdjs-extension-provider": "2.0.2",
-    "@elrondnetwork/erdjs-hw-provider": "2.0.4",
-    "@elrondnetwork/erdjs-wallet-connect-provider": "2.0.3",
-    "@elrondnetwork/erdjs-walletcore": "1.0.0",
-    "@elrondnetwork/erdjs-web-wallet-provider": "2.1.1"
+    "@multiversx/sdk-core": "11.4.1",
+    "@multiversx/sdk-extension-provider": "2.0.7",
+    "@multiversx/sdk-hw-provider": "3.0.3",
+    "@multiversx/sdk-wallet": "3.0.0",
+    "@multiversx/sdk-web-wallet-provider": "2.3.0",
+    "@multiversx/sdk-wallet-connect-provider": "3.1.0",
+    "qrcode": "1.5.1",
+    "qs": "6.10.3"
   },
   "devDependencies": {
     "@types/node": "18.0.3",

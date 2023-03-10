@@ -1,15 +1,15 @@
-const { Mnemonic, UserSigner, UserVerifier } = require("@elrondnetwork/erdjs-walletcore");
-const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@elrondnetwork/erdjs");
+const { Mnemonic, UserSigner, UserVerifier } = require("@multiversx/sdk-wallet");
+const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@multiversx/sdk-core");
 const axios = require("axios");
 
-// https://github.com/ElrondNetwork/elrond-sdk-testwallets/blob/main/users/mnemonic.txt
+// https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/mnemonic.txt
 const DummyMnemonic = "moral volcano peasant pass circle pen over picture flat shop clap goat never lyrics gather prepare woman film husband gravity behind test tiger improve";
-const APIUrl = "https://devnet-api.elrond.com";
+const APIUrl = "https://devnet-api.multiversx.com";
 
 module.exports.exampleDeriveAccountsFromMnemonic = function () {
     const mnemonic = Mnemonic.fromString(DummyMnemonic);
 
-    // https://github.com/ElrondNetwork/elrond-sdk-erdjs-walletcore/blob/main/src/users.spec.ts
+    // https://github.com/multiversx/mx-sdk-js-wallet/blob/main/src/users.spec.ts
     const addressIndexOfAlice = 0;
     const userSecretKeyOfAlice = mnemonic.deriveKey(addressIndexOfAlice);
     const userPublicKeyOfAlice = userSecretKeyOfAlice.generatePublicKey();
@@ -34,10 +34,10 @@ module.exports.exampleSignAndBroadcastTransaction = async function () {
     const address = userPublicKey.toAddress();
     const signer = new UserSigner(userSecretKey);
 
-    // https://docs.elrond.com/integrators/creating-transactions/#nonce-management
+    // https://docs.multiversx.com/integrators/creating-transactions/#nonce-management
     const nonce = await recallAccountNonce(address);
 
-    // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-cookbook/#preparing-a-simple-transaction
+    // https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook/#preparing-a-simple-transaction
     const data = "for the lunch"
     const gasLimit = new GasEstimator().forEGLDTransfer(data.length);
     const transaction = new Transaction({
@@ -98,7 +98,7 @@ module.exports.exampleSignMessage = async function () {
     console.log("Message signature", signature);
 
     // In order to validate a message signature, follow:
-    // https://docs.elrond.com/sdk-and-tools/erdjs/erdjs-signing-providers/#verifying-the-signature-of-a-login-token
+    // https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#verifying-the-signature-of-a-login-token
 }
 
 module.exports.exampleVerifyMessage = async function () {

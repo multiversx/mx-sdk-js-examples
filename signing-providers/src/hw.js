@@ -1,5 +1,5 @@
-import { HWProvider } from "@elrondnetwork/erdjs-hw-provider";
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@elrondnetwork/erdjs";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class HW {
@@ -53,10 +53,12 @@ export class HW {
     async signTransaction() {
         await this.provider.init();
 
+        const sender = await this.provider.getAddress();
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
             gasLimit: 70000,
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
             chainID: "T"
@@ -70,9 +72,11 @@ export class HW {
     async signTransactions() {
         await this.provider.init();
 
+        const sender = await this.provider.getAddress();
         const firstTransaction = new Transaction({
             nonce: 42,
             value: "1",
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
@@ -84,6 +88,7 @@ export class HW {
         const secondTransaction = new Transaction({
             nonce: 43,
             value: "100000000",
+            sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
