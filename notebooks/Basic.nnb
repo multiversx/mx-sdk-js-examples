@@ -17,7 +17,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { ApiNetworkProvider } from \"@elrondnetwork/erdjs-network-providers\";\n\nconst apiNetworkProvider = new ApiNetworkProvider(\"https://devnet-api.elrond.com\");"
+                "import { ApiNetworkProvider } from \"@multiversx/sdk-network-providers\";\n\nconst apiNetworkProvider = new ApiNetworkProvider(\"https://devnet-api.multiversx.com\");"
             ],
             "outputs": []
         },
@@ -31,14 +31,14 @@
         {
             "language": "javascript",
             "source": [
-                "import { ProxyNetworkProvider } from \"@elrondnetwork/erdjs-network-providers\";\n\nconst proxyNetworkProvider = new ProxyNetworkProvider(\"https://devnet-gateway.elrond.com\");"
+                "import { ProxyNetworkProvider } from \"@multiversx/sdk-network-providers\";\n\nconst proxyNetworkProvider = new ProxyNetworkProvider(\"https://devnet-gateway.multiversx.com\");"
             ],
             "outputs": []
         },
         {
             "language": "markdown",
             "source": [
-                "Use the classes from `@elrondnetwork/erdjs-network-providers` **only as a starting point**. As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the Elrond API (or Gateway).\n\nOn this topic, please see [extending erdjs](https://docs.elrond.com/sdk-and-tools/erdjs/extending-erdjs)."
+                "Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**. As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).\n\nOn this topic, please see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js)."
             ],
             "outputs": []
         },
@@ -93,7 +93,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { Address, Account } from \"@elrondnetwork/erdjs\";\n\nconst addressOfAlice = Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\");\nconst alice = new Account(addressOfAlice);\nconst aliceOnNetwork = await apiNetworkProvider.getAccount(addressOfAlice);\nalice.update(aliceOnNetwork);\n\nconsole.log(\"Nonce:\", alice.nonce);\nconsole.log(\"Balance:\", alice.balance.toString());"
+                "import { Address, Account } from \"@multiversx/sdk-core\";\n\nconst addressOfAlice = Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\");\nconst alice = new Account(addressOfAlice);\nconst aliceOnNetwork = await apiNetworkProvider.getAccount(addressOfAlice);\nalice.update(aliceOnNetwork);\n\nconsole.log(\"Nonce:\", alice.nonce);\nconsole.log(\"Balance:\", alice.balance.toString());"
             ],
             "outputs": [
                 {
@@ -173,7 +173,7 @@
         {
             "language": "markdown",
             "source": [
-                "For further reference, please see [nonce management](https://docs.elrond.com/integrators/creating-transactions/#nonce-management)."
+                "For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management)."
             ],
             "outputs": []
         },
@@ -194,7 +194,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { TokenPayment } from \"@elrondnetwork/erdjs\";\n\nconst firstPayment = TokenPayment.egldFromAmount(\"1.5\");\nconst secondPayment = TokenPayment.egldFromBigInteger(\"1500000000000000000\");\n\nconsole.log(firstPayment.valueOf(), secondPayment.valueOf());\nconsole.log(firstPayment.toPrettyString(), secondPayment.toPrettyString());"
+                "import { TokenPayment } from \"@multiversx/sdk-core\";\n\nconst firstPayment = TokenPayment.egldFromAmount(\"1.5\");\nconst secondPayment = TokenPayment.egldFromBigInteger(\"1500000000000000000\");\n\nconsole.log(firstPayment.valueOf(), secondPayment.valueOf());\nconsole.log(firstPayment.toPrettyString(), secondPayment.toPrettyString());"
             ],
             "outputs": [
                 {
@@ -298,7 +298,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { Address, Transaction, TransactionPayload, TokenPayment } from \"@elrondnetwork/erdjs\";\n\nconst tx = new Transaction({\n    data: new TransactionPayload(\"helloWorld\"),\n    gasLimit: 70000,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    receiver: Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"),\n    value: TokenPayment.egldFromAmount(1),\n    chainID: \"D\"\n});\n\ntx.setNonce(alice.getNonceThenIncrement());"
+                "import { Address, Transaction, TransactionPayload, TokenPayment } from \"@multiversx/sdk-core\";\n\nconst tx = new Transaction({\n    data: new TransactionPayload(\"helloWorld\"),\n    gasLimit: 70000,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    receiver: Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"),\n    value: TokenPayment.egldFromAmount(1),\n    chainID: \"D\"\n});\n\ntx.setNonce(alice.getNonceThenIncrement());"
             ],
             "outputs": []
         },
@@ -339,7 +339,7 @@
         {
             "language": "markdown",
             "source": [
-                ":::important\nNote that, for all purposes, **we recommend using [dapp-core](https://github.com/ElrondNetwork/dapp-core)** instead of integrating the signing providers on your own.\n:::"
+                ":::important\nNote that, for all purposes, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.\n:::"
             ],
             "outputs": []
         },
@@ -353,7 +353,7 @@
         {
             "language": "javascript",
             "source": [
-                "const data = tx.toSendable();\nconst url = \"https://devnet-api.elrond.com/transactions\";\nconst response = await axios.post(url, data, {\n    headers: {\n        \"Content-Type\": \"application/json\",\n    },\n});\nconst txHash = response.data.txHash;"
+                "const data = tx.toSendable();\nconst url = \"https://devnet-api.multiversx.com/transactions\";\nconst response = await axios.post(url, data, {\n    headers: {\n        \"Content-Type\": \"application/json\",\n    },\n});\nconst txHash = response.data.txHash;"
             ],
             "outputs": [
                 {
@@ -380,7 +380,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { TransactionWatcher } from \"@elrondnetwork/erdjs\";\n\nconst watcher = new TransactionWatcher(networkProvider);\nconst transactionOnNetwork = await watcher.awaitCompleted(tx);"
+                "import { TransactionWatcher } from \"@multiversx/sdk-core\";\n\nconst watcher = new TransactionWatcher(networkProvider);\nconst transactionOnNetwork = await watcher.awaitCompleted(tx);"
             ],
             "outputs": [
                 {
@@ -441,7 +441,7 @@
         {
             "language": "markdown",
             "source": [
-                "For a different awaiting strategy, also see [extending erdjs](https://docs.elrond.com/sdk-and-tools/erdjs/extending-erdjs)."
+                "For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js)."
             ],
             "outputs": []
         },
@@ -462,7 +462,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { ESDTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst payment = TokenPayment.fungibleFromAmount(\"COUNTER-8b028f\", \"100.00\", 2);\nconst data = new ESDTTransferPayloadBuilder()\n    .setPayment(payment)\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    receiver: Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 300000,\n    chainID: \"D\"\n});"
+                "import { ESDTTransferPayloadBuilder } from \"@multiversx/sdk-core\";\n\nconst payment = TokenPayment.fungibleFromAmount(\"TEST-8b028f\", \"100.00\", 2);\nconst data = new ESDTTransferPayloadBuilder()\n    .setPayment(payment)\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    receiver: Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 300000,\n    chainID: \"D\"\n});"
             ],
             "outputs": []
         },
@@ -476,7 +476,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { ESDTNFTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst payment = TokenPayment.nonFungible(\"ERDJS-38f249\", 1);\nconst data = new ESDTNFTTransferPayloadBuilder()\n    .setPayment(payment)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000,\n    chainID: \"D\"\n});"
+                "import { ESDTNFTTransferPayloadBuilder } from \"@multiversx/sdk-core\";\n\nconst payment = TokenPayment.nonFungible(\"TEST-38f249\", 1);\nconst data = new ESDTNFTTransferPayloadBuilder()\n    .setPayment(payment)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000,\n    chainID: \"D\"\n});"
             ],
             "outputs": [
                 {
@@ -503,7 +503,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { ESDTNFTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst payment = TokenPayment.semiFungible(\"SEMI-9efd0f\", 1, 5);\nconst data = new ESDTNFTTransferPayloadBuilder()\n    .setPayment(payment)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000,\n    chainID: \"D\"\n});"
+                "import { ESDTNFTTransferPayloadBuilder } from \"@multiversx/sdk-core\";\n\nconst payment = TokenPayment.semiFungible(\"SEMI-9efd0f\", 1, 5);\nconst data = new ESDTNFTTransferPayloadBuilder()\n    .setPayment(payment)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000,\n    chainID: \"D\"\n});"
             ],
             "outputs": []
         },
@@ -517,7 +517,7 @@
         {
             "language": "javascript",
             "source": [
-                "import { MultiESDTNFTTransferPayloadBuilder } from \"@elrondnetwork/erdjs\";\n\nconst paymentOne = TokenPayment.nonFungible(\"ERDJS-38f249\", 1);\nconst paymentTwo = TokenPayment.fungibleFromAmount(\"BAR-c80d29\", \"10.00\", 18);\nconst payments = [paymentOne, paymentTwo];\nconst data = new MultiESDTNFTTransferPayloadBuilder()\n    .setPayments(payments)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000 * payments.length,\n    chainID: \"D\"\n});"
+                "import { MultiESDTNFTTransferPayloadBuilder } from \"@multiversx/sdk-core\";\n\nconst paymentOne = TokenPayment.nonFungible(\"TEST-38f249\", 1);\nconst paymentTwo = TokenPayment.fungibleFromAmount(\"BAR-c80d29\", \"10.00\", 18);\nconst payments = [paymentOne, paymentTwo];\nconst data = new MultiESDTNFTTransferPayloadBuilder()\n    .setPayments(payments)\n    .setDestination(Address.fromBech32(\"erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx\"))\n    .build();\n\nconst transfer = new Transaction({\n    nonce: 7,\n    sender: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    // Same as sender address!\n    receiver: Address.fromBech32(\"erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th\"),\n    data: data,\n    gasLimit: 50000 + 1500 * data.length() + 1000000 * payments.length,\n    chainID: \"D\"\n});"
             ],
             "outputs": []
         }
