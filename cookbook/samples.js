@@ -1,12 +1,16 @@
 import { Address, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 
+export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+export const addressOfBob = new Address("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+export const addressOfCarol = new Address("erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8");
+
 export function getNotYetSignedTx() {
     return new Transaction({
         value: "1",
         gasLimit: 70000,
         gasPrice: 1000000000,
-        sender: Address.fromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"),
-        receiver: Address.fromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+        sender: addressOfAlice,
+        receiver: addressOfBob,
         data: new TransactionPayload("hello"),
         chainID: "D",
         version: 1

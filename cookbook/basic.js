@@ -1,4 +1,4 @@
-import { getNotYetSignedTx, getReadyToBroadcastTx } from "./samples.js"; // md-ignore
+import { addressOfAlice, addressOfBob, getNotYetSignedTx, getReadyToBroadcastTx } from "./samples.js"; // md-ignore
 
 const notYetSignedTx = getNotYetSignedTx(); // md-ignore
 const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
@@ -45,9 +45,8 @@ console.log(networkConfig.ChainID);
 // The following snippet fetches (from the Network) the **nonce** and the **balance** of an account, and updates the local representation of the account.
 
 // ```
-import { Account, Address } from "@multiversx/sdk-core";
+import { Account } from "@multiversx/sdk-core";
 
-const addressOfAlice = Address.fromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 const alice = new Account(addressOfAlice);
 const aliceOnNetwork = await apiNetworkProvider.getAccount(addressOfAlice);
 alice.update(aliceOnNetwork);
@@ -132,8 +131,8 @@ import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
 const tx = new Transaction({
     data: new TransactionPayload("helloWorld"),
     gasLimit: 70000,
-    sender: Address.fromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"),
-    receiver: Address.fromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+    sender: addressOfAlice,
+    receiver: addressOfBob,
     value: TokenTransfer.egldFromAmount(1),
     chainID: "D"
 });
@@ -178,20 +177,20 @@ let txHash = response.data.txHash;
 import { TransactionWatcher } from "@multiversx/sdk-core";
 
 const watcher = new TransactionWatcher(apiNetworkProvider);
-// const transactionOnNetwork = await watcher.awaitCompleted(tx); // md-include
+// const transactionOnNetwork = await watcher.awaitCompleted(tx); // md-uncomment
 // ```
 
 // If only the `txHash` is available, then:
 
 // ```
-// const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash }); // md-include
-// console.log(transactionOnNetwork); // md-include
+// const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash }); // md-uncomment
+// console.log(transactionOnNetwork); // md-uncomment
 // ```
 
 // In order to wait for multiple transactions:
 
 // ```
-// await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]); // md-include
+// await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]); // md-uncomment
 // ```
 
 // For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
