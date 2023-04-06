@@ -1,3 +1,7 @@
+import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
+
+const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
+
 // ## Contract deployments
 
 // ### Load the bytecode from a file
@@ -42,8 +46,10 @@ let contract = new SmartContract();
 // ```
 import { Address, CodeMetadata } from "@multiversx/sdk-core";
 
-let transaction = contract.deploy({
-    deployer: Address.fromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"),
+const deployerAddress = Address.fromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+
+const deployTransaction = contract.deploy({
+    deployer: deployerAddress,
     code: code,
     codeMetadata: new CodeMetadata(/* set the parameters accordingly */),
     initArguments: [/* set the initial arguments, if any */],
@@ -54,16 +60,46 @@ let transaction = contract.deploy({
 
 // Then, set the transaction nonce.
 
-// Note that the account nonce must be synchronized beforehand.Also, locally increment the nonce of the deployer(optional).
+// Note that the account nonce must be synchronized beforehand. 
+// Also, locally increment the nonce of the deployer (optional).
 
 // ```
-transaction.setNonce(deployer.getNonceThenIncrement());
+import { Account } from "@multiversx/sdk-core";
+
+const deployer = new Account(deployerAddress);
+const deployerOnNetwork = await networkProvider.getAccount(deployerAddress);
+deployer.update(deployerOnNetwork);
+
+deployTransaction.setNonce(deployer.getNonceThenIncrement());
 // ```
 
-// Then sign the transaction using a wallet / signing provider of your choice.Upon signing, you would usually compute the contract address(deterministically computable), as follows:
+// Then **sign the transaction** using a wallet / signing provider of your choice (not shown here).
+
+import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
+
+const pemText = fs.readFileSync("../testwallets/alice.pem", { encoding: "utf8" }); // md-ignore
+const signer = UserSigner.fromPem(pemText); // md-ignore
+
+// Upon signing, you would usually compute the contract address (deterministically computable), as follows:
 
 // ```
-let contractAddress = SmartContract.computeAddress(transaction.getSender(), transaction.getNonce());
+const contractAddress = SmartContract.computeAddress(deployTransaction.getSender(), deployTransaction.getNonce());
+console.log("Contract address:", contractAddress.bech32());
 // ```
 
 // In order to broadcast the transaction and await its completion, use a network provider and a transaction watcher:
+
+// ```
+import { TransactionWatcher } from "@multiversx/sdk-core";
+
+await networkProvider.sendTransaction(deployTransaction);
+let transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(deployTransaction);
+// ```
+
+// In the end, parse the results:
+
+// ```
+import { ResultsParser } from "@multiversx/sdk-core";
+
+let { returnCode } = new ResultsParser().parseUntypedOutcome(transactionOnNetwork);
+// ```
