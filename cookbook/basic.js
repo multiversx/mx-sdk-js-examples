@@ -169,7 +169,7 @@ const response = await axios.post(url, data, {
     },
 });
 let txHash = response.data.txHash;
-//```
+// ```
 
 // ### Wait for transaction completion
 
@@ -177,20 +177,20 @@ let txHash = response.data.txHash;
 import { TransactionWatcher } from "@multiversx/sdk-core";
 
 const watcher = new TransactionWatcher(apiNetworkProvider);
-// const transactionOnNetwork = await watcher.awaitCompleted(tx); // md-uncomment
+// const transactionOnNetwork = await watcher.awaitCompleted(tx);
 // ```
 
 // If only the `txHash` is available, then:
 
 // ```
-// const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash }); // md-uncomment
-// console.log(transactionOnNetwork); // md-uncomment
+// const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash });
+// console.log(transactionOnNetwork);
 // ```
 
 // In order to wait for multiple transactions:
 
 // ```
-// await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]); // md-uncomment
+// await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]);
 // ```
 
 // For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
