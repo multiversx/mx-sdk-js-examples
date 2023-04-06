@@ -1,4 +1,4 @@
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload, TransactionVersion } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
@@ -101,6 +101,30 @@ export class HW {
         await this.provider.signTransactions(transactions);
 
         alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
+    }
+
+    async signGuardedTransaction() {
+        await this.provider.init();
+
+        const sender = await this.provider.getAddress();
+        const transaction = new Transaction({
+            nonce: 42,
+            value: "1",
+            gasLimit: 200000,
+            sender: Address.fromBech32(sender),
+            receiver: Address.fromBech32("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
+            guardian: Address.fromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+            data: new TransactionPayload("hello"),
+            chainID: "T",
+            version: TransactionVersion.withTxOptions(),
+            options: TransactionOptions.withOptions({
+                guarded: true
+            })
+        });
+
+        await this.provider.signTransaction(transaction);
+
+        alert(JSON.stringify(transaction.toSendable(), null, 4));
     }
 
     async signMessage() {
