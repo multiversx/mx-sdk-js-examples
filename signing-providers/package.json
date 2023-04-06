@@ -8,7 +8,7 @@
   },
   "author": "MultiversX",
   "dependencies": {
-    "@multiversx/sdk-core": "12.0.1-beta.4",
+    "@multiversx/sdk-core": "git+https://github.com/multiversx/mx-sdk-js-core#prepare-release-06",
     "@multiversx/sdk-extension-provider": "2.0.7",
     "@multiversx/sdk-hw-provider": "git+https://github.com/multiversx/mx-sdk-js-hw-provider#tx-options-03",
     "@multiversx/sdk-wallet": "3.0.0",
