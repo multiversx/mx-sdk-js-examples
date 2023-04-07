@@ -104,6 +104,15 @@ export class HW {
     }
 
     async signGuardedTransaction() {
+        try {
+            await this.doSignGuardedTransaction();
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    }
+
+    async doSignGuardedTransaction() {
         await this.provider.init();
 
         const sender = await this.provider.getAddress();
