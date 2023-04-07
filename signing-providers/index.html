@@ -101,44 +101,6 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Wallet Connect ( Maiar ) ( Deprecated )</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="walletConnect.login()">Login</button>
-                    <button class="btn btn-info" disabled="disabled" onclick="walletConnect.loginWithToken()">Login with
-                        token</button>
-                    <button class="btn btn-info" onclick="walletConnect.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="walletConnect.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" disabled="disabled" onclick="walletConnect.signMessage()">Sign
-                        message</button>
-                    <button class="btn btn-info" onclick="walletConnect.logout()">Logout</button>
-                </div>
-            </div>
-            <div class="modal" id="MyWalletConnectModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Connect using Maiar on your phone</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div id="MyWalletConnectQRContainer"></div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
                     <h3>Hardware Wallet</h3>
                 </div>
             </div>
@@ -195,8 +157,7 @@
 
     <script>
         const webWallet = new app.WebWallet();
-        const extension = new app.Extension();
-        const walletConnect = new app.WalletConnect();
+        const extension = new app.Extension();        
         const walletConnectV2 = new app.WalletConnectV2();
         const hw = new app.HW();
     </script>

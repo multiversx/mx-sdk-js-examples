@@ -1,0 +1,36 @@
+{
+    "name": "counter",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "increment",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "i64"
+                }
+            ]
+        },
+        {
+            "name": "decrement",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "i64"
+                }
+            ]
+        },
+        {
+            "name": "get",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "i64"
+                }
+            ]
+        }
+    ]
+}

@@ -8,12 +8,12 @@
   },
   "author": "MultiversX",
   "dependencies": {
-    "@multiversx/sdk-core": "git+https://github.com/multiversx/mx-sdk-js-core#prepare-release-06",
+    "@multiversx/sdk-wallet": "4.0.0",
+    "@multiversx/sdk-core": "12.0.1",
     "@multiversx/sdk-extension-provider": "2.0.7",
-    "@multiversx/sdk-hw-provider": "git+https://github.com/multiversx/mx-sdk-js-hw-provider#tx-options-03",
-    "@multiversx/sdk-wallet": "3.0.0",
+    "@multiversx/sdk-hw-provider": "3.0.3",
     "@multiversx/sdk-web-wallet-provider": "2.3.0",
-    "@multiversx/sdk-wallet-connect-provider": "3.1.0",
+    "@multiversx/sdk-wallet-connect-provider": "3.2.0",
     "qrcode": "1.5.1",
     "qs": "6.10.3"
   },
