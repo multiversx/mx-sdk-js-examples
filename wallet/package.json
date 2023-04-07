@@ -6,8 +6,8 @@
   "author": "MultiversX",
   "dependencies": {
     "axios": "0.24.0",
-    "@multiversx/sdk-wallet": "3.0.0",
-    "@multiversx/sdk-core": "11.4.1"
+    "@multiversx/sdk-wallet": "4.0.0",
+    "@multiversx/sdk-core": "12.0.1-beta.4"
   },
   "devDependencies": {}
 }
