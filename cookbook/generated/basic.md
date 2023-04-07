@@ -136,10 +136,10 @@ tx.setNonce(alice.getNonceThenIncrement());
 
 ### Broadcast using a network provider
 
-// ``` 
+```
 let txHash = await proxyNetworkProvider.sendTransaction(tx); 
 console.log("Hash:", txHash); 
-// ``` 
+```
 
 Note that the transaction **must to be signed before being broadcasted**. Signing can be achieved using a signing provider.
 

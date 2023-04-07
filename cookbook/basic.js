@@ -142,13 +142,13 @@ tx.setNonce(alice.getNonceThenIncrement());
 
 // ### Broadcast using a network provider
 
+// ```
 try { // md-ignore
-    // ``` // md-unindent
     let txHash = await proxyNetworkProvider.sendTransaction(tx); // md-unindent
     console.log("Hash:", txHash); // md-unindent
-    // ``` // md-unindent
 } catch { // md-ignore
 } // md-ignore
+// ```
 
 // Note that the transaction **must to be signed before being broadcasted**. Signing can be achieved using a signing provider.
 
