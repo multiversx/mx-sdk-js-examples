@@ -1,5 +1,5 @@
 const { Mnemonic, UserSigner, UserVerifier } = require("@multiversx/sdk-wallet");
-const { Address, GasEstimator, SignableMessage, Transaction, TokenPayment, TransactionPayload } = require("@multiversx/sdk-core");
+const { Address, GasEstimator, SignableMessage, Transaction, TokenTransfer, TransactionPayload } = require("@multiversx/sdk-core");
 const axios = require("axios");
 
 // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/mnemonic.txt
@@ -43,7 +43,7 @@ module.exports.exampleSignAndBroadcastTransaction = async function () {
     const transaction = new Transaction({
         nonce: nonce,
         // 0.123456789000000000 EGLD
-        value: TokenPayment.egldFromBigInteger("123456789000000000"),
+        value: TokenTransfer.egldFromBigInteger("123456789000000000"),
         sender: address,
         receiver: new Address("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
         data: new TransactionPayload(data),
@@ -52,8 +52,11 @@ module.exports.exampleSignAndBroadcastTransaction = async function () {
         chainID: "D"
     });
 
-    await signer.sign(transaction);
-    console.log("Transaction signature", transaction.getSignature().hex());
+    const serializedTransaction = transaction.serializeForSigning();
+    const signature = await signer.sign(serializedTransaction);
+    transaction.applySignature(signature);
+
+    console.log("Transaction signature", transaction.getSignature().toString("hex"));
     console.log("Transaction hash", transaction.getHash().hex());
 
     console.log("Data to broadcast:");
@@ -93,9 +96,11 @@ module.exports.exampleSignMessage = async function () {
         message: Buffer.from(dataExample)
     });
 
-    await signer.sign(message);
-    const signature = message.getSignature().hex();
-    console.log("Message signature", signature);
+    const serializedMessage = message.serializeForSigning();
+    const signature = await signer.sign(serializedMessage);
+    message.applySignature(signature);
+
+    console.log("Message signature", message.getSignature().toString("hex"));
 
     // In order to validate a message signature, follow:
     // https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#verifying-the-signature-of-a-login-token
@@ -106,15 +111,18 @@ module.exports.exampleVerifyMessage = async function () {
     const dataExample = `${addressBech32}hello{}`;
     const message = new SignableMessage({
         message: Buffer.from(dataExample),
-        signature: { hex: () => "5a7de64fb45bb11fc540839bff9de5276e1b17de542e7750b002e4663aea327b9834d4ac46b2c9531653113b7eb3eb000aef89943bd03fd96353fbcf03512809" }
+        signature: Buffer.from("5a7de64fb45bb11fc540839bff9de5276e1b17de542e7750b002e4663aea327b9834d4ac46b2c9531653113b7eb3eb000aef89943bd03fd96353fbcf03512809", "hex")
     });
 
     const verifier = UserVerifier.fromAddress(Address.fromBech32(addressBech32));
+    const serializedMessage = message.serializeForSigning();
+    const signature = message.getSignature();
 
-    console.log("verify() with good signature:", verifier.verify(message));
+    console.log("verify() with good signature:", verifier.verify(serializedMessage, signature));
 
     message.message = Buffer.from("bye");
-    console.log("verify() with bad signature (message altered):", verifier.verify(message));
+    const serializedMessageAltered = message.serializeForSigning();
+    console.log("verify() with bad signature (message altered):", verifier.verify(serializedMessageAltered, signature));
 }
 
 module.exports.exampleVerifyTransactionSignature = async function () {
@@ -132,9 +140,12 @@ module.exports.exampleVerifyTransactionSignature = async function () {
     });
 
     const verifier = UserVerifier.fromAddress(Address.fromBech32(addressBech32));
+    const serializedTransaction = transaction.serializeForSigning();
+    const signature = transaction.getSignature();
 
-    console.log("verify() with good signature:", verifier.verify(transaction));
+    console.log("verify() with good signature:", verifier.verify(serializedTransaction, signature));
 
     transaction.setNonce(7);
-    console.log("verify() with bad signature (message altered):", verifier.verify(transaction));
+    const serializedAlteredTransaction = transaction.serializeForSigning();
+    console.log("verify() with bad signature (message altered):", verifier.verify(serializedAlteredTransaction, signature));
 }
