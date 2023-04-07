@@ -45,9 +45,9 @@ Then, parse the response as above.
 ### When the ABI is available
 
 ```
-import { AbiRegistry, SmartContractAbi } from "@multiversx/sdk-core";
+import { AbiRegistry } from "@multiversx/sdk-core";
 
-const legacyDelegationAbi = new SmartContractAbi(AbiRegistry.create({
+const legacyDelegationAbi = AbiRegistry.create({
     "endpoints": [
         {
             "name": "getClaimableRewards",
@@ -59,7 +59,7 @@ const legacyDelegationAbi = new SmartContractAbi(AbiRegistry.create({
             }]
         }
     ]
-}));
+});
 
 const getClaimableRewardsEndpoint = legacyDelegationAbi.getEndpoint("getClaimableRewards");
 

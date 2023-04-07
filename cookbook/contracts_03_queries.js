@@ -1,5 +1,5 @@
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { addressOfFirstDevnetDelegator, legacyDelegationContractAddress } from "./samples"; // md-ignore
+import { addressOfFirstDevnetDelegator, legacyDelegationContractAddress } from "./samples.js"; // md-ignore
 
 const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 
@@ -48,9 +48,9 @@ console.assert(JSON.stringify(queryResponseFromInteraction) === JSON.stringify(q
 // ### When the ABI is available
 
 // ```
-import { AbiRegistry, SmartContractAbi } from "@multiversx/sdk-core";
+import { AbiRegistry } from "@multiversx/sdk-core";
 
-const legacyDelegationAbi = new SmartContractAbi(AbiRegistry.create({
+const legacyDelegationAbi = AbiRegistry.create({
     "endpoints": [
         {
             "name": "getClaimableRewards",
@@ -62,7 +62,7 @@ const legacyDelegationAbi = new SmartContractAbi(AbiRegistry.create({
             }]
         }
     ]
-}));
+});
 
 const getClaimableRewardsEndpoint = legacyDelegationAbi.getEndpoint("getClaimableRewards");
 

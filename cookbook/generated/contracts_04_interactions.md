@@ -45,9 +45,9 @@ Then, sign, broadcast `tx` and wait for its completion.
 ### Using `Interaction`, when the ABI is available
 
 ```
-import { AbiRegistry, SmartContractAbi } from "@multiversx/sdk-core";
+import { AbiRegistry } from "@multiversx/sdk-core";
 
-const abi = new SmartContractAbi(AbiRegistry.create({
+const abiRegistry = AbiRegistry.create({
     "endpoints": [
         {
             "name": "foobar",
@@ -68,9 +68,9 @@ const abi = new SmartContractAbi(AbiRegistry.create({
             "outputs": []
         }
     ]
-}));
+});
 
-contract = new SmartContract({ address: contractAddress, abi: abi });
+contract = new SmartContract({ address: contractAddress, abi: abiRegistry });
 
 let tx3 = contract.methods.doSomethingWithValue([1, 2, 3])
     .withSender(addressOfAlice)
@@ -139,7 +139,7 @@ let endpointDefinition = AbiRegistry.create({
         "inputs": [],
         "outputs": [{ "type": "i64" }]
     }]
-}).getInterface("counter").getEndpoint("increment");
+}).getEndpoint("increment");
 
 transactionOnNetwork = await networkProvider.getTransaction(txHash);
 let typedBundle = resultsParser.parseOutcome(transactionOnNetwork, endpointDefinition);
