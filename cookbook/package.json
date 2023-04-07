@@ -2,7 +2,7 @@
     "type": "module",
     "dependencies": {
         "@multiversx/sdk-wallet": "4.0.0",
-        "@multiversx/sdk-core": "git+https://github.com/multiversx/mx-sdk-js-core#feat/erdjs-v12",
+        "@multiversx/sdk-core": "12.1.0",
         "@multiversx/sdk-network-providers": "1.3.0",
         "axios": "1.3.4"
     }
