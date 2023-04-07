@@ -1,4 +1,4 @@
-import { addressOfAlice, addressOfBob } from "./samples";
+import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
 
 // ## Token transfers
 

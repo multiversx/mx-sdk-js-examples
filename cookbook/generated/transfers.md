@@ -1,4 +1,3 @@
-import { addressOfAlice, addressOfBob } from "./samples";
 
 ## Token transfers
 
