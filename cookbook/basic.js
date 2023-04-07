@@ -150,7 +150,7 @@ try { // md-ignore
 } // md-ignore
 // ```
 
-// Note that the transaction **must to be signed before being broadcasted**. Signing can be achieved using a signing provider.
+// Note that the transaction **must be signed before being broadcasted**. Signing can be achieved using a signing provider.
 
 // :::important
 // Note that, for all purposes, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
