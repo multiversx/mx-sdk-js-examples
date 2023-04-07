@@ -23,6 +23,7 @@ let queryResponse = await networkProvider.queryContract(query);
 let bundle = new ResultsParser().parseUntypedQueryResponse(queryResponse);
 let firstValue = bundle.values[0];
 let decodedValue = new BinaryCodec().decodeTopLevel(firstValue, new BigUIntType());
+
 console.log(bundle.returnCode);
 console.log(bundle.returnMessage);
 console.log(bundle.values);

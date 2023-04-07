@@ -67,3 +67,4 @@ const tx4 = factory.createMultiESDTNFTTransfer({
     destination: addressOfBob,
     chainID: "D"
 });
+// ```
