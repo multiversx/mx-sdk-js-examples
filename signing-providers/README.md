@@ -30,7 +30,7 @@ npm run build
 Start the server (with a HTTPS binding):
 
 ```bash
-http-server -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=8080
+http-server -c-1 -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=8080
 ```
 
 Afterwards, navigate to [https://localhost:8080/index.html](https://localhost:8080/index.html).

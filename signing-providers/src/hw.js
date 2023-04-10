@@ -1,4 +1,4 @@
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload, TransactionVersion } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
@@ -15,7 +15,9 @@ export class HW {
 
         await this.provider.login({ addressIndex: addressIndex });
 
-        alert(`Logged in. Address: ${await this.provider.getAddress()}`);
+        const address = await this.provider.getAddress();
+
+        this.displayOutcome("Logged in. Address:", address);
     }
 
     async loginWithToken() {
@@ -27,9 +29,10 @@ export class HW {
         const authToken = acquireThirdPartyAuthToken();
         const payloadToSign = Buffer.from(`${authToken}{}`);
         const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
+        const verifyResult = verifyAuthTokenSignature(address, authToken, signature.hex());
 
-        alert(`Logged in.\nAddress: ${address}\nSignature: ${signature.hex()}`);
-        alert(verifyAuthTokenSignature(address, authToken, signature.hex()));
+        this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.hex()}`);
+        this.displayOutcome(`Verification result: ${verifyResult}`);
     }
 
     async displayAddresses() {
@@ -47,7 +50,7 @@ export class HW {
 
         await this.provider.setAddressIndex(addressIndex);
 
-        alert(`Address has been set: ${await this.provider.getAddress()}.`);
+        this.displayOutcome(`Address has been set: ${await this.provider.getAddress()}.`)
     }
 
     async signTransaction() {
@@ -66,7 +69,7 @@ export class HW {
 
         await this.provider.signTransaction(transaction);
 
-        alert(JSON.stringify(transaction.toSendable(), null, 4));
+        this.displayOutcome("Transaction signed.", transaction.toSendable());
     }
 
     async signTransactions() {
@@ -100,7 +103,39 @@ export class HW {
         const transactions = [firstTransaction, secondTransaction];
         await this.provider.signTransactions(transactions);
 
-        alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
+        this.displayOutcome("Transactions signed.", transactions.map((transaction) => transaction.toSendable()));
+    }
+
+    async signGuardedTransaction() {
+        try {
+            await this.doSignGuardedTransaction();
+        } catch (error) {
+            this.displayError(error);
+        }
+    }
+
+    async doSignGuardedTransaction() {
+        await this.provider.init();
+
+        const sender = await this.provider.getAddress();
+        const transaction = new Transaction({
+            nonce: 42,
+            value: "1",
+            gasLimit: 200000,
+            sender: Address.fromBech32(sender),
+            receiver: Address.fromBech32("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
+            guardian: Address.fromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
+            data: new TransactionPayload("hello"),
+            chainID: "T",
+            version: TransactionVersion.withTxOptions(),
+            options: TransactionOptions.withOptions({
+                guarded: true
+            })
+        });
+
+        await this.provider.signTransaction(transaction);
+
+        this.displayOutcome("Transaction signed.", transaction.toSendable());
     }
 
     async signMessage() {
@@ -111,6 +146,23 @@ export class HW {
         });
 
         await this.provider.signMessage(message);
-        alert(JSON.stringify(message, null, 4));
+
+        this.displayOutcome("Message signed.", message);
+    }
+
+    displayOutcome(message, outcome) {
+        if (!outcome) {
+            console.log(message);
+            alert(message);
+            return;
+        }
+
+        console.log(message, outcome);
+        alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
+    }
+
+    displayError(error) {
+        console.error(error);
+        alert(`Error: ${error}`);
     }
 }
