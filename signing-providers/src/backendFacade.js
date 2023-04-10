@@ -19,11 +19,11 @@ export function verifyAuthTokenSignature(address, authToken, signature) {
     const verifier = UserVerifier.fromAddress(new Address(address));
 
     const message = new SignableMessage({
-        signature: { hex: () => signature },
         message: Buffer.from(`${address}${authToken}{}`)
     });
 
-    const ok = verifier.verify(message);
+    const serializedMessage = message.serializeForSigning();
+    const ok = verifier.verify(serializedMessage, Buffer.from(signature, "hex"));
     if (ok) {
         return `The bearer of the token [${authToken}] is also the owner of the address [${address}].`;
     }
