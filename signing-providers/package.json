@@ -11,7 +11,7 @@
     "@multiversx/sdk-wallet": "4.0.0",
     "@multiversx/sdk-core": "12.1.0",
     "@multiversx/sdk-extension-provider": "2.0.7",
-    "@multiversx/sdk-hw-provider": "git+https://github.com/multiversx/mx-sdk-js-hw-provider#8d0009631a634feead32058d5613257d3385664f",
+    "@multiversx/sdk-hw-provider": "4.0.0",
     "@multiversx/sdk-web-wallet-provider": "2.3.0",
     "@multiversx/sdk-wallet-connect-provider": "3.2.0",
     "qrcode": "1.5.1",
