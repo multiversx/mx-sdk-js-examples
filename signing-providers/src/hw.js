@@ -29,9 +29,9 @@ export class HW {
         const authToken = acquireThirdPartyAuthToken();
         const payloadToSign = Buffer.from(`${authToken}{}`);
         const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
-        const verifyResult = verifyAuthTokenSignature(address, authToken, signature.hex());
+        const verifyResult = verifyAuthTokenSignature(address, authToken, signature.toString("hex"));
 
-        this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.hex()}`);
+        this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.toString("hex")}`);
         this.displayOutcome(`Verification result: ${verifyResult}`);
     }
 
