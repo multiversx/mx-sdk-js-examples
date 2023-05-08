@@ -45,16 +45,20 @@ export class WebWallet {
 
     async signTransaction() {
         const sender = getUrlParams().address;
+        if (!sender) {
+            alert("Try to login first.");
+            return;
+        }
+
         const transaction = new Transaction({
             nonce: 42,
-            value: "1",
+            value: "1000000000000000000",
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
-            version: 1
+            chainID: "T"
         });
 
         await this.provider.signTransaction(transaction);
@@ -62,10 +66,14 @@ export class WebWallet {
 
     async signTransactions() {
         const sender = getUrlParams().address;
+        if (!sender) {
+            alert("Try to login first.");
+            return;
+        }
 
         const firstTransaction = new Transaction({
             nonce: 42,
-            value: "1",
+            value: "1000000000000000000",
             gasLimit: 70000,
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
@@ -75,7 +83,7 @@ export class WebWallet {
 
         const secondTransaction = new Transaction({
             nonce: 43,
-            value: "1",
+            value: "3000000000000000000",
             gasLimit: 70000,
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
