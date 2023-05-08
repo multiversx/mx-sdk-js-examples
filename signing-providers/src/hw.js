@@ -67,9 +67,9 @@ export class HW {
             chainID: "T"
         });
 
-        await this.provider.signTransaction(transaction);
+        const signedTransaction = await this.provider.signTransaction(transaction);
 
-        this.displayOutcome("Transaction signed.", transaction.toSendable());
+        this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
     }
 
     async signTransactions() {
@@ -101,9 +101,9 @@ export class HW {
         });
 
         const transactions = [firstTransaction, secondTransaction];
-        await this.provider.signTransactions(transactions);
+        const signedTransactions = await this.provider.signTransactions(transactions);
 
-        this.displayOutcome("Transactions signed.", transactions.map((transaction) => transaction.toSendable()));
+        this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
     }
 
     async signGuardedTransaction() {
@@ -133,9 +133,9 @@ export class HW {
             })
         });
 
-        await this.provider.signTransaction(transaction);
+        const signedTransaction = await this.provider.signTransaction(transaction);
 
-        this.displayOutcome("Transaction signed.", transaction.toSendable());
+        this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
     }
 
     async signMessage() {
@@ -145,9 +145,9 @@ export class HW {
             message: Buffer.from("hello")
         });
 
-        await this.provider.signMessage(message);
+        const signedMessage = await this.provider.signMessage(message);
 
-        this.displayOutcome("Message signed.", message);
+        this.displayOutcome("Message signed.", signedMessage);
     }
 
     displayOutcome(message, outcome) {
