@@ -4,23 +4,28 @@
   "description": "Examples",
   "main": "src/index.js",
   "scripts": {
-    "build": "browserify src/index.js -o out/app.js --standalone app -p esmify"
+    "build": "webpack"
   },
   "author": "MultiversX",
   "dependencies": {
-    "@multiversx/sdk-wallet": "4.0.0",
-    "@multiversx/sdk-core": "12.1.0",
+    "@multiversx/sdk-core": "12.4.2",
     "@multiversx/sdk-extension-provider": "2.0.7",
-    "@multiversx/sdk-hw-provider": "6.0.0",
-    "@multiversx/sdk-web-wallet-provider": "3.0.0",
+    "@multiversx/sdk-hw-provider": "6.1.0",
+    "@multiversx/sdk-wallet": "4.0.0",
     "@multiversx/sdk-wallet-connect-provider": "3.2.1",
+    "@multiversx/sdk-web-wallet-provider": "3.0.0",
+    "punycode": "2.3.0",
     "qrcode": "1.5.1",
     "qs": "6.10.3"
   },
   "devDependencies": {
     "@types/node": "18.0.3",
-    "browserify": "17.0.0",
+    "crypto-browserify": "3.12.0",
     "esmify": "2.1.1",
-    "typescript": "4.7.4"
+    "path-browserify": "1.0.1",
+    "stream-browserify": "3.0.0",
+    "typescript": "4.7.4",
+    "webpack": "5.88.0",
+    "webpack-cli": "4.8.0"
   }
 }
