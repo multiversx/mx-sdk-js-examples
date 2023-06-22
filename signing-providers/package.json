@@ -21,7 +21,6 @@
   "devDependencies": {
     "@types/node": "18.0.3",
     "crypto-browserify": "3.12.0",
-    "esmify": "2.1.1",
     "path-browserify": "1.0.1",
     "stream-browserify": "3.0.0",
     "typescript": "4.7.4",
