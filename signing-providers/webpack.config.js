@@ -33,7 +33,7 @@ const config = {
             stream: require.resolve("stream-browserify"),
             crypto: require.resolve("crypto-browserify"),
             path: require.resolve("path-browserify"),
-            punycode: require.resolve("punycode/"),
+            punycode: require.resolve("punycode"),
             fs: false,
         },
     },
