@@ -9,7 +9,7 @@
   "author": "MultiversX",
   "dependencies": {
     "@multiversx/sdk-core": "12.4.2",
-    "@multiversx/sdk-extension-provider": "2.0.7",
+    "@multiversx/sdk-extension-provider": "3.0.0",
     "@multiversx/sdk-hw-provider": "6.1.0",
     "@multiversx/sdk-wallet": "4.0.0",
     "@multiversx/sdk-wallet-connect-provider": "4.0.0",
