@@ -62,7 +62,7 @@ export class HW {
 
         const senderBech32 = await this.provider.getAddress();
         const sender = new Address(senderBech32);
-        const guardian = await this.getGuardianAddress(sender);
+        const guardian = await this.getGuardian(sender);
 
         const transaction = new Transaction({
             nonce: 42,
@@ -89,7 +89,7 @@ export class HW {
 
         const senderBech32 = await this.provider.getAddress();
         const sender = new Address(senderBech32);
-        const guardian = await this.getGuardianAddress(sender);
+        const guardian = await this.getGuardian(sender);
 
         const firstTransaction = new Transaction({
             nonce: 42,
@@ -125,10 +125,9 @@ export class HW {
         }
     }
 
-    async getGuardianAddress(sender) {
+    async getGuardian(sender) {
         const guardianData = await this.apiNetworkProvider.getGuardianData(sender);
-        const currentGuardian = guardianData.getCurrentGuardianAddress();
-        return currentGuardian;
+        return guardianData.getCurrentGuardianAddress();
     }
 
     async showSignedTransactionsWhenGuarded() {
