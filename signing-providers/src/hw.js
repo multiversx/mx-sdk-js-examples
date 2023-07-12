@@ -1,10 +1,14 @@
-import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload, TransactionVersion } from "@multiversx/sdk-core";
+import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
+import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
+import { WALLET_PROVIDER_TESTNET, WalletProvider } from '@multiversx/sdk-web-wallet-provider';
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class HW {
     constructor() {
         this.provider = new HWProvider();
+        this.walletProvider = new WalletProvider(WALLET_PROVIDER_TESTNET);
+        this.apiNetworkProvider = new ApiNetworkProvider("https://testnet-api.multiversx.com");
     }
 
     async login() {
@@ -56,86 +60,92 @@ export class HW {
     async signTransaction() {
         await this.provider.init();
 
-        const sender = await this.provider.getAddress();
+        const senderBech32 = await this.provider.getAddress();
+        const sender = new Address(senderBech32);
+        const guardian = await this.getGuardianAddress(sender);
+
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
             gasLimit: 70000,
-            sender: new Address(sender),
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: "T"
+            chainID: "T",
+            guardian: guardian ? guardian : undefined,
         });
 
         const signedTransaction = await this.provider.signTransaction(transaction);
 
-        this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
+        if (guardian) {
+            await this.walletProvider.guardTransactions([transaction], { callbackUrl: getCurrentLocation() });
+        } else {
+            this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
+        }
     }
 
     async signTransactions() {
         await this.provider.init();
 
-        const sender = await this.provider.getAddress();
+        const senderBech32 = await this.provider.getAddress();
+        const sender = new Address(senderBech32);
+        const guardian = await this.getGuardianAddress(sender);
+
         const firstTransaction = new Transaction({
             nonce: 42,
             value: "1",
-            sender: new Address(sender),
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: "T",
-            version: 1
+            guardian: guardian ? guardian : undefined
         });
 
         const secondTransaction = new Transaction({
             nonce: 43,
             value: "100000000",
-            sender: new Address(sender),
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
             chainID: "T",
-            version: 1
+            guardian: guardian ? guardian : undefined
         });
 
         const transactions = [firstTransaction, secondTransaction];
         const signedTransactions = await this.provider.signTransactions(transactions);
 
-        this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
-    }
-
-    async signGuardedTransaction() {
-        try {
-            await this.doSignGuardedTransaction();
-        } catch (error) {
-            this.displayError(error);
+        if (guardian) {
+            await this.walletProvider.guardTransactions(transactions, { callbackUrl: getCurrentLocation() });
+        } else {
+            this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
         }
     }
 
-    async doSignGuardedTransaction() {
-        await this.provider.init();
+    async getGuardianAddress(sender) {
+        const guardianData = await this.apiNetworkProvider.getGuardianData(sender);
+        const currentGuardian = guardianData.getCurrentGuardianAddress();
+        return currentGuardian;
+    }
 
-        const sender = await this.provider.getAddress();
-        const transaction = new Transaction({
-            nonce: 42,
-            value: "1",
-            gasLimit: 200000,
-            sender: Address.fromBech32(sender),
-            receiver: Address.fromBech32("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
-            guardian: Address.fromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
-            data: new TransactionPayload("hello"),
-            chainID: "T",
-            version: TransactionVersion.withTxOptions(),
-            options: TransactionOptions.withOptions({
-                guarded: true
-            })
-        });
+    async showSignedTransactionsWhenGuarded() {
+        const plainSignedTransactions = this.walletProvider.getTransactionsFromWalletUrl();
+        alert(JSON.stringify(plainSignedTransactions, null, 4));
 
-        const signedTransaction = await this.provider.signTransaction(transaction);
+        // Now let's convert them back to sdk-js' Transaction objects.
+        // Note that the Web Wallet provider returns the data field as a plain string. 
+        // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
+        // Therefore, we need to apply a workaround (an additional conversion).
+        for (const plainTransaction of plainSignedTransactions) {
+            const plainTransactionClone = structuredClone(plainTransaction);
+            plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
+            const transaction = Transaction.fromPlainObject(plainTransactionClone);
 
-        this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
+            console.log(transaction.toSendable());
+        }
     }
 
     async signMessage() {
@@ -165,4 +175,8 @@ export class HW {
         console.error(error);
         alert(`Error: ${error}`);
     }
+}
+
+function getCurrentLocation() {
+    return window.location.href.split("?")[0];
 }
