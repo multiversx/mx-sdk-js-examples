@@ -6,33 +6,33 @@ import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendF
 
 export class HW {
     constructor() {
-        this.provider = new HWProvider();
+        this.hwProvider = new HWProvider();
         this.walletProvider = new WalletProvider(WALLET_PROVIDER_TESTNET);
         this.apiNetworkProvider = new ApiNetworkProvider("https://testnet-api.multiversx.com");
     }
 
     async login() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
         console.log("AddressIndex", addressIndex);
 
-        await this.provider.login({ addressIndex: addressIndex });
+        await this.hwProvider.login({ addressIndex: addressIndex });
 
-        const address = await this.provider.getAddress();
+        const address = await this.hwProvider.getAddress();
 
         this.displayOutcome("Logged in. Address:", address);
     }
 
     async loginWithToken() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
         console.log("AddressIndex", addressIndex);
 
         const authToken = acquireThirdPartyAuthToken();
         const payloadToSign = Buffer.from(`${authToken}{}`);
-        const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
+        const { address, signature } = await this.hwProvider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
         const verifyResult = verifyAuthTokenSignature(address, authToken, signature.toString("hex"));
 
         this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.toString("hex")}`);
@@ -40,27 +40,27 @@ export class HW {
     }
 
     async displayAddresses() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
-        const addresses = await this.provider.getAccounts();
+        const addresses = await this.hwProvider.getAccounts();
         alert(addresses.join(",\n"));
     }
 
     async setAddressIndex() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForSetAddress").value);
         console.log("Set addressIndex", addressIndex);
 
-        await this.provider.setAddressIndex(addressIndex);
+        await this.hwProvider.setAddressIndex(addressIndex);
 
-        this.displayOutcome(`Address has been set: ${await this.provider.getAddress()}.`)
+        this.displayOutcome(`Address has been set: ${await this.hwProvider.getAddress()}.`)
     }
 
     async signTransaction() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
-        const senderBech32 = await this.provider.getAddress();
+        const senderBech32 = await this.hwProvider.getAddress();
         const sender = new Address(senderBech32);
         const guardian = await this.getGuardian(sender);
 
@@ -75,7 +75,7 @@ export class HW {
             guardian: guardian ? guardian : undefined,
         });
 
-        const signedTransaction = await this.provider.signTransaction(transaction);
+        const signedTransaction = await this.hwProvider.signTransaction(transaction);
 
         if (guardian) {
             await this.walletProvider.guardTransactions([transaction], { callbackUrl: getCurrentLocation() });
@@ -85,9 +85,9 @@ export class HW {
     }
 
     async signTransactions() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
-        const senderBech32 = await this.provider.getAddress();
+        const senderBech32 = await this.hwProvider.getAddress();
         const sender = new Address(senderBech32);
         const guardian = await this.getGuardian(sender);
 
@@ -116,7 +116,7 @@ export class HW {
         });
 
         const transactions = [firstTransaction, secondTransaction];
-        const signedTransactions = await this.provider.signTransactions(transactions);
+        const signedTransactions = await this.hwProvider.signTransactions(transactions);
 
         if (guardian) {
             await this.walletProvider.guardTransactions(transactions, { callbackUrl: getCurrentLocation() });
@@ -132,7 +132,7 @@ export class HW {
 
     async showSignedTransactionsWhenGuarded() {
         const plainSignedTransactions = this.walletProvider.getTransactionsFromWalletUrl();
-        alert(JSON.stringify(plainSignedTransactions, null, 4));
+        const signedTransactions = [];
 
         // Now let's convert them back to sdk-js' Transaction objects.
         // Note that the Web Wallet provider returns the data field as a plain string. 
@@ -142,19 +142,20 @@ export class HW {
             const plainTransactionClone = structuredClone(plainTransaction);
             plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
             const transaction = Transaction.fromPlainObject(plainTransactionClone);
-
-            console.log(transaction.toSendable());
+            signedTransactions.push(transaction);
         }
+
+        this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
     }
 
     async signMessage() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const message = new SignableMessage({
             message: Buffer.from("hello")
         });
 
-        const signedMessage = await this.provider.signMessage(message);
+        const signedMessage = await this.hwProvider.signMessage(message);
 
         this.displayOutcome("Message signed.", signedMessage);
     }
