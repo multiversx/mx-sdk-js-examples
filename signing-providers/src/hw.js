@@ -78,7 +78,7 @@ export class HW {
         const signedTransaction = await this.hwProvider.signTransaction(transaction);
 
         if (guardian) {
-            await this.walletProvider.guardTransactions([transaction], { callbackUrl: getCurrentLocation() });
+            await this.walletProvider.guardTransactions([signedTransaction], { callbackUrl: getCurrentLocation() });
         } else {
             this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
         }
@@ -119,7 +119,7 @@ export class HW {
         const signedTransactions = await this.hwProvider.signTransactions(transactions);
 
         if (guardian) {
-            await this.walletProvider.guardTransactions(transactions, { callbackUrl: getCurrentLocation() });
+            await this.walletProvider.guardTransactions(signedTransactions, { callbackUrl: getCurrentLocation() });
         } else {
             this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
         }
