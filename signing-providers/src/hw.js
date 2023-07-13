@@ -1,4 +1,4 @@
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 import { WALLET_PROVIDER_TESTNET, WalletProvider } from '@multiversx/sdk-web-wallet-provider';
@@ -63,6 +63,7 @@ export class HW {
         const senderBech32 = await this.hwProvider.getAddress();
         const sender = new Address(senderBech32);
         const guardian = await this.getGuardian(sender);
+        const transactionOptions = guardian ? TransactionOptions.withOptions({ guarded: true }) : undefined;
 
         const transaction = new Transaction({
             nonce: 42,
@@ -72,7 +73,8 @@ export class HW {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
             chainID: "T",
-            guardian: guardian ? guardian : undefined,
+            guardian: guardian,
+            options: transactionOptions
         });
 
         const signedTransaction = await this.hwProvider.signTransaction(transaction);
@@ -90,6 +92,7 @@ export class HW {
         const senderBech32 = await this.hwProvider.getAddress();
         const sender = new Address(senderBech32);
         const guardian = await this.getGuardian(sender);
+        const transactionOptions = guardian ? TransactionOptions.withOptions({ guarded: true }) : undefined;
 
         const firstTransaction = new Transaction({
             nonce: 42,
@@ -100,7 +103,8 @@ export class HW {
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: "T",
-            guardian: guardian ? guardian : undefined
+            guardian: guardian,
+            options: transactionOptions
         });
 
         const secondTransaction = new Transaction({
@@ -112,7 +116,8 @@ export class HW {
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
             chainID: "T",
-            guardian: guardian ? guardian : undefined
+            guardian: guardian,
+            options: transactionOptions
         });
 
         const transactions = [firstTransaction, secondTransaction];
