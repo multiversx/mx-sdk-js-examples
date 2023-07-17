@@ -1,34 +1,38 @@
-import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload, TransactionVersion } from "@multiversx/sdk-core";
+import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
+import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
+import { WALLET_PROVIDER_TESTNET, WalletProvider } from '@multiversx/sdk-web-wallet-provider';
 import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
 
 export class HW {
     constructor() {
-        this.provider = new HWProvider();
+        this.hwProvider = new HWProvider();
+        this.walletProvider = new WalletProvider(WALLET_PROVIDER_TESTNET);
+        this.apiNetworkProvider = new ApiNetworkProvider("https://testnet-api.multiversx.com");
     }
 
     async login() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
         console.log("AddressIndex", addressIndex);
 
-        await this.provider.login({ addressIndex: addressIndex });
+        await this.hwProvider.login({ addressIndex: addressIndex });
 
-        const address = await this.provider.getAddress();
+        const address = await this.hwProvider.getAddress();
 
         this.displayOutcome("Logged in. Address:", address);
     }
 
     async loginWithToken() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
         console.log("AddressIndex", addressIndex);
 
         const authToken = acquireThirdPartyAuthToken();
         const payloadToSign = Buffer.from(`${authToken}{}`);
-        const { address, signature } = await this.provider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
+        const { address, signature } = await this.hwProvider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
         const verifyResult = verifyAuthTokenSignature(address, authToken, signature.toString("hex"));
 
         this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.toString("hex")}`);
@@ -36,116 +40,127 @@ export class HW {
     }
 
     async displayAddresses() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
-        const addresses = await this.provider.getAccounts();
+        const addresses = await this.hwProvider.getAccounts();
         alert(addresses.join(",\n"));
     }
 
     async setAddressIndex() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const addressIndex = parseInt(document.getElementById("addressIndexForSetAddress").value);
         console.log("Set addressIndex", addressIndex);
 
-        await this.provider.setAddressIndex(addressIndex);
+        await this.hwProvider.setAddressIndex(addressIndex);
 
-        this.displayOutcome(`Address has been set: ${await this.provider.getAddress()}.`)
+        this.displayOutcome(`Address has been set: ${await this.hwProvider.getAddress()}.`)
     }
 
     async signTransaction() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
-        const sender = await this.provider.getAddress();
+        const senderBech32 = await this.hwProvider.getAddress();
+        const sender = new Address(senderBech32);
+        const guardian = await this.getGuardian(sender);
+        const transactionOptions = guardian ? TransactionOptions.withOptions({ guarded: true }) : undefined;
+
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
             gasLimit: 70000,
-            sender: new Address(sender),
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: "T"
+            chainID: "T",
+            guardian: guardian,
+            options: transactionOptions
         });
 
-        const signedTransaction = await this.provider.signTransaction(transaction);
+        const signedTransaction = await this.hwProvider.signTransaction(transaction);
 
-        this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
+        if (guardian) {
+            await this.walletProvider.guardTransactions([signedTransaction], { callbackUrl: getCurrentLocation() });
+        } else {
+            this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
+        }
     }
 
     async signTransactions() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
-        const sender = await this.provider.getAddress();
+        const senderBech32 = await this.hwProvider.getAddress();
+        const sender = new Address(senderBech32);
+        const guardian = await this.getGuardian(sender);
+        const transactionOptions = guardian ? TransactionOptions.withOptions({ guarded: true }) : undefined;
+
         const firstTransaction = new Transaction({
             nonce: 42,
             value: "1",
-            sender: new Address(sender),
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: "T",
-            version: 1
+            guardian: guardian,
+            options: transactionOptions
         });
 
         const secondTransaction = new Transaction({
             nonce: 43,
             value: "100000000",
-            sender: new Address(sender),
+            sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
             chainID: "T",
-            version: 1
+            guardian: guardian,
+            options: transactionOptions
         });
 
         const transactions = [firstTransaction, secondTransaction];
-        const signedTransactions = await this.provider.signTransactions(transactions);
+        const signedTransactions = await this.hwProvider.signTransactions(transactions);
+
+        if (guardian) {
+            await this.walletProvider.guardTransactions(signedTransactions, { callbackUrl: getCurrentLocation() });
+        } else {
+            this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
+        }
+    }
+
+    async getGuardian(sender) {
+        const guardianData = await this.apiNetworkProvider.getGuardianData(sender);
+        return guardianData.getCurrentGuardianAddress();
+    }
+
+    async showSignedTransactionsWhenGuarded() {
+        const plainSignedTransactions = this.walletProvider.getTransactionsFromWalletUrl();
+        const signedTransactions = [];
+
+        // Now let's convert them back to sdk-js' Transaction objects.
+        // Note that the Web Wallet provider returns the data field as a plain string. 
+        // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
+        // Therefore, we need to apply a workaround (an additional conversion).
+        for (const plainTransaction of plainSignedTransactions) {
+            const plainTransactionClone = structuredClone(plainTransaction);
+            plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
+            const transaction = Transaction.fromPlainObject(plainTransactionClone);
+            signedTransactions.push(transaction);
+        }
 
         this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
     }
 
-    async signGuardedTransaction() {
-        try {
-            await this.doSignGuardedTransaction();
-        } catch (error) {
-            this.displayError(error);
-        }
-    }
-
-    async doSignGuardedTransaction() {
-        await this.provider.init();
-
-        const sender = await this.provider.getAddress();
-        const transaction = new Transaction({
-            nonce: 42,
-            value: "1",
-            gasLimit: 200000,
-            sender: Address.fromBech32(sender),
-            receiver: Address.fromBech32("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
-            guardian: Address.fromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"),
-            data: new TransactionPayload("hello"),
-            chainID: "T",
-            version: TransactionVersion.withTxOptions(),
-            options: TransactionOptions.withOptions({
-                guarded: true
-            })
-        });
-
-        const signedTransaction = await this.provider.signTransaction(transaction);
-
-        this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
-    }
-
     async signMessage() {
-        await this.provider.init();
+        await this.hwProvider.init();
 
         const message = new SignableMessage({
             message: Buffer.from("hello")
         });
 
-        const signedMessage = await this.provider.signMessage(message);
+        const signedMessage = await this.hwProvider.signMessage(message);
 
         this.displayOutcome("Message signed.", signedMessage);
     }
@@ -165,4 +180,8 @@ export class HW {
         console.error(error);
         alert(`Error: ${error}`);
     }
+}
+
+function getCurrentLocation() {
+    return window.location.href.split("?")[0];
 }
