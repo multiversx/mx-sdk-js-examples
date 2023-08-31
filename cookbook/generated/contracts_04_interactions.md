@@ -47,7 +47,7 @@ Then, sign, broadcast `tx` and wait for its completion.
 ```
 import { AbiRegistry } from "@multiversx/sdk-core";
 
-const abiRegistry = AbiRegistry.create({
+let abiRegistry = AbiRegistry.create({
     "endpoints": [
         {
             "name": "foobar",
@@ -76,6 +76,47 @@ let tx3 = contract.methods.doSomethingWithValue([1, 2, 3])
     .withSender(addressOfAlice)
     .withNonce(44)
     .withValue(TokenTransfer.egldFromAmount(1))
+    .withGasLimit(20000000)
+    .withChainID("D")
+    .buildTransaction();
+```
+
+Now let's see an example using variadic arguments, as well:
+
+```
+import { VariadicValue } from "@multiversx/sdk-core";
+
+abiRegistry = AbiRegistry.create({
+    "endpoints": [
+        {
+            "name": "foobar",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "doSomething",
+            "inputs": [{
+                "type": "counted-variadic<utf-8 string>"
+            },
+            {
+                "type": "variadic<u64>"
+            }],
+            "outputs": []
+        }
+    ]
+});
+
+contract = new SmartContract({ address: contractAddress, abi: abiRegistry });
+
+let tx4 = contract.methods.doSomething(
+    [
+        // Counted variadic must be explicitly typed 
+        VariadicValue.fromItemsCounted("foo", "bar"),
+        // Regular variadic can be implicitly typed 
+        1, 2, 3
+    ])
+    .withSender(addressOfAlice)
+    .withNonce(45)
     .withGasLimit(20000000)
     .withChainID("D")
     .buildTransaction();

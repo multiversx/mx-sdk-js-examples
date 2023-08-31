@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List
 
-current_dir = Path(__file__).parent
+current_dir = Path(__file__).parent.absolute()
 
 input_files = [
     current_dir / "basic.js",
@@ -22,7 +22,7 @@ KNOWN_DIRECTIVES = [DIRECTIVE_IGNORE, DIRECTIVE_UNINDENT, DIRECTIVE_AS_COMMENT]
 
 def main():
     for input_file in input_files:
-        output_file = current_dir / "generated" / input_file.with_suffix(".md")
+        output_file = current_dir / "generated" / input_file.with_suffix(".md").name
         render_file(input_file, output_file)
 
 
