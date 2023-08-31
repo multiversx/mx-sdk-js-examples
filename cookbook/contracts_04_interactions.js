@@ -87,7 +87,7 @@ let tx3 = contract.methods.doSomethingWithValue([1, 2, 3])
 // Now let's see an example using variadic arguments, as well:
 
 // ```
-import { VariadicValue } from "@multiversx/sdk-core";
+import { StringValue, VariadicValue } from "@multiversx/sdk-core";
 
 abiRegistry = AbiRegistry.create({
     "endpoints": [
@@ -114,7 +114,7 @@ contract = new SmartContract({ address: contractAddress, abi: abiRegistry });
 let tx4 = contract.methods.doSomething(
     [
         // Counted variadic must be explicitly typed // md-as-comment
-        VariadicValue.fromItemsCounted("foo", "bar"),
+        VariadicValue.fromItemsCounted(StringValue.fromUTF8("foo"), StringValue.fromUTF8("bar")),
         // Regular variadic can be implicitly typed // md-as-comment
         1, 2, 3
     ])
