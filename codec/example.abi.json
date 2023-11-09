@@ -1,0 +1,97 @@
+{
+    "endpoints": [
+        {
+            "name": "deposit",
+            "inputs": [
+                {
+                    "name": "to",
+                    "type": "Address"
+                },
+                {
+                    "name": "opt_transfer_data",
+                    "type": "optional<TransferData>",
+                    "multi_arg": true
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "events": [
+        {
+            "identifier": "deposit",
+            "inputs": [
+                {
+                    "name": "dest_address",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "tokens",
+                    "type": "List<EsdtTokenPayment>",
+                    "indexed": true
+                },
+                {
+                    "name": "event_data",
+                    "type": "DepositEvent"
+                }
+            ]
+        }
+    ],
+    "types": {
+        "DepositEvent": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "tx_nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "opt_function",
+                    "type": "Option<bytes>"
+                },
+                {
+                    "name": "opt_arguments",
+                    "type": "Option<List<bytes>>"
+                },
+                {
+                    "name": "opt_gas_limit",
+                    "type": "Option<u64>"
+                }
+            ]
+        },
+        "EsdtTokenPayment": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "token_nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                }
+            ]
+        },
+        "TransferData": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "gas_limit",
+                    "type": "u64"
+                },
+                {
+                    "name": "function",
+                    "type": "bytes"
+                },
+                {
+                    "name": "args",
+                    "type": "List<bytes>"
+                }
+            ]
+        }
+    }
+}
