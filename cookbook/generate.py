@@ -10,6 +10,8 @@ input_files = [
     current_dir / "contracts_02_abi.js",
     current_dir / "contracts_03_queries.js",
     current_dir / "contracts_04_interactions.js",
+    current_dir / "contracts_05_events.js",
+    current_dir / "codec.js",
     current_dir / "signing.js"
 ]
 

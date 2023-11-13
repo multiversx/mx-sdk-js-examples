@@ -92,6 +92,68 @@
                     "type": "List<bytes>"
                 }
             ]
+        },
+        "Reward": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "reward_type",
+                    "type": "RewardType"
+                },
+                {
+                    "name": "reward_token_id",
+                    "type": "EgldOrEsdtTokenIdentifier"
+                },
+                {
+                    "name": "value",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "description",
+                    "type": "bytes"
+                },
+                {
+                    "name": "percentage_chance",
+                    "type": "u64"
+                },
+                {
+                    "name": "epochs_cooldown",
+                    "type": "u64"
+                }
+            ]
+        },
+        "RewardType": {
+            "type": "enum",
+            "variants": [
+                {
+                    "name": "None",
+                    "discriminant": 0
+                },
+                {
+                    "name": "ExperiencePoints",
+                    "discriminant": 1
+                },
+                {
+                    "name": "MysteryBox",
+                    "discriminant": 2
+                },
+                {
+                    "name": "SFT",
+                    "discriminant": 3
+                },
+                {
+                    "name": "PercentValue",
+                    "discriminant": 4
+                },
+                {
+                    "name": "FixedValue",
+                    "discriminant": 5
+                },
+                {
+                    "name": "CustomReward",
+                    "discriminant": 6
+                }
+            ]
         }
     }
 }
