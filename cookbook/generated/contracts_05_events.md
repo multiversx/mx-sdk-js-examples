@@ -1,5 +1,3 @@
-import { AbiRegistry, ResultsParser } from "@multiversx/sdk-core";
-import { promises } from "fs";
 
 ## Contract events
 

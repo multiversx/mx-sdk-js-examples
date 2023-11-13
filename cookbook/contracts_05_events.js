@@ -1,6 +1,6 @@
-import { AbiRegistry, ResultsParser } from "@multiversx/sdk-core";
+import { AbiRegistry, ResultsParser } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { promises } from "fs";
+import { promises } from "fs"; // md-ignore
 const networkProvider = new ApiNetworkProvider("https://testnet-api.multiversx.com"); // md-ignore
 
 // ## Contract events
