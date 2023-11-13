@@ -3,6 +3,8 @@
 
 ### Decode transaction events
 
+Example of decoding a transaction event having the identifier "deposit":
+
 ```
 const abiContent = await promises.readFile("../contracts/example.abi.json", { encoding: "utf8" });
 const abiObj = JSON.parse(abiContent);
