@@ -47,8 +47,7 @@ async function doMain() {
     try {
         await main();
     } catch (error) {
-        console.error("Error:");
-        console.error(error.message);
+        console.error("Error:", error.message);
         process.exit(1);
     }
 }
