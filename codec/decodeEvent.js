@@ -65,7 +65,7 @@ function findTransactionEvent(transaction, eventIdentifier) {
     return null;
 }
 
-(async () => {
+async function doMain() {
     try {
         await main();
     } catch (error) {
@@ -73,5 +73,6 @@ function findTransactionEvent(transaction, eventIdentifier) {
         console.error(error.message);
         process.exit(1);
     }
-})();
+}
 
+await doMain();

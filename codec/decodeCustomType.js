@@ -43,7 +43,7 @@ function asUserPath(userPath) {
     return (userPath || "").toString().replace("~", homedir);
 }
 
-(async () => {
+async function doMain() {
     try {
         await main();
     } catch (error) {
@@ -51,4 +51,6 @@ function asUserPath(userPath) {
         console.error(error.message);
         process.exit(1);
     }
-})();
+}
+
+await doMain();
