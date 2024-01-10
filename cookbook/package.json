@@ -2,8 +2,8 @@
     "type": "module",
     "dependencies": {
         "@multiversx/sdk-wallet": "4.2.0",
-        "@multiversx/sdk-core": "12.17.0",
-        "@multiversx/sdk-network-providers": "2.2.0",
+        "@multiversx/sdk-core": "12.18.0",
+        "@multiversx/sdk-network-providers": "2.2.1",
         "axios": "1.6.5"
     }
 }
