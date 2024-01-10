@@ -1,15 +1,12 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import QRCode from "qrcode";
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
-
-// Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
-const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
-const relayUrl = "wss://relay.walletconnect.com";
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { CHAIN_ID, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from "./config";
 
 export class WalletConnectV2 {
     constructor() {
-        this.provider = new WalletConnectV2Provider(this.prepareCallbacks(), "T", relayUrl, projectId);
+        this.provider = new WalletConnectV2Provider(this.prepareCallbacks(), CHAIN_ID, WALLET_CONNECT_RELAY_URL, WALLET_CONNECT_PROJECT_ID);
     }
 
     prepareCallbacks() {
@@ -46,19 +43,19 @@ export class WalletConnectV2 {
 
     async loginWithToken() {
         await this.provider.init();        
-        const authToken = acquireThirdPartyAuthToken();
+        const nativeAuthInitialPart = await createNativeAuthInitialPart();
         const { uri, approval } = await this.provider.connect();        
 
         await openModal(uri);     
         
         try {
-            await this.provider.login({ approval, token: authToken });
+            await this.provider.login({ approval, token: nativeAuthInitialPart });
 
             const address = await this.provider.getAddress();
             const signature = await this.provider.getSignature();
-            alert(`Address: ${address};\nsignature of token = ${signature}`);
-    
-            alert(verifyAuthTokenSignature(address, authToken, signature));
+            const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
+
+            verifyNativeAuthToken(nativeAuthToken);
         } catch (err) {
             console.log(err);
             alert('Rejected by user')
@@ -82,7 +79,7 @@ export class WalletConnectV2 {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -103,7 +100,7 @@ export class WalletConnectV2 {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -115,7 +112,7 @@ export class WalletConnectV2 {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 

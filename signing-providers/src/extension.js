@@ -1,6 +1,7 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { ExtensionProvider } from "@multiversx/sdk-extension-provider";
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { CHAIN_ID } from "./config";
 
 export class Extension {
     constructor() {
@@ -17,14 +18,14 @@ export class Extension {
     async loginWithToken() {
         await this.provider.init();
 
-        const authToken = acquireThirdPartyAuthToken();
-        await this.provider.login({ token: authToken });
+        const nativeAuthInitialPart = await createNativeAuthInitialPart();
+        await this.provider.login({ token: nativeAuthInitialPart });
 
         const address = this.provider.account.address;
         const signature = this.provider.account.signature;
-        alert(`Address: ${address};\nsignature of token = ${signature}`);
+        const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
-        alert(verifyAuthTokenSignature(address, authToken, signature));
+        verifyNativeAuthToken(nativeAuthToken);
     }
 
     async logout() {
@@ -44,7 +45,7 @@ export class Extension {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -65,7 +66,7 @@ export class Extension {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -77,7 +78,7 @@ export class Extension {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 

@@ -1,14 +1,15 @@
 import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
-import { WALLET_PROVIDER_TESTNET, WalletProvider } from '@multiversx/sdk-web-wallet-provider';
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
+import { WalletProvider } from '@multiversx/sdk-web-wallet-provider';
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { API_URL, WALLET_PROVIDER_URL } from "./config";
 
 export class HW {
     constructor() {
         this.hwProvider = new HWProvider();
-        this.walletProvider = new WalletProvider(WALLET_PROVIDER_TESTNET);
-        this.apiNetworkProvider = new ApiNetworkProvider("https://testnet-api.multiversx.com");
+        this.walletProvider = new WalletProvider(WALLET_PROVIDER_URL);
+        this.apiNetworkProvider = new ApiNetworkProvider(API_URL);
     }
 
     async login() {
@@ -30,13 +31,15 @@ export class HW {
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
         console.log("AddressIndex", addressIndex);
 
-        const authToken = acquireThirdPartyAuthToken();
-        const payloadToSign = Buffer.from(`${authToken}{}`);
-        const { address, signature } = await this.hwProvider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
-        const verifyResult = verifyAuthTokenSignature(address, authToken, signature.toString("hex"));
+        const nativeAuthInitialPart = await createNativeAuthInitialPart();
 
-        this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.toString("hex")}`);
-        this.displayOutcome(`Verification result: ${verifyResult}`);
+        const { address, signature } = await this.hwProvider.tokenLogin({
+            addressIndex: addressIndex,
+            token: Buffer.from(nativeAuthInitialPart)
+        });
+
+        const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature.toString("hex"));
+        verifyNativeAuthToken(nativeAuthToken);
     }
 
     async displayAddresses() {
@@ -72,7 +75,7 @@ export class HW {
             sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: "T",
+            chainID: CHAIN_ID,
             guardian: guardian,
             options: transactionOptions
         });
@@ -102,7 +105,7 @@ export class HW {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             guardian: guardian,
             options: transactionOptions
         });
@@ -115,7 +118,7 @@ export class HW {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
-            chainID: "T",
+            chainID: CHAIN_ID,
             guardian: guardian,
             options: transactionOptions
         });

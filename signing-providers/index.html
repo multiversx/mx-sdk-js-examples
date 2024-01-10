@@ -45,6 +45,37 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
+                    <h3>xAlias</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="xAlias.login()">Login</button>
+                    <button class="btn btn-info" onclick="xAlias.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="xAlias.signTransaction()">Sign transaction</button>
+                    <button class="btn btn-info" onclick="xAlias.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="xAlias.signMessage()">Sign
+                        message</button>
+                    <button class="btn btn-info" onclick="xAlias.logout()">Logout</button>
+                </div>
+                <div class="mt-4">
+                    <h5>Extract data from URL (query string)</h5>
+
+                    <button class="btn btn-info" onclick="xAlias.showAddress()">Show address</button>
+                    <button class="btn btn-info" onclick="xAlias.showTokenSignature()">Show token signature</button>
+                    <button class="btn btn-info" onclick="xAlias.validateTokenSignature()">Validate token
+                        signature</button>
+                    <button class="btn btn-info" onclick="xAlias.showSignedTransactions()">Show signed
+                        transactions</button>
+                    <button class="btn btn-info" onclick="xAlias.showMessageSignature()">Show message
+                        signature</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
                     <h3>Extension (MultiversX DeFi Wallet)</h3>
                 </div>
             </div>
@@ -159,6 +190,7 @@
 
     <script>
         const webWallet = new WebWallet();
+        const xAlias = new XAlias();
         const extension = new Extension();
         const walletConnectV2 = new WalletConnectV2();
         const hw = new HW();

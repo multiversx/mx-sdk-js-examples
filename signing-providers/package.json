@@ -8,13 +8,14 @@
   },
   "author": "MultiversX",
   "dependencies": {
-    "@multiversx/sdk-core": "12.5.0",
-    "@multiversx/sdk-network-providers": "1.5.0",
+    "@multiversx/sdk-core": "12.18.0",
+    "@multiversx/sdk-network-providers": "2.2.1",
     "@multiversx/sdk-extension-provider": "3.0.0",
     "@multiversx/sdk-hw-provider": "6.1.0",
-    "@multiversx/sdk-wallet": "4.0.0",
+    "@multiversx/sdk-wallet": "4.2.0",
     "@multiversx/sdk-wallet-connect-provider": "4.0.0",
     "@multiversx/sdk-web-wallet-provider": "3.0.0",
+    "@multiversx/sdk-native-auth-client": "1.0.6",
     "punycode": "2.3.0",
     "qrcode": "1.5.1",
     "qs": "6.10.3"

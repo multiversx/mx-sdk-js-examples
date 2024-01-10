@@ -2,11 +2,11 @@ import { Address, SignableMessage, Transaction, TransactionPayload } from "@mult
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { WALLET_PROVIDER_URL } from "./config";
+import { CHAIN_ID, XALIAS_URL } from "./config";
 
-export class WebWallet {
+export class XAlias {
     constructor() {
-        this.provider = new WalletProvider(WALLET_PROVIDER_URL);
+        this.provider = new WalletProvider(XALIAS_URL);
     }
 
     async login() {
@@ -18,7 +18,7 @@ export class WebWallet {
         const nativeAuthInitialPart = await createNativeAuthInitialPart();
         // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage"). 
         // In real-life, use the approach that best suits your application.
-        await localStorage.setItem("web-wallet-example:nativeAuthInitialPart", nativeAuthInitialPart);
+        await localStorage.setItem("x-alias-example:nativeAuthInitialPart", nativeAuthInitialPart);
         const callbackUrl = getCurrentLocation();
         await this.provider.login({ callbackUrl: callbackUrl, token: nativeAuthInitialPart });
     }
@@ -38,7 +38,7 @@ export class WebWallet {
 
     async validateTokenSignature() {
         const address = getUrlParams().address;
-        const nativeAuthInitialPart = await localStorage.getItem("web-wallet-example:nativeAuthInitialPart");
+        const nativeAuthInitialPart = await localStorage.getItem("x-alias-example:nativeAuthInitialPart");
         const signature = getUrlParams().signature;
         const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
