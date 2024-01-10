@@ -1,7 +1,7 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import QRCode from "qrcode";
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 
 // Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
 const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
@@ -46,19 +46,19 @@ export class WalletConnectV2 {
 
     async loginWithToken() {
         await this.provider.init();        
-        const authToken = acquireThirdPartyAuthToken();
+        const nativeAuthInitialPart = createNativeAuthInitialPart();
         const { uri, approval } = await this.provider.connect();        
 
         await openModal(uri);     
         
         try {
-            await this.provider.login({ approval, token: authToken });
+            await this.provider.login({ approval, token: nativeAuthInitialPart });
 
             const address = await this.provider.getAddress();
             const signature = await this.provider.getSignature();
-            alert(`Address: ${address};\nsignature of token = ${signature}`);
-    
-            alert(verifyAuthTokenSignature(address, authToken, signature));
+            const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
+
+            verifyNativeAuthToken(nativeAuthToken);
         } catch (err) {
             console.log(err);
             alert('Rejected by user')

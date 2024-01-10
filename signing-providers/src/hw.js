@@ -2,7 +2,7 @@ import { Address, SignableMessage, Transaction, TransactionOptions, TransactionP
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 import { WALLET_PROVIDER_TESTNET, WalletProvider } from '@multiversx/sdk-web-wallet-provider';
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 
 export class HW {
     constructor() {
@@ -30,13 +30,11 @@ export class HW {
         const addressIndex = parseInt(document.getElementById("addressIndexForLogin").value);
         console.log("AddressIndex", addressIndex);
 
-        const authToken = acquireThirdPartyAuthToken();
-        const payloadToSign = Buffer.from(`${authToken}{}`);
-        const { address, signature } = await this.hwProvider.tokenLogin({ addressIndex: addressIndex, token: payloadToSign });
-        const verifyResult = verifyAuthTokenSignature(address, authToken, signature.toString("hex"));
+        const nativeAuthInitialPart = `${createNativeAuthInitialPart()}{}`
 
-        this.displayOutcome(`Logged in.\nAddress: ${address}\nSignature: ${signature.toString("hex")}`);
-        this.displayOutcome(`Verification result: ${verifyResult}`);
+        const { address, signature } = await this.hwProvider.tokenLogin({ addressIndex: addressIndex, token: nativeAuthInitialPart });
+        const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
+        verifyNativeAuthToken(nativeAuthToken);
     }
 
     async displayAddresses() {

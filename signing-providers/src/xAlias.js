@@ -1,7 +1,7 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 
 export class XAlias {
     constructor() {
@@ -14,12 +14,12 @@ export class XAlias {
     }
 
     async loginWithToken() {
-        const authToken = acquireThirdPartyAuthToken();
-        // This is just an example of how to store the "authToken" in-between page changes & redirects (in "sessionStorage"). 
+        const nativeAuthInitialPart = await createNativeAuthInitialPart();
+        // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage"). 
         // In real-life, use the approach that best suits your application.
-        await sessionStorage.setItem("web-wallet-example:authToken", authToken);
+        await localStorage.setItem("x-alias-example:nativeAuthInitialPart", nativeAuthInitialPart);
         const callbackUrl = getCurrentLocation();
-        await this.provider.login({ callbackUrl: callbackUrl, token: authToken });
+        await this.provider.login({ callbackUrl: callbackUrl, token: nativeAuthInitialPart });
     }
 
     async logout() {
@@ -37,10 +37,11 @@ export class XAlias {
 
     async validateTokenSignature() {
         const address = getUrlParams().address;
-        const authToken = await sessionStorage.getItem("web-wallet-example:authToken");
+        const nativeAuthInitialPart = await localStorage.getItem("x-alias-example:nativeAuthInitialPart");
         const signature = getUrlParams().signature;
+        const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
-        alert(verifyAuthTokenSignature(address, authToken, signature));
+        verifyNativeAuthToken(nativeAuthToken);
     }
 
     async signTransaction() {

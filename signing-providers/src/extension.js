@@ -1,6 +1,6 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { ExtensionProvider } from "@multiversx/sdk-extension-provider";
-import { acquireThirdPartyAuthToken, verifyAuthTokenSignature } from "./backendFacade";
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 
 export class Extension {
     constructor() {
@@ -17,14 +17,14 @@ export class Extension {
     async loginWithToken() {
         await this.provider.init();
 
-        const authToken = acquireThirdPartyAuthToken();
-        await this.provider.login({ token: authToken });
+        const nativeAuthInitialPart = createNativeAuthInitialPart();
+        await this.provider.login({ token: nativeAuthInitialPart });
 
         const address = this.provider.account.address;
         const signature = this.provider.account.signature;
-        alert(`Address: ${address};\nsignature of token = ${signature}`);
+        const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
-        alert(verifyAuthTokenSignature(address, authToken, signature));
+        verifyNativeAuthToken(nativeAuthToken);
     }
 
     async logout() {
