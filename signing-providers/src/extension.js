@@ -18,7 +18,7 @@ export class Extension {
     async loginWithToken() {
         await this.provider.init();
 
-        const nativeAuthInitialPart = createNativeAuthInitialPart();
+        const nativeAuthInitialPart = await createNativeAuthInitialPart();
         await this.provider.login({ token: nativeAuthInitialPart });
 
         const address = this.provider.account.address;

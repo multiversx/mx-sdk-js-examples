@@ -8,6 +8,8 @@ export async function createNativeAuthInitialPart() {
     });
 
     const initialPart = await client.initialize();
+    console.log("createNativeAuthInitialPart()", initialPart);
+
     return initialPart;
 }
 
@@ -23,13 +25,15 @@ export function packNativeAuthToken(address, initialPart, signature) {
 }
 
 export function verifyNativeAuthToken(nativeAuthToken) {
-    alert(`
+    const message = `
 Native auth token:
 ${nativeAuthToken}
 
 Normally, you would now send this token to your server, which would then validate it.
 
 Go and check it on:
-https://utils.multiversx.com/auth (switch to ${NETWORK_NAME})
-    `);
+https://utils.multiversx.com/auth (switch to ${NETWORK_NAME})`;
+
+    console.log(message);
+    alert(message);
 }

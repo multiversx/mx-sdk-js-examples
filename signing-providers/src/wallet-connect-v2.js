@@ -43,7 +43,7 @@ export class WalletConnectV2 {
 
     async loginWithToken() {
         await this.provider.init();        
-        const nativeAuthInitialPart = createNativeAuthInitialPart();
+        const nativeAuthInitialPart = await createNativeAuthInitialPart();
         const { uri, approval } = await this.provider.connect();        
 
         await openModal(uri);     
