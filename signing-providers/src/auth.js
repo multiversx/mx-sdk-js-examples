@@ -1,8 +1,9 @@
 import { NativeAuthClient } from "@multiversx/sdk-native-auth-client";
+import { API_URL, NETWORK_NAME } from "./config";
 
 export async function createNativeAuthInitialPart() {
     const client = new NativeAuthClient({
-        apiUrl: "https://testnet-api.multiversx.com",
+        apiUrl: API_URL,
         expirySeconds: 7200,
     });
 
@@ -29,6 +30,6 @@ ${nativeAuthToken}
 Normally, you would now send this token to your server, which would then validate it.
 
 Go and check it on:
-https://utils.multiversx.com/auth (switch to "Testnet")
+https://utils.multiversx.com/auth (switch to ${NETWORK_NAME})
     `);
 }

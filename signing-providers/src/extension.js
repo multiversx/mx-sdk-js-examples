@@ -1,6 +1,7 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { ExtensionProvider } from "@multiversx/sdk-extension-provider";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { CHAIN_ID } from "./config";
 
 export class Extension {
     constructor() {
@@ -44,7 +45,7 @@ export class Extension {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -65,7 +66,7 @@ export class Extension {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -77,7 +78,7 @@ export class Extension {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 

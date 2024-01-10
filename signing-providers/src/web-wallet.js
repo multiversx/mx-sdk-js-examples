@@ -1,11 +1,12 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
-import { WALLET_PROVIDER_TESTNET, WalletProvider } from "@multiversx/sdk-web-wallet-provider";
+import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { WALLET_PROVIDER_URL } from "./config";
 
 export class WebWallet {
     constructor() {
-        this.provider = new WalletProvider(WALLET_PROVIDER_TESTNET);
+        this.provider = new WalletProvider(WALLET_PROVIDER_URL);
     }
 
     async login() {
@@ -59,7 +60,7 @@ export class WebWallet {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T"
+            chainID: CHAIN_ID
         });
 
         await this.provider.signTransaction(transaction);
@@ -79,7 +80,7 @@ export class WebWallet {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: "T"
+            chainID: CHAIN_ID
         });
 
         const secondTransaction = new Transaction({
@@ -89,7 +90,7 @@ export class WebWallet {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("world"),
-            chainID: "T"
+            chainID: CHAIN_ID
         });
 
         await this.provider.signTransactions([firstTransaction, secondTransaction]);

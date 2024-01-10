@@ -2,10 +2,11 @@ import { Address, SignableMessage, Transaction, TransactionPayload } from "@mult
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { CHAIN_ID, XALIAS_URL } from "./config";
 
 export class XAlias {
     constructor() {
-        this.provider = new WalletProvider("https://testnet.xalias.com");
+        this.provider = new WalletProvider(XALIAS_URL);
     }
 
     async login() {
@@ -59,7 +60,7 @@ export class XAlias {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T"
+            chainID: CHAIN_ID
         });
 
         await this.provider.signTransaction(transaction);
@@ -79,7 +80,7 @@ export class XAlias {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: "T"
+            chainID: CHAIN_ID
         });
 
         const secondTransaction = new Transaction({
@@ -89,7 +90,7 @@ export class XAlias {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("world"),
-            chainID: "T"
+            chainID: CHAIN_ID
         });
 
         await this.provider.signTransactions([firstTransaction, secondTransaction]);

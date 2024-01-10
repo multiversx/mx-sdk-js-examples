@@ -2,14 +2,11 @@ import { Address, SignableMessage, Transaction, TransactionPayload } from "@mult
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import QRCode from "qrcode";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-
-// Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
-const projectId = "9b1a9564f91cb659ffe21b73d5c4e2d8";
-const relayUrl = "wss://relay.walletconnect.com";
+import { CHAIN_ID, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from "./config";
 
 export class WalletConnectV2 {
     constructor() {
-        this.provider = new WalletConnectV2Provider(this.prepareCallbacks(), "T", relayUrl, projectId);
+        this.provider = new WalletConnectV2Provider(this.prepareCallbacks(), CHAIN_ID, WALLET_CONNECT_RELAY_URL, WALLET_CONNECT_PROJECT_ID);
     }
 
     prepareCallbacks() {
@@ -82,7 +79,7 @@ export class WalletConnectV2 {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -103,7 +100,7 @@ export class WalletConnectV2 {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
@@ -115,7 +112,7 @@ export class WalletConnectV2 {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
-            chainID: "T",
+            chainID: CHAIN_ID,
             version: 1
         });
 
