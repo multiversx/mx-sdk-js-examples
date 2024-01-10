@@ -32,9 +32,12 @@ export class HW {
         console.log("AddressIndex", addressIndex);
 
         const nativeAuthInitialPart = await createNativeAuthInitialPart();
-        const decoratedNativeAuthInitialPart = Buffer.from(`${nativeAuthInitialPart}{}`);
 
-        const { address, signature } = await this.hwProvider.tokenLogin({ addressIndex: addressIndex, token: decoratedNativeAuthInitialPart });
+        const { address, signature } = await this.hwProvider.tokenLogin({
+            addressIndex: addressIndex,
+            token: Buffer.from(nativeAuthInitialPart)
+        });
+
         const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature.toString("hex"));
         verifyNativeAuthToken(nativeAuthToken);
     }
