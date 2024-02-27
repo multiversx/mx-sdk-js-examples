@@ -1,10 +1,9 @@
-import { addressOfAlice, addressOfBob, getNotYetSignedTx, getReadyToBroadcastTx } from "./samples.js"; // md-ignore
+import { addressOfAlice, addressOfBob, getNotYetSignedTxLegacy, getNotYetSignedTxNext, getReadyToBroadcastTxLegacy, getReadyToBroadcastTxNext } from "./samples.js"; // md-ignore
 
-const notYetSignedTx = getNotYetSignedTx(); // md-ignore
-const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
-const tx1 = readyToBroadcastTx; // md-ignore
-const tx2 = readyToBroadcastTx; // md-ignore
-const tx3 = readyToBroadcastTx; // md-ignore
+const notYetSignedTxLegacy = getNotYetSignedTxLegacy(); // md-ignore
+const notYetSignedTxNext = getNotYetSignedTxNext(); // md-ignore
+const readyToBroadcastTx = getReadyToBroadcastTxLegacy(); // md-ignore
+const readyToBroadcastTxNext = getReadyToBroadcastTxNext(); // md-ignore
 
 // ## Creating network providers
 
@@ -64,10 +63,14 @@ alice.incrementNonce();
 console.log("Nonce:", alice.nonce);
 // ```
 
-// Alternatively, you can also use `setNonce` on a `Transaction` object:
+// md-insert:transactionLegacyVsNext
+
+// If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction. 
+// For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
 
 // ```
-notYetSignedTx.setNonce(alice.getNonceThenIncrement());
+notYetSignedTxNext.nonce = alice.getNonceThenIncrement();
+notYetSignedTxLegacy.setNonce(alice.getNonceThenIncrement());
 // ```
 
 // For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
@@ -133,10 +136,26 @@ transfer = TokenTransfer.metaEsdtFromAmount(identifier, nonce, "0.1", numDecimal
 
 // ### Preparing a simple transaction
 
-// ```
-import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
+// md-insert:transactionLegacyVsNext
 
-const tx = new Transaction({
+// If you are using `sdk-core v13` or later, use `TransactionNext` class to prepare a transaction. 
+// For `sdk-core v12` or earlier, use the legacy `Transaction` class to prepare a transaction.
+
+// ```
+import { Transaction, TransactionNext, TransactionPayload } from "@multiversx/sdk-core";
+
+const txNext = new TransactionNext({
+    data: new TextEncoder().encode("food for cats"),
+    gasLimit: 70000n,
+    sender: addressOfAlice.toBech32(),
+    receiver: addressOfBob.toBech32(),
+    value: 1000000000000000000n,
+    chainID: "D"
+});
+
+txNext.nonce = alice.getNonceThenIncrement();
+
+const txLegacy = new Transaction({
     data: new TransactionPayload("helloWorld"),
     gasLimit: 70000,
     sender: addressOfAlice,
@@ -145,15 +164,17 @@ const tx = new Transaction({
     chainID: "D"
 });
 
-tx.setNonce(alice.getNonceThenIncrement());
+txLegacy.setNonce(alice.getNonceThenIncrement());
 // ```
 
 // ### Broadcast using a network provider
 
 // ```
 try { // md-ignore
-    let txHash = await proxyNetworkProvider.sendTransaction(tx); // md-unindent
-    console.log("Hash:", txHash); // md-unindent
+    const txHashNext = await proxyNetworkProvider.sendTransaction(txNext); // md-unindent
+    const txHashLegacy = await proxyNetworkProvider.sendTransaction(txLegacy); // md-unindent
+    console.log("TX hash (1):", txHashNext); // md-unindent
+    console.log("TX hash (2):", txHashLegacy); // md-unindent
 } catch { // md-ignore
 } // md-ignore
 // ```

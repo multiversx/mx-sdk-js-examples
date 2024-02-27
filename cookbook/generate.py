@@ -16,11 +16,20 @@ input_files = [
     current_dir / "signing.js"
 ]
 
+MARKER_INSERT = "md-insert:"
 DIRECTIVE_PREFIX = "// md-"
 DIRECTIVE_IGNORE = "// md-ignore"
 DIRECTIVE_UNINDENT = "// md-unindent"
 DIRECTIVE_AS_COMMENT = "// md-as-comment"
-KNOWN_DIRECTIVES = [DIRECTIVE_IGNORE, DIRECTIVE_UNINDENT, DIRECTIVE_AS_COMMENT]
+DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
+
+notes = {
+    "transactionLegacyVsNext": """:::note
+Since `sdk-core v13`, the `Transaction` class is considered legacy. The alternative is `TransactionNext`. 
+In a future major release (e.g. end of 2024), the legacy `Transaction` class will be dropped, and replaced by `TransactionNext`, 
+which will also receive the short name, `Transaction`.
+:::"""
+}
 
 
 def main():
@@ -35,12 +44,11 @@ def render_file(input_file: Path, output_file: Path):
     output_lines: List[str] = []
 
     for line in input_lines:
-        assert_only_known_directives(line)
-
         should_ignore = DIRECTIVE_IGNORE in line
         should_unindent = DIRECTIVE_UNINDENT in line
         is_comment = line.startswith("//")
         should_keep_as_comment = DIRECTIVE_AS_COMMENT in line
+        should_insert = DIRECTIVE_INSERT in line
 
         if should_ignore:
             continue
@@ -54,22 +62,15 @@ def render_file(input_file: Path, output_file: Path):
         line = line.replace(DIRECTIVE_UNINDENT, "")
         line = line.replace(DIRECTIVE_AS_COMMENT, "")
 
+        if should_insert:
+            box_name = line.replace(MARKER_INSERT, "").strip()
+            box_content = notes[box_name]
+            line = box_content
+
         output_lines.append(line)
 
     output_text = "\n".join(output_lines)
     output_file.write_text(output_text)
-
-
-def assert_only_known_directives(line: str):
-    if DIRECTIVE_PREFIX not in line:
-        return
-
-    any_known_directive = any(
-        directive in line for directive in KNOWN_DIRECTIVES)
-    if any_known_directive:
-        return
-
-    raise Exception(f"Unknown directive in line: {line}")
 
 
 if __name__ == "__main__":
