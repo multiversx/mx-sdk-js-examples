@@ -6,6 +6,7 @@ current_dir = Path(__file__).parent.absolute()
 input_files = [
     current_dir / "basic.js",
     current_dir / "transfers.js",
+    current_dir / "handling_amounts.js",
     current_dir / "contracts_01_deployments.js",
     current_dir / "contracts_02_abi.js",
     current_dir / "contracts_03_queries.js",
@@ -38,7 +39,7 @@ def render_file(input_file: Path, output_file: Path):
 
         should_ignore = DIRECTIVE_IGNORE in line
         should_unindent = DIRECTIVE_UNINDENT in line
-        is_comment = line.startswith("// ")
+        is_comment = line.startswith("//")
         should_keep_as_comment = DIRECTIVE_AS_COMMENT in line
 
         if should_ignore:
@@ -48,7 +49,7 @@ def render_file(input_file: Path, output_file: Path):
             line = line.lstrip()
 
         if is_comment and not should_keep_as_comment:
-            line = line[3:]
+            line = line[2:].lstrip()
 
         line = line.replace(DIRECTIVE_UNINDENT, "")
         line = line.replace(DIRECTIVE_AS_COMMENT, "")

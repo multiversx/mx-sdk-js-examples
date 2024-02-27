@@ -72,7 +72,15 @@ notYetSignedTx.setNonce(alice.getNonceThenIncrement());
 
 // For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
 
-// ## Preparing `TokenTransfer` objects
+// ## Preparing `TokenTransfer` objects (legacy)
+
+// :::note
+// Since `sdk-core v13`, the `TokenTransfer` class is considered legacy.
+//
+// For the alternative, see [token transfers](#token-transfers).
+//
+// For formatting or parsing token amounts, see [formatting and parsing amounts](#formatting-and-parsing-amounts).
+// :::
 
 // A `TokenTransfer` object for **EGLD transfers** (value movements):
 
