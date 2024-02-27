@@ -5,6 +5,7 @@ current_dir = Path(__file__).parent.absolute()
 
 input_files = [
     current_dir / "basic.js",
+    current_dir / "broadcasting_transactions.js",
     current_dir / "transfers.js",
     current_dir / "handling_amounts.js",
     current_dir / "contracts_01_deployments.js",
@@ -33,12 +34,19 @@ which will also receive the short name, `Transaction`.
 
 
 def main():
+    output_file = current_dir / "cookbook.md"
+    output_sections: List[str] = []
+
     for input_file in input_files:
-        output_file = current_dir / "generated" / input_file.with_suffix(".md").name
-        render_file(input_file, output_file)
+        lines = render_file(input_file)
+        section = "\n".join(lines).strip()
+        output_sections.append(section)
+
+    output_text = "\n".join(output_sections) + "\n"
+    output_file.write_text(output_text)
 
 
-def render_file(input_file: Path, output_file: Path):
+def render_file(input_file: Path) -> List[str]:
     input_text = input_file.read_text()
     input_lines = input_text.splitlines()
     output_lines: List[str] = []
@@ -69,8 +77,7 @@ def render_file(input_file: Path, output_file: Path):
 
         output_lines.append(line)
 
-    output_text = "\n".join(output_lines)
-    output_file.write_text(output_text)
+    return output_lines
 
 
 if __name__ == "__main__":
