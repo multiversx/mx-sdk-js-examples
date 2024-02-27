@@ -169,36 +169,24 @@ txLegacy.setNonce(alice.getNonceThenIncrement());
 
 // ### Broadcast using a network provider
 
+// In order to broadcast a transaction, use a network provider:
+
 // ```
 try { // md-ignore
-    const txHashNext = await proxyNetworkProvider.sendTransaction(txNext); // md-unindent
-    const txHashLegacy = await proxyNetworkProvider.sendTransaction(txLegacy); // md-unindent
-    console.log("TX hash (1):", txHashNext); // md-unindent
-    console.log("TX hash (2):", txHashLegacy); // md-unindent
+    const txHashNext = await apiNetworkProvider.sendTransaction(readyToBroadcastTxNext); // md-unindent
+    console.log("TX hash:", txHashNext); // md-unindent
+
+    const txHashLegacy = await apiNetworkProvider.sendTransaction(readyToBroadcastTxLegacy); // md-unindent
+    console.log("TX hash:", txHashLegacy); // md-unindent
 } catch { // md-ignore
 } // md-ignore
 // ```
 
-// Note that the transaction **must be signed before being broadcasted**. Signing can be achieved using a signing provider.
+// Note that the transactions **must be signed before being broadcasted**. Signing can be achieved using a signing provider.
 
 // :::important
 // Note that, for all purposes, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
 // :::
-
-// ### Broadcast using `axios`
-
-// ```
-import axios from "axios";
-
-const data = readyToBroadcastTx.toSendable();
-const url = "https://devnet-api.multiversx.com/transactions";
-const response = await axios.post(url, data, {
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
-let txHash = response.data.txHash;
-// ```
 
 // ### Wait for transaction completion
 

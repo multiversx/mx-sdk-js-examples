@@ -36,15 +36,15 @@ export function getNotYetSignedTxNext() {
 export function getReadyToBroadcastTxLegacy() {
     const tx = new Transaction({
         nonce: 42,
-        value: "1",
+        value: "1000000000000000000",
         receiver: Address.fromBech32("erd1testnlersh4z0wsv8kjx39me4rmnvjkwu8dsaea7ukdvvc9z396qykv7z7"),
-        sender: Address.fromBech32("erd15x2panzqvfxul2lvstfrmdcl5t4frnsylfrhng8uunwdssxw4y9succ9sq"),
+        sender: Address.fromBech32("erd1ej69d0509akc7vwh9kfeew5hp8gm8u2fxrd7066mmphs8029da6sxjca72"),
         gasLimit: 50000,
         gasPrice: 1000000000,
         chainID: "D"
     });
 
-    const signature = Buffer.from("c8eb539e486db7d703d8c70cab3b7679113f77c4685d8fcc94db027ceacc6b8605115034355386dffd7aa12e63dbefa03251a2f1b1d971f52250187298d12900", "hex");
+    const signature = Buffer.from("69d5cb5ce7a380cfd8bf6ebebbf70a45a5119791aa27b30e48e4a9f61a81afdfaf17b16368b8149039b84aa0bbaa3e1ee975eed9a07d196b6f480655fe40be09", "hex");
     tx.applySignature(signature);
     return tx;
 }
@@ -52,15 +52,15 @@ export function getReadyToBroadcastTxLegacy() {
 export function getReadyToBroadcastTxNext() {
     const tx = new TransactionNext({
         nonce: 42n,
-        value: 1n,
+        value: 1000000000000000000n,
         receiver: "erd1testnlersh4z0wsv8kjx39me4rmnvjkwu8dsaea7ukdvvc9z396qykv7z7",
-        sender: "erd15x2panzqvfxul2lvstfrmdcl5t4frnsylfrhng8uunwdssxw4y9succ9sq",
+        sender: "erd1ej69d0509akc7vwh9kfeew5hp8gm8u2fxrd7066mmphs8029da6sxjca72",
         gasLimit: 50000n,
         gasPrice: 1000000000n,
         chainID: "D"
     });
 
-    const signature = Buffer.from("c8eb539e486db7d703d8c70cab3b7679113f77c4685d8fcc94db027ceacc6b8605115034355386dffd7aa12e63dbefa03251a2f1b1d971f52250187298d12900", "hex");
+    const signature = Buffer.from("69d5cb5ce7a380cfd8bf6ebebbf70a45a5119791aa27b30e48e4a9f61a81afdfaf17b16368b8149039b84aa0bbaa3e1ee975eed9a07d196b6f480655fe40be09", "hex");
     tx.signature = signature;
     return tx;
 }
