@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 current_dir = Path(__file__).parent.absolute()
 
@@ -15,31 +15,41 @@ input_files = [
     current_dir / "signing.js"
 ]
 
+MARKER_INSERT = "md-insert:"
 DIRECTIVE_PREFIX = "// md-"
 DIRECTIVE_IGNORE = "// md-ignore"
 DIRECTIVE_UNINDENT = "// md-unindent"
 DIRECTIVE_AS_COMMENT = "// md-as-comment"
-KNOWN_DIRECTIVES = [DIRECTIVE_IGNORE, DIRECTIVE_UNINDENT, DIRECTIVE_AS_COMMENT]
+DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
+
+notes: Dict[str, str] = {
+}
 
 
 def main():
+    output_file = current_dir / "cookbook.md"
+    output_sections: List[str] = []
+
     for input_file in input_files:
-        output_file = current_dir / "generated" / input_file.with_suffix(".md").name
-        render_file(input_file, output_file)
+        lines = render_file(input_file)
+        section = "\n".join(lines).strip()
+        output_sections.append(section)
+
+    output_text = "\n".join(output_sections) + "\n"
+    output_file.write_text(output_text)
 
 
-def render_file(input_file: Path, output_file: Path):
+def render_file(input_file: Path) -> List[str]:
     input_text = input_file.read_text()
     input_lines = input_text.splitlines()
     output_lines: List[str] = []
 
     for line in input_lines:
-        assert_only_known_directives(line)
-
         should_ignore = DIRECTIVE_IGNORE in line
         should_unindent = DIRECTIVE_UNINDENT in line
-        is_comment = line.startswith("// ")
+        is_comment = line.startswith("//")
         should_keep_as_comment = DIRECTIVE_AS_COMMENT in line
+        should_insert = DIRECTIVE_INSERT in line
 
         if should_ignore:
             continue
@@ -48,27 +58,19 @@ def render_file(input_file: Path, output_file: Path):
             line = line.lstrip()
 
         if is_comment and not should_keep_as_comment:
-            line = line[3:]
+            line = line[2:].lstrip()
 
         line = line.replace(DIRECTIVE_UNINDENT, "")
         line = line.replace(DIRECTIVE_AS_COMMENT, "")
 
+        if should_insert:
+            box_name = line.replace(MARKER_INSERT, "").strip()
+            box_content = notes[box_name]
+            line = box_content
+
         output_lines.append(line)
 
-    output_text = "\n".join(output_lines)
-    output_file.write_text(output_text)
-
-
-def assert_only_known_directives(line: str):
-    if DIRECTIVE_PREFIX not in line:
-        return
-
-    any_known_directive = any(
-        directive in line for directive in KNOWN_DIRECTIVES)
-    if any_known_directive:
-        return
-
-    raise Exception(f"Unknown directive in line: {line}")
+    return output_lines
 
 
 if __name__ == "__main__":
