@@ -9,6 +9,7 @@ export const completedTransactionsHashes = [
     "7d7d05f141026aa461154b52476a5a78bd3dd9b0dc29bedc66b0de54c55a41d5"
 ];
 
+// TODO: use another contract.
 export const legacyDelegationContractAddress = Address.fromBech32("erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx");
 export const addressOfFirstDevnetDelegator = new Address("erd1s0us936aku52uxyvnhxspcaj4f4sp7d9azuyw7kf32ggm88ynlps7c0yr9");
 
