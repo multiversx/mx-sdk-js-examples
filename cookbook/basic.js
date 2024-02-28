@@ -1,4 +1,10 @@
-import { addressOfAlice, getNotYetSignedTxLegacy, getNotYetSignedTxNext } from "./samples.js"; // md-ignore
+import { addressOfAlice, addressOfBob, getNotYetSignedTx, getReadyToBroadcastTx } from "./samples.js"; // md-ignore
+
+const notYetSignedTx = getNotYetSignedTx(); // md-ignore
+const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
+const tx1 = readyToBroadcastTx; // md-ignore
+const tx2 = readyToBroadcastTx; // md-ignore
+const tx3 = readyToBroadcastTx; // md-ignore
 
 // ## Creating network providers
 
@@ -58,30 +64,15 @@ alice.incrementNonce();
 console.log("Nonce:", alice.nonce);
 // ```
 
-// md-insert:transactionLegacyVsNext
-
-// If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction. 
-// For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
+// Alternatively, you can also use `setNonce` on a `Transaction` object:
 
 // ```
-const notYetSignedTxLegacy = getNotYetSignedTxLegacy(); // md-ignore
-const notYetSignedTxNext = getNotYetSignedTxNext(); // md-ignore
-
-notYetSignedTxNext.nonce = alice.getNonceThenIncrement();
-notYetSignedTxLegacy.setNonce(alice.getNonceThenIncrement());
+notYetSignedTx.setNonce(alice.getNonceThenIncrement());
 // ```
 
 // For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
 
-// ## Preparing `TokenTransfer` objects (legacy)
-
-// :::note
-// Since `sdk-core v13`, the `TokenTransfer` class is considered legacy.
-//
-// For the alternative, see [token transfers](#token-transfers).
-//
-// For formatting or parsing token amounts, see [formatting and parsing amounts](#formatting-and-parsing-amounts).
-// :::
+// ## Preparing `TokenTransfer` objects
 
 // A `TokenTransfer` object for **EGLD transfers** (value movements):
 
@@ -129,3 +120,77 @@ transfer = TokenTransfer.nonFungible(identifier, nonce);
 // ```
 transfer = TokenTransfer.metaEsdtFromAmount(identifier, nonce, "0.1", numDecimals);
 // ```
+
+// ## Broadcasting transactions
+
+// ### Preparing a simple transaction
+
+// ```
+import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
+
+const tx = new Transaction({
+    data: new TransactionPayload("helloWorld"),
+    gasLimit: 70000,
+    sender: addressOfAlice,
+    receiver: addressOfBob,
+    value: TokenTransfer.egldFromAmount(1),
+    chainID: "D"
+});
+
+tx.setNonce(alice.getNonceThenIncrement());
+// ```
+
+// ### Broadcast using a network provider
+
+// ```
+try { // md-ignore
+    let txHash = await proxyNetworkProvider.sendTransaction(tx); // md-unindent
+    console.log("Hash:", txHash); // md-unindent
+} catch { // md-ignore
+} // md-ignore
+// ```
+
+// Note that the transaction **must be signed before being broadcasted**. Signing can be achieved using a signing provider.
+
+// :::important
+// Note that, for all purposes, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
+// :::
+
+// ### Broadcast using `axios`
+
+// ```
+import axios from "axios";
+
+const data = readyToBroadcastTx.toSendable();
+const url = "https://devnet-api.multiversx.com/transactions";
+const response = await axios.post(url, data, {
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+let txHash = response.data.txHash;
+// ```
+
+// ### Wait for transaction completion
+
+// ```
+import { TransactionWatcher } from "@multiversx/sdk-core";
+
+const watcher = new TransactionWatcher(apiNetworkProvider);
+// const transactionOnNetwork = await watcher.awaitCompleted(tx);
+// ```
+
+// If only the `txHash` is available, then:
+
+// ```
+// const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash });
+// console.log(transactionOnNetwork);
+// ```
+
+// In order to wait for multiple transactions:
+
+// ```
+// await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]);
+// ```
+
+// For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).

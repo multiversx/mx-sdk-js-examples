@@ -1,13 +1,11 @@
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 current_dir = Path(__file__).parent.absolute()
 
 input_files = [
     current_dir / "basic.js",
-    current_dir / "broadcasting_transactions.js",
     current_dir / "transfers.js",
-    current_dir / "handling_amounts.js",
     current_dir / "contracts_01_deployments.js",
     current_dir / "contracts_02_abi.js",
     current_dir / "contracts_03_queries.js",
@@ -24,12 +22,7 @@ DIRECTIVE_UNINDENT = "// md-unindent"
 DIRECTIVE_AS_COMMENT = "// md-as-comment"
 DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
 
-notes = {
-    "transactionLegacyVsNext": """:::note
-Since `sdk-core v13`, the `Transaction` class is considered legacy. The alternative is `TransactionNext`. 
-In a future major release (e.g. end of 2024), the legacy `Transaction` class will be dropped, and replaced by `TransactionNext`, 
-which will also receive the short name, `Transaction`.
-:::"""
+notes: Dict[str, str] = {
 }
 
 

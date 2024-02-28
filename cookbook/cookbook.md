@@ -56,32 +56,15 @@ alice.incrementNonce();
 console.log("Nonce:", alice.nonce);
 ```
 
-:::note
-Since `sdk-core v13`, the `Transaction` class is considered legacy. The alternative is `TransactionNext`. 
-In a future major release (e.g. end of 2024), the legacy `Transaction` class will be dropped, and replaced by `TransactionNext`, 
-which will also receive the short name, `Transaction`.
-:::
-
-If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction. 
-For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
+Alternatively, you can also use `setNonce` on a `Transaction` object:
 
 ```
-
-notYetSignedTxNext.nonce = alice.getNonceThenIncrement();
-notYetSignedTxLegacy.setNonce(alice.getNonceThenIncrement());
+notYetSignedTx.setNonce(alice.getNonceThenIncrement());
 ```
 
 For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
 
-## Preparing `TokenTransfer` objects (legacy)
-
-:::note
-Since `sdk-core v13`, the `TokenTransfer` class is considered legacy.
-
-For the alternative, see [token transfers](#token-transfers).
-
-For formatting or parsing token amounts, see [formatting and parsing amounts](#formatting-and-parsing-amounts).
-:::
+## Preparing `TokenTransfer` objects
 
 A `TokenTransfer` object for **EGLD transfers** (value movements):
 
@@ -129,62 +112,52 @@ A `TokenTransfer` object for transferring **meta-esdt** tokens:
 ```
 transfer = TokenTransfer.metaEsdtFromAmount(identifier, nonce, "0.1", numDecimals);
 ```
+
 ## Broadcasting transactions
 
 ### Preparing a simple transaction
 
-:::note
-Since `sdk-core v13`, the `Transaction` class is considered legacy. The alternative is `TransactionNext`. 
-In a future major release (e.g. end of 2024), the legacy `Transaction` class will be dropped, and replaced by `TransactionNext`, 
-which will also receive the short name, `Transaction`.
-:::
-
-If you are using `sdk-core v13` or later, use `TransactionNext` class to prepare a transaction. 
-For `sdk-core v12` or earlier, use the legacy `Transaction` class to prepare a transaction.
-
 ```
-import { Transaction, TransactionNext, TransactionPayload } from "@multiversx/sdk-core";
+import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
 
-const txNext = new TransactionNext({
-    data: new TextEncoder().encode("food for cats"),
-    gasLimit: 70000n,
-    sender: addressOfAlice.toBech32(),
-    receiver: addressOfBob.toBech32(),
-    value: 1000000000000000000n,
-    chainID: "D"
-});
-
-txNext.nonce = 42n;
-
-const txLegacy = new Transaction({
+const tx = new Transaction({
     data: new TransactionPayload("helloWorld"),
     gasLimit: 70000,
     sender: addressOfAlice,
     receiver: addressOfBob,
-    value: "1000000000000000000",
+    value: TokenTransfer.egldFromAmount(1),
     chainID: "D"
 });
 
-txLegacy.setNonce(43);
+tx.setNonce(alice.getNonceThenIncrement());
 ```
 
 ### Broadcast using a network provider
 
-:::important
-Note that the transactions **must be signed before being broadcasted**. 
-On the front-end, signing can be achieved using a signing provider.
-On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
-:::
-
-In order to broadcast a transaction, use a network provider:
-
+```
+let txHash = await proxyNetworkProvider.sendTransaction(tx); 
+console.log("Hash:", txHash); 
 ```
 
-const txHashNext = await apiNetworkProvider.sendTransaction(readyToBroadcastTxNext); 
-console.log("TX hash:", txHashNext); 
+Note that the transaction **must be signed before being broadcasted**. Signing can be achieved using a signing provider.
 
-const txHashLegacy = await apiNetworkProvider.sendTransaction(readyToBroadcastTxLegacy); 
-console.log("TX hash:", txHashLegacy); 
+:::important
+Note that, for all purposes, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
+:::
+
+### Broadcast using `axios`
+
+```
+import axios from "axios";
+
+const data = readyToBroadcastTx.toSendable();
+const url = "https://devnet-api.multiversx.com/transactions";
+const response = await axios.post(url, data, {
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+let txHash = response.data.txHash;
 ```
 
 ### Wait for transaction completion
@@ -192,29 +165,21 @@ console.log("TX hash:", txHashLegacy);
 ```
 import { TransactionWatcher } from "@multiversx/sdk-core";
 
-const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
-const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(txHash);
+const watcher = new TransactionWatcher(apiNetworkProvider);
+const transactionOnNetwork = await watcher.awaitCompleted(tx);
 ```
 
-If, instead, you use a `ProxyNetworkProvider` to instantiate the `TransactionWatcher`, you'll need to patch the `getTransaction` method,
-so that it instructs the network provider to fetch the so-called _processing status_, as well (required by the watcher to detect transaction completion).
+If only the `txHash` is available, then:
 
 ```
-const watcherUsingProxy = new TransactionWatcher({
-    getTransaction: async (hash) => { return await proxyNetworkProvider.getTransaction(hash, true) }
-});
-
-const transactionOnNetworkUsingProxy = await watcherUsingProxy.awaitCompleted(txHash);
+const transactionOnNetwork = await watcher.awaitCompleted({ getHash: () => txHash });
+console.log(transactionOnNetwork);
 ```
 
 In order to wait for multiple transactions:
 
 ```
-await Promise.all([
-    watcherUsingApi.awaitCompleted(tx1), 
-    watcherUsingApi.awaitCompleted(tx2), 
-    watcherUsingApi.awaitCompleted(tx3)
-]);
+await Promise.all([watcher.awaitCompleted(tx1), watcher.awaitCompleted(tx2), watcher.awaitCompleted(tx3)]);
 ```
 
 For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
@@ -285,47 +250,6 @@ const tx4 = factory.createMultiESDTNFTTransfer({
     destination: addressOfBob,
     chainID: "D"
 });
-```
-## Formatting and parsing amounts
-
-:::note
-For formatting or parsing token amounts as numbers (with fixed number of decimals), please do not rely on `sdk-core`. Instead, use `sdk-dapp` (higher level) or `bignumber.js` (lower level).
-:::
-
-You can format amounts using `formatAmount` from `sdk-dapp`:
-
-```
-import { formatAmount } from '@multiversx/sdk-dapp/utils/operations';
-
-console.log("Format using sdk-dapp:", formatAmount({
-    input: "1500000000000000000",
-    decimals: 18,
-    digits: 4
-}));
-```
-
-Or directly using `bignumber.js`:
-
-```
-import BigNumber from "bignumber.js";
-
-BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
-
-console.log("Format using bignumber.js:",new BigNumber("1500000000000000000").shiftedBy(-18).toFixed(4));
-```
-
-You can parse amounts using `parseAmount` from `sdk-dapp`:
-
-```
-import { formatAmount } from '@multiversx/sdk-dapp/utils/operations';
-
-console.log("Parse using sdk-dapp:", parseAmount("1.5", 18));
-```
-
-Or directly using `bignumber.js`:
-
-```
-console.log("Parse using bignumber.js:", new BigNumber("1.5").shiftedBy(18).decimalPlaces(0).toFixed(0));
 ```
 ## Contract deployments
 
