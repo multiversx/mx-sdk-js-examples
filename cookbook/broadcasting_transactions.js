@@ -11,9 +11,6 @@ TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 
 // md-insert:transactionLegacyVsNext
 
-// If you are using `sdk-core v13` or later, use `TransactionNext` class to prepare a transaction. 
-// For `sdk-core v12` or earlier, use the legacy `Transaction` class to prepare a transaction.
-
 // ```
 import { Transaction, TransactionNext, TransactionPayload } from "@multiversx/sdk-core";
 
