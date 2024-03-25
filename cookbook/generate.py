@@ -26,9 +26,7 @@ DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
 
 notes: Dict[str, str] = {
     "transactionLegacyVsNext": """:::note
-Since `sdk-core v13`, the `Transaction` class is considered legacy. The alternative is `TransactionNext`. 
-In a future major release (e.g. end of 2024), the legacy `Transaction` class will be dropped, and replaced by `TransactionNext`, 
-which will also receive the short name, `Transaction`.
+Since `sdk-core v13`, the `Transaction` class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
 :::"""
 }
 
