@@ -1,4 +1,4 @@
-import { addressOfAlice, getNotYetSignedTxLegacy, getNotYetSignedTxNext } from "./samples.js"; // md-ignore
+import { addressOfAlice, getNotYetSignedTx } from "./samples.js"; // md-ignore
 
 // ## Creating network providers
 
@@ -64,68 +64,9 @@ console.log("Nonce:", alice.nonce);
 // For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
 
 // ```
-const notYetSignedTxLegacy = getNotYetSignedTxLegacy(); // md-ignore
-const notYetSignedTxNext = getNotYetSignedTxNext(); // md-ignore
+const notYetSignedTx = getNotYetSignedTx(); // md-ignore
 
-notYetSignedTxNext.nonce = alice.getNonceThenIncrement();
-notYetSignedTxLegacy.setNonce(alice.getNonceThenIncrement());
+notYetSignedTx.nonce = alice.getNonceThenIncrement();
 // ```
 
 // For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
-
-// ## Preparing `TokenTransfer` objects (legacy)
-
-// :::note
-// Since `sdk-core v13`, the `TokenTransfer` class is considered legacy.
-//
-// For the alternative, see [token transfers](#token-transfers).
-//
-// For formatting or parsing token amounts, see [formatting and parsing amounts](#formatting-and-parsing-amounts).
-// :::
-
-// A `TokenTransfer` object for **EGLD transfers** (value movements):
-
-// ```
-import { TokenTransfer } from "@multiversx/sdk-core";
-
-let firstTransfer = TokenTransfer.egldFromAmount("1.5");
-let secondTransfer = TokenTransfer.egldFromBigInteger("1500000000000000000");
-
-console.log(firstTransfer.valueOf(), secondTransfer.valueOf());
-console.log(firstTransfer.toPrettyString(), secondTransfer.toPrettyString());
-// ```
-
-// A `TokenTransfer` object for transferring **fungible** tokens:
-
-// ```
-const identifier = "FOO-123456";
-const numDecimals = 2;
-firstTransfer = TokenTransfer.fungibleFromAmount(identifier, "1.5", numDecimals);
-secondTransfer = TokenTransfer.fungibleFromBigInteger(identifier, "4000", numDecimals);
-
-console.log(firstTransfer.toString()); // Will output: 150.
-console.log(firstTransfer.toPrettyString()); // Will output: 1.50 FOO-123456.
-console.log(secondTransfer.toString()); // Will output: 4000.
-console.log(secondTransfer.toPrettyString()); // Will output: 40.00 FOO-123456.
-// ```
-
-// A `TokenTransfer` object for transferring **semi-fungible** tokens:
-
-// ```
-let nonce = 3;
-let quantity = 50;
-let transfer = TokenTransfer.semiFungible(identifier, nonce, quantity);
-// ```
-
-// A `TokenTransfer` object for transferring **non-fungible** tokens (the quantity doesn't need to be specified for NFTs, as the token is only one of its kind):
-
-// ```
-nonce = 7;
-transfer = TokenTransfer.nonFungible(identifier, nonce);
-// ```
-
-// A `TokenTransfer` object for transferring **meta-esdt** tokens:
-
-// ```
-transfer = TokenTransfer.metaEsdtFromAmount(identifier, nonce, "0.1", numDecimals);
-// ```

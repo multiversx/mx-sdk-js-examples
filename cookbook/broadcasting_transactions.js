@@ -1,5 +1,5 @@
 import { ApiNetworkProvider, ProxyNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { addressOfAlice, addressOfBob, completedTransactionsHashes, getReadyToBroadcastTxLegacy, getReadyToBroadcastTxNext } from "./samples.js"; // md-ignore
+import { addressOfAlice, addressOfBob, completedTransactionsHashes, getReadyToBroadcastTx } from "./samples.js"; // md-ignore
 
 const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com"); // md-ignore
@@ -12,9 +12,11 @@ TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 // md-insert:transactionLegacyVsNext
 
 // ```
-import { Transaction, TransactionNext, TransactionPayload } from "@multiversx/sdk-core";
+import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
 
-const txNext = new TransactionNext({
+// Recommended approach:
+
+const tx = new Transaction({
     data: new TextEncoder().encode("food for cats"),
     gasLimit: 70000n,
     sender: addressOfAlice.toBech32(),
@@ -23,7 +25,9 @@ const txNext = new TransactionNext({
     chainID: "D"
 });
 
-txNext.nonce = 42n;
+tx.nonce = 42n;
+
+// Legacy approach:
 
 const txLegacy = new Transaction({
     data: new TransactionPayload("helloWorld"),
@@ -48,15 +52,11 @@ txLegacy.setNonce(43);
 // In order to broadcast a transaction, use a network provider:
 
 // ```
-const readyToBroadcastTxLegacy = getReadyToBroadcastTxLegacy(); // md-ignore
-const readyToBroadcastTxNext = getReadyToBroadcastTxNext(); // md-ignore
+const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
 
 try { // md-ignore
-    const txHashNext = await apiNetworkProvider.sendTransaction(readyToBroadcastTxNext); // md-unindent
-    console.log("TX hash:", txHashNext); // md-unindent
-
-    const txHashLegacy = await apiNetworkProvider.sendTransaction(readyToBroadcastTxLegacy); // md-unindent
-    console.log("TX hash:", txHashLegacy); // md-unindent
+    const txHash = await apiNetworkProvider.sendTransaction(readyToBroadcastTx); // md-unindent
+    console.log("TX hash:", txHash); // md-unindent
 } catch { // md-ignore
 } // md-ignore
 // ```
