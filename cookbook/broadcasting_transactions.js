@@ -14,7 +14,7 @@ TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 // ```
 import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
 
-// Recommended approach:
+// Recommended approach: // md-as-comment
 
 const tx = new Transaction({
     data: new TextEncoder().encode("food for cats"),
@@ -27,7 +27,7 @@ const tx = new Transaction({
 
 tx.nonce = 42n;
 
-// Legacy approach:
+// Legacy approach: // md-as-comment
 
 const txLegacy = new Transaction({
     data: new TransactionPayload("helloWorld"),
