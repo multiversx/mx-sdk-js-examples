@@ -28,17 +28,17 @@ import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
 // ```
 import { GasEstimator, Token, TokenComputer, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
 
-// The new approach of creating a "TransferTransactionsFactory":
+// The new approach of creating a "TransferTransactionsFactory": // md-as-comment
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
 const factory = new TransferTransactionsFactory({ config: factoryConfig, tokenComputer: new TokenComputer() });
 
-// The legacy approach of creating a "TransferTransactionsFactory":
+// The legacy approach of creating a "TransferTransactionsFactory": // md-as-comment
 const legacyFactory = new TransferTransactionsFactory(new GasEstimator());
 // ```
 
 // Now, we can use the factory to create transfer transactions.
 
-// ### **EGLD** transfers (value movements):
+// ### **EGLD** transfers (value movements)
 
 // ```
 const tx1 = factory.createTransactionForNativeTokenTransfer({
