@@ -5,7 +5,9 @@ current_dir = Path(__file__).parent.absolute()
 
 input_files = [
     current_dir / "basic.js",
+    current_dir / "broadcasting_transactions.js",
     current_dir / "transfers.js",
+    current_dir / "handling_amounts.js",
     current_dir / "contracts_01_deployments.js",
     current_dir / "contracts_02_abi.js",
     current_dir / "contracts_03_queries.js",
@@ -23,6 +25,9 @@ DIRECTIVE_AS_COMMENT = "// md-as-comment"
 DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
 
 notes: Dict[str, str] = {
+    "transactionLegacyVsNext": """:::note
+Since `sdk-core v13`, the `Transaction` class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
+:::"""
 }
 
 
