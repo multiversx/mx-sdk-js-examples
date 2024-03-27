@@ -1,11 +1,10 @@
-import { assert } from "chai"; // md-ignore
 import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
 
 // ## Token transfers
 
 // Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the `TransferTransactionsFactory` class.
 //
-// ::note
+// :::note
 // In `sdk-core v13`, the `TransferTransactionsFactory` class was extended with new methods, 
 // to be aligned with the [SDKs specs](https://github.com/multiversx/mx-sdk-specs/blob/main/core/transactions-factories/transfer_transactions_factory.md).
 // The old, legacy methods are still available (see below), thus existing client code isn't affected.
@@ -26,14 +25,11 @@ import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
 // First, let's create a `TransferTransactionsFactory`:
 
 // ```
-import { GasEstimator, Token, TokenComputer, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
+import { Token, TokenComputer, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
 
 // The new approach of creating a "TransferTransactionsFactory": // md-as-comment
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
 const factory = new TransferTransactionsFactory({ config: factoryConfig, tokenComputer: new TokenComputer() });
-
-// The legacy approach of creating a "TransferTransactionsFactory": // md-as-comment
-const legacyFactory = new TransferTransactionsFactory(new GasEstimator());
 // ```
 
 // Now, we can use the factory to create transfer transactions.
@@ -54,7 +50,6 @@ tx1.nonce = 42n;
 // ### Single ESDT transfer
 
 // ```
-// New approach: // md-as-comment
 const tx2 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -67,23 +62,11 @@ const tx2 = factory.createTransactionForESDTTokenTransfer({
 });
 
 tx2.nonce = 43n;
-
-// Legacy approach: // md-as-comment
-const tx2Legacy = legacyFactory.createESDTTransfer({
-    tokenTransfer: TokenTransfer.fungibleFromAmount("TEST-8b028f", "100.00", 2),
-    nonce: 43,
-    sender: addressOfAlice,
-    receiver: addressOfBob,
-    chainID: "D"
-});
-
-assert.deepEqual(tx2, tx2Legacy);
 // ```
 
 // ### Single NFT transfer
 
 // ```
-// New approach: // md-as-comment
 const tx3 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -96,23 +79,11 @@ const tx3 = factory.createTransactionForESDTTokenTransfer({
 });
 
 tx3.nonce = 44n;
-
-// Legacy approach: // md-as-comment
-const tx3Legacy = legacyFactory.createESDTNFTTransfer({
-    tokenTransfer: TokenTransfer.nonFungible("TEST-38f249", 1),
-    nonce: 44,
-    sender: addressOfAlice,
-    destination: addressOfBob,
-    chainID: "D"
-});
-
-assert.deepEqual(tx3, tx3Legacy);
 // ```
 
 // ### Single SFT transfer
 
 // ```
-// New approach: // md-as-comment
 const tx4 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -125,23 +96,11 @@ const tx4 = factory.createTransactionForESDTTokenTransfer({
 });
 
 tx4.nonce = 45n;
-
-// Legacy approach: // md-as-comment
-const tx4Legacy = legacyFactory.createESDTNFTTransfer({
-    tokenTransfer: TokenTransfer.semiFungible("SEMI-9efd0f", 1, 5),
-    nonce: 45,
-    sender: addressOfAlice,
-    destination: addressOfBob,
-    chainID: "D"
-});
-
-assert.deepEqual(tx4, tx4Legacy);
 // ```
 
 // ### Multi ESDT / NFT transfer
 
 // ```
-// New approach: // md-as-comment
 const tx5 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -162,20 +121,4 @@ const tx5 = factory.createTransactionForESDTTokenTransfer({
 });
 
 tx5.nonce = 46n;
-
-// Legacy approach: // md-as-comment
-const tx5Legacy = legacyFactory.createMultiESDTNFTTransfer({
-    tokenTransfers: [
-        TokenTransfer.fungibleFromAmount("TEST-8b028f", "100.00", 2),
-        TokenTransfer.nonFungible("TEST-38f249", 1),
-        TokenTransfer.semiFungible("SEMI-9efd0f", 1, 5)
-    ],
-    nonce: 46,
-    sender: addressOfAlice,
-    destination: addressOfBob,
-    gasLimit: 1712500,
-    chainID: "D"
-});
-
-assert.deepEqual(tx5, tx5Legacy);
 // ```

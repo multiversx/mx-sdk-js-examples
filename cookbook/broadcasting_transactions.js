@@ -12,12 +12,11 @@ TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 // md-insert:transactionLegacyVsNext
 
 // ```
-import { Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Transaction } from "@multiversx/sdk-core";
 
-// Recommended approach: // md-as-comment
 
 const tx = new Transaction({
-    data: new TextEncoder().encode("food for cats"),
+    data: Buffer.from("food for cats"),
     gasLimit: 70000n,
     sender: addressOfAlice.toBech32(),
     receiver: addressOfBob.toBech32(),
@@ -26,19 +25,6 @@ const tx = new Transaction({
 });
 
 tx.nonce = 42n;
-
-// Legacy approach: // md-as-comment
-
-const txLegacy = new Transaction({
-    data: new TransactionPayload("helloWorld"),
-    gasLimit: 70000,
-    sender: addressOfAlice,
-    receiver: addressOfBob,
-    value: "1000000000000000000",
-    chainID: "D"
-});
-
-txLegacy.setNonce(43);
 // ```
 
 // ### Broadcast using a network provider

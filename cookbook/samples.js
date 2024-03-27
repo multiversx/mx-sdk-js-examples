@@ -20,7 +20,7 @@ export function getNotYetSignedTx() {
         gasPrice: 1000000000n,
         sender: addressOfAlice.toBech32(),
         receiver: addressOfBob.toBech32(),
-        data: new TextEncoder().encode("hello"),
+        data: Buffer.from("hello"),
         chainID: "D",
         version: 1
     });
