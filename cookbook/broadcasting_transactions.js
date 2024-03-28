@@ -35,10 +35,7 @@ tx.nonce = 42n;
 // On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
 // :::
 
-// :::important
-// For the sake of simplicity, in this section we'll use a private key to sign the transaction.
-// In real-world dApps, transactions are signed by end-users using their wallet, through a signing provider.
-// :::
+// md:insert:forSimplicityWeUseUserSigner
 
 // ```
 import { TransactionComputer } from "@multiversx/sdk-core";
@@ -93,11 +90,11 @@ const transactionOnNetworkUsingProxy = await watcherUsingProxy.awaitCompleted(tx
 // In order to wait for multiple transactions:
 
 // ```
-const [tx1, tx2, tx3] = completedTransactionsHashes; // md-ignore
+const [txHash1, txHash2, txHash3] = completedTransactionsHashes; // md-ignore
 await Promise.all([
-    watcherUsingApi.awaitCompleted(tx1), 
-    watcherUsingApi.awaitCompleted(tx2), 
-    watcherUsingApi.awaitCompleted(tx3)
+    watcherUsingApi.awaitCompleted(txHash1), 
+    watcherUsingApi.awaitCompleted(txHash2), 
+    watcherUsingApi.awaitCompleted(txHash3)
 ]);
 // ```
 

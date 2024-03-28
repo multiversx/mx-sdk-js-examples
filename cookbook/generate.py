@@ -27,7 +27,13 @@ DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
 notes: Dict[str, str] = {
     "transactionLegacyVsNext": """:::note
 Since `sdk-core v13`, the `Transaction` class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
-:::"""
+:::""",
+
+    "forSimplicityWeUseUserSigner": """:::important
+For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
+In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
+:::
+"""
 }
 
 
