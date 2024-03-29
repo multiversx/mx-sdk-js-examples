@@ -32,13 +32,12 @@ const code = Code.fromBuffer(codeBuffer);
 // Now, let's create a `SmartContractTransactionsFactory`:
 
 // ```
-import { SmartContractTransactionsFactory, TokenComputer, TransactionsFactoryConfig } from "@multiversx/sdk-core";
+import { SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core";
 
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
 
 let factory = new SmartContractTransactionsFactory({
-    config: factoryConfig,
-    tokenComputer: new TokenComputer()
+    config: factoryConfig
 });
 // ```
 
@@ -47,8 +46,7 @@ let factory = new SmartContractTransactionsFactory({
 // ```
 factory = new SmartContractTransactionsFactory({
     config: factoryConfig,
-    abi: abi,
-    tokenComputer: new TokenComputer(),
+    abi: abi
 });
 // ```
 

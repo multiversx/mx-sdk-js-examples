@@ -25,11 +25,11 @@ import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
 // First, let's create a `TransferTransactionsFactory`:
 
 // ```
-import { Token, TokenComputer, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
+import { Token, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
 
 // The new approach of creating a "TransferTransactionsFactory": // md-as-comment
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
-const factory = new TransferTransactionsFactory({ config: factoryConfig, tokenComputer: new TokenComputer() });
+const factory = new TransferTransactionsFactory({ config: factoryConfig });
 // ```
 
 // Now, we can use the factory to create transfer transactions.
@@ -55,7 +55,7 @@ const tx2 = factory.createTransactionForESDTTokenTransfer({
     receiver: addressOfBob,
     tokenTransfers: [
         new TokenTransfer({
-            token: new Token({ identifier: "TEST-8b028f", nonce: 0n }),
+            token: new Token({ identifier: "TEST-8b028f" }),
             amount: 10000n,
         })
     ],
@@ -106,7 +106,7 @@ const tx5 = factory.createTransactionForESDTTokenTransfer({
     receiver: addressOfBob,
     tokenTransfers: [
         new TokenTransfer({
-            token: new Token({ identifier: "TEST-8b028f", nonce: 0n }),
+            token: new Token({ identifier: "TEST-8b028f" }),
             amount: 10000n,
         }),
         new TokenTransfer({
