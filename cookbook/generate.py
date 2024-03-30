@@ -8,13 +8,13 @@ input_files = [
     current_dir / "broadcasting_transactions.js",
     current_dir / "transfers.js",
     current_dir / "handling_amounts.js",
-    current_dir / "contracts_01_deployments.js",
     current_dir / "contracts_02_abi.js",
-    current_dir / "contracts_03_queries.js",
-    current_dir / "contracts_04_interactions.js",
-    current_dir / "contracts_05_events.js",
-    current_dir / "codec.js",
-    current_dir / "signing.js"
+    current_dir / "contracts_01_deployments.js",
+    # current_dir / "contracts_03_queries.js",
+    # current_dir / "contracts_04_interactions.js",
+    # current_dir / "contracts_05_events.js",
+    # current_dir / "codec.js",
+    # current_dir / "signing.js"
 ]
 
 MARKER_INSERT = "md-insert:"
@@ -33,7 +33,16 @@ Since `sdk-core v13`, the `Transaction` class exhibits its state as public read-
 For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
 In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
-"""
+""",
+
+    "coreAndNetworkProvidersImpedanceMismatch": """:::important
+Generally speaking, the components of `sdk-core` and `sdk-network-providers` cover different aspects of the SDK. 
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
+
+This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specifically crafted _converters_ and _adapters_.
+Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
+However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
+:::"""
 }
 
 

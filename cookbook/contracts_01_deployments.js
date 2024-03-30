@@ -92,7 +92,7 @@ deployTransaction.nonce = deployer.getNonceThenIncrement();
 
 // Now, **sign the transaction** using a wallet / signing provider of your choice.
 
-// md:insert:forSimplicityWeUseUserSigner
+// md-insert:forSimplicityWeUseUserSigner
 
 import { TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
@@ -121,14 +121,23 @@ console.log("Contract address:", contractAddress.bech32());
 import { TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
 
 const txHash = await networkProvider.sendTransaction(deployTransaction);
-let transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
+const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
 // ```
 
-// In the end, parse the results:
+// In the end, you can parse the results using a `SmartContractTransactionsOutcomeParser`.
+// However, since the `parseDeploy` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
+// we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a [`TransactionsConverter`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionsConverter.html).
+
+// md-insert:coreAndNetworkProvidersImpedanceMismatch
 
 // ```
-import { ResultsParser } from "@multiversx/sdk-core";
+import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";
 
-let { returnCode } = new ResultsParser().parseUntypedOutcome(transactionOnNetwork);
-console.log("Return code:", returnCode);
+const converter = new TransactionsConverter();
+const parser = new SmartContractTransactionsOutcomeParser();
+
+const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetwork);
+const parsedOutcome = parser.parseDeploy({ transactionOutcome });
+
+console.log(parsedOutcome);
 // ```

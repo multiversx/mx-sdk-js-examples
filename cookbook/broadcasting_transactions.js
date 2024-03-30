@@ -35,7 +35,7 @@ tx.nonce = 42n;
 // On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
 // :::
 
-// md:insert:forSimplicityWeUseUserSigner
+// md-insert:forSimplicityWeUseUserSigner
 
 // ```
 import { TransactionComputer } from "@multiversx/sdk-core";
