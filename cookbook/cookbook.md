@@ -397,9 +397,9 @@ Now, prepare the deploy transaction:
 ```
 import { U32Value } from "@multiversx/sdk-core";
 
-For deploy arguments, use `TypedValue` objects if you haven't provided an ABI to the factory:
+// For deploy arguments, use `TypedValue` objects if you haven't provided an ABI to the factory: 
 let args = [new U32Value(42)]
-Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
+// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: 
 args = [42];
 
 const deployTransaction = factory.createTransactionForDeploy({
