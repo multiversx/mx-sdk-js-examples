@@ -36,10 +36,10 @@ In real-world dApps, transactions are signed by end-users using their wallet, th
 """,
 
     "coreAndNetworkProvidersImpedanceMismatch": """:::important
-Generally speaking, the components of `sdk-core` and `sdk-network-providers` cover different aspects of the SDK. 
+Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
 The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
 
-This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specifically crafted _converters_ and _adapters_.
+This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
 However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
 :::"""

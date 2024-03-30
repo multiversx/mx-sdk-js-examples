@@ -439,6 +439,7 @@ In real-world dApps, transactions are signed by end-users using their wallet, th
 :::
 
 
+```
 
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
 const walletObject = JSON.parse(fileContent);
@@ -448,12 +449,14 @@ const computer = new TransactionComputer();
 const serializedTx = computer.computeBytesForSigning(deployTransaction);
 
 deployTransaction.signature = await signer.sign(serializedTx);
+```
 
 Once you know the sender address and nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
 ```
 
-const contractAddress = SmartContract.computeAddress(deployTransaction.getSender(), deployTransaction.getNonce());
+const addressComputer = new AddressComputer();
+const contractAddress = addressComputer.computeContractAddress(Address.fromBech32(deployTransaction.sender), deployTransaction.nonce);
 console.log("Contract address:", contractAddress.bech32());
 ```
 
@@ -465,15 +468,15 @@ const txHash = await networkProvider.sendTransaction(deployTransaction);
 const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
 ```
 
-In the end, you can parse the results using a `SmartContractTransactionsOutcomeParser`.
+In the end, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
 However, since the `parseDeploy` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
 we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a [`TransactionsConverter`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionsConverter.html).
 
 :::important
-Generally speaking, the components of `sdk-core` and `sdk-network-providers` cover different aspects of the SDK. 
+Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
 The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
 
-This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specifically crafted _converters_ and _adapters_.
+This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
 However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
 :::

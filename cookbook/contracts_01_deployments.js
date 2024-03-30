@@ -1,4 +1,4 @@
-import { AbiRegistry } from "@multiversx/sdk-core"; // md-ignore
+import { AbiRegistry, Address } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
 import { addressOfAlice } from "./samples.js"; // md-ignore
 
@@ -94,6 +94,7 @@ deployTransaction.nonce = deployer.getNonceThenIncrement();
 
 // md-insert:forSimplicityWeUseUserSigner
 
+// ```
 import { TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
 
@@ -105,13 +106,15 @@ const computer = new TransactionComputer();
 const serializedTx = computer.computeBytesForSigning(deployTransaction);
 
 deployTransaction.signature = await signer.sign(serializedTx);
+// ```
 
 // Once you know the sender address and nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
 // ```
-import { SmartContract } from "@multiversx/sdk-core"; // md-ignore
+import { AddressComputer } from "@multiversx/sdk-core"; // md-ignore
 
-const contractAddress = SmartContract.computeAddress(deployTransaction.getSender(), deployTransaction.getNonce());
+const addressComputer = new AddressComputer();
+const contractAddress = addressComputer.computeContractAddress(Address.fromBech32(deployTransaction.sender), deployTransaction.nonce);
 console.log("Contract address:", contractAddress.bech32());
 // ```
 
@@ -124,7 +127,7 @@ const txHash = await networkProvider.sendTransaction(deployTransaction);
 const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
 // ```
 
-// In the end, you can parse the results using a `SmartContractTransactionsOutcomeParser`.
+// In the end, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
 // However, since the `parseDeploy` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
 // we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a [`TransactionsConverter`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionsConverter.html).
 
