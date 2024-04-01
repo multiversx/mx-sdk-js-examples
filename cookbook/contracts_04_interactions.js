@@ -1,4 +1,4 @@
-import { AbiRegistry, Address } from "@multiversx/sdk-core"; // md-ignore
+import { AbiRegistry, Address, TokenTransfer, Token } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import { addressOfAlice } from "./samples.js"; // md-ignore
@@ -110,7 +110,7 @@ const transactionOnNetwork = await new TransactionWatcher(networkProvider).await
 // For transfer & execute with native EGLD, prepare your transaction as follows:
 
 // ```
-const transaction = factory.createTransactionForExecute({
+const transactionWithNativeTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
     functionName: "foobar",
@@ -124,35 +124,45 @@ const transaction = factory.createTransactionForExecute({
 
 // For transfer & execute with ESDT tokens, prepare your transaction as follows:
 
+// ```
+const transactionWithTokenTransfer = factory.createTransactionForExecute({
+    sender: addressOfAlice,
+    contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
+    functionName: "foobar",
+    gasLimit: 5000000,
+    args: args,
+    tokenTransfers: [
+        new TokenTransfer({
+            token: new Token({ identifier: "UTK-14d57d" }),
+            amount: 42000000000000000000n,
+        })
+    ]
+});
+// ```
 
+// Or, for transferring multiple tokens (NFTs included):
 
+// ```
+const transactionWithMultipleTokenTransfers = factory.createTransactionForExecute({
+    sender: addressOfAlice,
+    contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
+    functionName: "foobar",
+    gasLimit: 5000000,
+    args: args,
+    tokenTransfers: [
+        new TokenTransfer({
+            token: new Token({ identifier: "UTK-14d57d" }),
+            amount: 42000000000000000000n,
+        }),
+        new TokenTransfer({
+            token: new Token({ identifier: "EXAMPLE-453bec", nonce: 3n }),
+            amount: 1n,
+        }),
+    ]
+});
+// ```
 
-// TOKEN_CHOCOLATE="CHOCOLATE-daf625"
-// TOKEN_BEER="BEER-b16c6d"
-
-
-
-// // For single payments, do as follows:
-
-// // ```
-// // Fungible token // md-as-comment
-// interaction.withSingleESDTTransfer(TokenTransfer.fungibleFromAmount("FOO-6ce17b", "1.5", 18));
-
-// // Non-fungible token // md-as-comment
-// interaction.withSingleESDTNFTTransfer(TokenTransfer.nonFungible("SDKJS-38f249", 1));
-// // ```
-
-// // For multiple payments:
-
-// // ```
-// interaction.withMultiESDTNFTTransfer([
-//     TokenTransfer.fungibleFromAmount("FOO-6ce17b", "1.5", 18),
-//     TokenTransfer.nonFungible("SDKJS-38f249", 1)
-// ]);
-// // ```
-
-
-
+// Above, we've prepared the `TokenTransfer` objects as seen in the section [token transfers](#token-transfers).
 
 // // ## Parsing contract results
 
