@@ -1,4 +1,4 @@
-import { addressOfAlice, getNotYetSignedTx } from "./samples.js"; // md-ignore
+import { addressOfAlice, getNotYetSignedTx } from "./framework.js"; // md-ignore
 
 // ## Creating network providers
 

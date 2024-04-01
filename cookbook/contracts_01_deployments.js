@@ -1,7 +1,7 @@
 import { AbiRegistry, Address } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
 import { promises } from "fs"; // md-ignore
-import { addressOfAlice } from "./samples.js"; // md-ignore
+import { addressOfAlice } from "./framework.js"; // md-ignore
 
 const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 

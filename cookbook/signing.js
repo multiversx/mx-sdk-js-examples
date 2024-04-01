@@ -1,4 +1,4 @@
-import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
+import { addressOfAlice, addressOfBob } from "./framework.js"; // md-ignore
 
 // ## Signing objects
 
@@ -85,7 +85,8 @@ const tx = Transaction.fromPlainObject({
     gasLimit: 50000,
     chainID: "D",
     version: 1,
-    signature: "3c5eb2d1c9b3ab2f578541e62dcfa5008976d11f85644a48884a8a6c4d2980fa14954ab2924d6e67c051562488096d2e79cd3c0378edf234a52e648e672d1b0a"
+    signature:
+        "3c5eb2d1c9b3ab2f578541e62dcfa5008976d11f85644a48884a8a6c4d2980fa14954ab2924d6e67c051562488096d2e79cd3c0378edf234a52e648e672d1b0a"
 });
 
 const serializedTx = tx.serializeForSigning();
@@ -97,7 +98,10 @@ const txSignature = tx.getSignature();
 // ```
 message = new SignableMessage({ message: Buffer.from("hello") });
 serializedMessage = message.serializeForSigning();
-messageSignature = Buffer.from("561bc58f1dc6b10de208b2d2c22c9a474ea5e8cabb59c3d3ce06bbda21cc46454aa71a85d5a60442bd7784effa2e062fcb8fb421c521f898abf7f5ec165e5d0f", "hex");
+messageSignature = Buffer.from(
+    "561bc58f1dc6b10de208b2d2c22c9a474ea5e8cabb59c3d3ce06bbda21cc46454aa71a85d5a60442bd7784effa2e062fcb8fb421c521f898abf7f5ec165e5d0f",
+    "hex"
+);
 // ```
 
 // We can verify their signatures as follows:

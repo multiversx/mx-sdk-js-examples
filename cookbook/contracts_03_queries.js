@@ -1,5 +1,5 @@
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { addressOfFirstDevnetDelegator, legacyDelegationContractAddress } from "./samples.js"; // md-ignore
+import { addressOfFirstDevnetDelegator, legacyDelegationContractAddress } from "./framework.js"; // md-ignore
 
 const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 
