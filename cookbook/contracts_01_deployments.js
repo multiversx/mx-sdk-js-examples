@@ -1,14 +1,13 @@
-import { AbiRegistry, Address, Account, TransactionWatcher, TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { promises } from "fs"; // md-ignore
-import { addressOfAlice } from "./framework.js"; // md-ignore
+import { AbiRegistry, Address, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
-
-const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
+import { promises } from "fs"; // md-ignore
+import { addressOfAlice, apiNetworkProvider } from "./framework.js"; // md-ignore
 
 let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" }); // md-ignore
 let abiObj = JSON.parse(abiJson); // md-ignore
 let abi = AbiRegistry.create(abiObj); // md-ignore
+
+const { alice: deployer } = await syncAccounts(); // md-ignore
 
 // ## Contract deployments
 
@@ -74,10 +73,6 @@ const deployTransaction = factory.createTransactionForDeploy({
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 // ```
-const deployer = new Account(addressOfAlice);
-const deployerOnNetwork = await networkProvider.getAccount(addressOfAlice);
-deployer.update(deployerOnNetwork);
-
 deployTransaction.nonce = deployer.getNonceThenIncrement();
 // ```
 
@@ -113,8 +108,8 @@ console.log("Contract address:", contractAddress.bech32());
 // Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
 
 // ```
-const txHash = await networkProvider.sendTransaction(deployTransaction);
-const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
+const txHash = await apiNetworkProvider.sendTransaction(deployTransaction);
+const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
 // ```
 
 // In the end, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).

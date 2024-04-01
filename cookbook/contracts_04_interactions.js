@@ -1,14 +1,13 @@
-import { AbiRegistry, Address, Account, TokenTransfer, Token, TransactionWatcher, TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { promises } from "fs"; // md-ignore
-import { addressOfAlice } from "./framework.js"; // md-ignore
+import { AbiRegistry, Address, Token, TokenTransfer, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
-
-const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
+import { promises } from "fs"; // md-ignore
+import { addressOfAlice, apiNetworkProvider, syncAccounts } from "./framework.js"; // md-ignore
 
 let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" }); // md-ignore
 let abiObj = JSON.parse(abiJson); // md-ignore
 let abi = AbiRegistry.create(abiObj); // md-ignore
+
+const { alice } = await syncAccounts(); // md-ignore
 
 // ## Contract interactions
 
@@ -68,11 +67,7 @@ const transaction = factory.createTransactionForExecute({
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 // ```
-const caller = new Account(addressOfAlice);
-const callerOnNetwork = await networkProvider.getAccount(addressOfAlice);
-caller.update(callerOnNetwork);
-
-transaction.nonce = caller.getNonceThenIncrement();
+transaction.nonce = alice.getNonceThenIncrement();
 // ```
 
 // Now, **sign the transaction** using a wallet / signing provider of your choice.
@@ -93,8 +88,8 @@ transaction.signature = await signer.sign(serializedTx);
 // Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
 
 // ```
-const txHash = await networkProvider.sendTransaction(transaction);
-const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
+const txHash = await apiNetworkProvider.sendTransaction(transaction);
+const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
 // ```
 
 // ### Transfer & execute

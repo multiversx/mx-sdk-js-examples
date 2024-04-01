@@ -2,8 +2,8 @@
  * A minimalistic framework for writing & executing the cookbook.
  */
 
-import { Address, Transaction } from "@multiversx/sdk-core";
-import { AccountOnNetwork } from "@multiversx/sdk-network-providers";
+import { Account, Address, Transaction } from "@multiversx/sdk-core";
+import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 
 export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 
@@ -18,9 +18,9 @@ export const completedTransactionsHashes = [
 ];
 
 export const accounts = {
-    alice: new AccountOnNetwork({ address: addressOfAlice }),
-    bob: new AccountOnNetwork({ address: addressOfBob }),
-    carol: new AccountOnNetwork({ address: addressOfCarol }),
+    alice: new Account(addressOfAlice),
+    bob: new Account(addressOfBob),
+    carol: new Account(addressOfCarol),
 };
 
 // TODO: use another contract.
@@ -30,6 +30,8 @@ export const legacyDelegationContractAddress = Address.fromBech32(
 export const addressOfFirstDevnetDelegator = new Address(
     "erd1s0us936aku52uxyvnhxspcaj4f4sp7d9azuyw7kf32ggm88ynlps7c0yr9"
 );
+
+export const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 
 export function getNotYetSignedTx() {
     return new Transaction({
@@ -64,10 +66,14 @@ export function getReadyToBroadcastTx() {
 }
 
 export async function syncAccounts() {
-    for (const account in accounts) {
-        const accountOnNetwork = await networkProvider.getAccount(account.address);
+    for (const account of Object.values(accounts)) {
+        const accountOnNetwork = await apiNetworkProvider.getAccount(account.address);
         account.update(accountOnNetwork);
     }
+
+    return accounts;
 }
 
-export function signByAlice(tx) {}
+export function signAndBroadcast(tx) {
+    
+}

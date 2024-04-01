@@ -22,3 +22,44 @@ import axios from "axios";
 const response = await axios.get("https://github.com/multiversx/mx-sdk-js-core/raw/main/src/testdata/counter.abi.json");
 abi = AbiRegistry.create(response.data);
 // ```
+
+// ### Manually construct the ABI
+
+// If an ABI file isn't directly available, but you do have knowledge of the contract's endpoints and types, you can manually construct the ABI. Let's see a simple example:
+
+// ```
+abi = AbiRegistry.create({
+    "endpoints": [{
+        "name": "add",
+        "inputs": [],
+        "outputs": []
+    }]
+});
+// ```
+
+// An endpoint with both inputs and outputs:
+
+abi = AbiRegistry.create({
+    "endpoints": [
+        {
+            "name": "foo",
+            "inputs": [
+                { "type": "BigUint" },
+                { "type": "u32" },
+                { "type": "Address" }
+            ],
+            "outputs": [
+                { "type": "u32" }
+            ]
+        },
+        {
+            "name": "bar",
+            "inputs": [
+                { "type": "counted-variadic<utf-8 string>" },
+                { "type": "variadic<u64>" }
+            ],
+            "outputs": []
+        }
+    ]
+});
+
