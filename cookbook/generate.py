@@ -10,8 +10,8 @@ input_files = [
     current_dir / "handling_amounts.js",
     current_dir / "contracts_02_abi.js",
     current_dir / "contracts_01_deployments.js",
+    current_dir / "contracts_04_interactions.js",
     # current_dir / "contracts_03_queries.js",
-    # current_dir / "contracts_04_interactions.js",
     # current_dir / "contracts_05_events.js",
     # current_dir / "codec.js",
     # current_dir / "signing.js"
@@ -42,6 +42,16 @@ The former aims to be agnostic to network providers, while the latter is designe
 This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
 However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
+:::""",
+
+    "mixedTypedValuesAndNativeValues": """:::tip
+When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
+you can still use `TypedValue` objects as arguments for deployments and interactions.
+
+Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. E.g.
+```
+let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
+```
 :::"""
 }
 

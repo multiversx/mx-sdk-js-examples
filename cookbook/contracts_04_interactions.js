@@ -1,207 +1,193 @@
+import { AbiRegistry, Address } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { addressOfAlice, addressOfCarol } from "./samples.js"; // md-ignore
+import { promises } from "fs"; // md-ignore
+import { addressOfAlice } from "./samples.js"; // md-ignore
 
 const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 
+let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" }); // md-ignore
+let abiObj = JSON.parse(abiJson); // md-ignore
+let abi = AbiRegistry.create(abiObj); // md-ignore
+
 // ## Contract interactions
 
-// ### When the ABI is not available
+// In `sdk-core v13`, the recommended way to create transactions for calling
+// (and, for that matter, deploying and upgrading) 
+// smart contracts is through a `SmartContractTransactionsFactory`.
+
+// The older (legacy) approaches, using `SmartContract.call()`, `SmartContract.methods.myFunction()`, `SmartContract.methodsExplicit.myFunction()` and
+// `new Interaction(contract, "myFunction", args)` are still available, however. 
+// At some point in the (more distant) future,  they will be deprecated and removed.
+
+// Now, let's create a `SmartContractTransactionsFactory`:
 
 // ```
-import { Address, AddressValue, SmartContract, U64Value } from "@multiversx/sdk-core";
+import { SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core";
 
-let contractAddress = new Address("erd1qqqqqqqqqqqqqpgq5sup58y38q3pwyqklagxmuraetshrqwpd8ssh0ssph");
-let contract = new SmartContract({ address: contractAddress });
+const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
 
-let tx1 = contract.call({
-    caller: addressOfAlice,
-    func: "doSomething",
+let factory = new SmartContractTransactionsFactory({
+    config: factoryConfig
+});
+// ```
+
+// If the contract ABI is available, provide it to the factory:
+
+// ```
+factory = new SmartContractTransactionsFactory({
+    config: factoryConfig,
+    abi: abi
+});
+// ```
+
+// ### Regular interactions
+
+// Now, let's prepare a contract execute transaction, to call the `add` function of our
+// previously deployed smart contract:
+
+// ```
+import { U32Value } from "@multiversx/sdk-core";
+
+// For arguments, use `TypedValue` objects if you haven't provided an ABI to the factory: // md-as-comment
+let args = [new U32Value(42)]
+// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
+args = [42];
+
+const transaction = factory.createTransactionForExecute({
+    sender: addressOfAlice,
+    contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
+    functionName: "add",
     gasLimit: 5000000,
-    args: [new AddressValue(addressOfCarol), new U64Value(1000)],
-    chainID: "D"
+    args: args
 });
-
-tx1.setNonce(42);
 // ```
 
-// Then, sign, broadcast `tx` and wait for its completion.
+// md-insert:mixedTypedValuesAndNativeValues
 
-// ### Using `Interaction`, when the ABI is not available
-
-// ```
-import { Interaction, TokenTransfer, U32Value } from "@multiversx/sdk-core";
-
-let args = [new U32Value(1), new U32Value(2), new U32Value(3)];
-let interaction = new Interaction(contract, "doSomethingWithValue", args);
-
-let tx2 = interaction
-    .withSender(addressOfAlice)
-    .withNonce(43)
-    .withValue(TokenTransfer.egldFromAmount(1))
-    .withGasLimit(20000000)
-    .withChainID("D")
-    .buildTransaction();
-// ```
-
-// Then, sign, broadcast `tx` and wait for its completion.
-
-// ### Using `Interaction`, when the ABI is available
+// Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand). 
 
 // ```
-import { AbiRegistry } from "@multiversx/sdk-core";
+import { Account } from "@multiversx/sdk-core"; // md-ignore
 
-let abiRegistry = AbiRegistry.create({
-    "endpoints": [
-        {
-            "name": "foobar",
-            "inputs": [],
-            "outputs": []
-        },
-        {
-            "name": "doSomethingWithValue",
-            "inputs": [{
-                "type": "u32"
-            },
-            {
-                "type": "u32"
-            },
-            {
-                "type": "u32"
-            }],
-            "outputs": []
-        }
-    ]
-});
+const caller = new Account(addressOfAlice);
+const callerOnNetwork = await networkProvider.getAccount(addressOfAlice);
+caller.update(callerOnNetwork);
 
-contract = new SmartContract({ address: contractAddress, abi: abiRegistry });
-
-let tx3 = contract.methods.doSomethingWithValue([1, 2, 3])
-    .withSender(addressOfAlice)
-    .withNonce(44)
-    .withValue(TokenTransfer.egldFromAmount(1))
-    .withGasLimit(20000000)
-    .withChainID("D")
-    .buildTransaction();
+transaction.nonce = caller.getNonceThenIncrement();
 // ```
 
-// Now let's see an example using variadic arguments, as well:
+// Now, **sign the transaction** using a wallet / signing provider of your choice.
+
+// md-insert:forSimplicityWeUseUserSigner
 
 // ```
-import { StringValue, VariadicValue } from "@multiversx/sdk-core";
+import { TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
+import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
 
-abiRegistry = AbiRegistry.create({
-    "endpoints": [
-        {
-            "name": "foobar",
-            "inputs": [],
-            "outputs": []
-        },
-        {
-            "name": "doSomething",
-            "inputs": [{
-                "type": "counted-variadic<utf-8 string>"
-            },
-            {
-                "type": "variadic<u64>"
-            }],
-            "outputs": []
-        }
-    ]
-});
+const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
+const walletObject = JSON.parse(fileContent);
+const signer = UserSigner.fromWallet(walletObject, "password");
 
-contract = new SmartContract({ address: contractAddress, abi: abiRegistry });
+const computer = new TransactionComputer();
+const serializedTx = computer.computeBytesForSigning(transaction);
 
-let tx4 = contract.methods.doSomething(
-    [
-        // Counted variadic must be explicitly typed // md-as-comment
-        VariadicValue.fromItemsCounted(StringValue.fromUTF8("foo"), StringValue.fromUTF8("bar")),
-        // Regular variadic can be implicitly typed // md-as-comment
-        1, 2, 3
-    ])
-    .withSender(addressOfAlice)
-    .withNonce(45)
-    .withGasLimit(20000000)
-    .withChainID("D")
-    .buildTransaction();
+transaction.signature = await signer.sign(serializedTx);
+// ```
+
+// Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
+
+// ```
+import { TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
+
+const txHash = await networkProvider.sendTransaction(transaction);
+const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
 // ```
 
 // ### Transfer & execute
 
-// Given an interaction:
+// At times, you may want to send some tokens (native EGLD or ESDT) along with the contract call.
+
+// For transfer & execute with native EGLD, prepare your transaction as follows:
 
 // ```
-interaction = contract.methods.foobar([]);
+const transaction = factory.createTransactionForExecute({
+    sender: addressOfAlice,
+    contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
+    functionName: "foobar",
+    gasLimit: 5000000,
+    args: args,
+    nativeTransferAmount: 1000000000000000000n
+});
 // ```
 
-// One can apply token transfers to the smart contract call, as well.
+// Above, we're sending 1 EGLD along with the contract call.
 
-// For single payments, do as follows:
+// For transfer & execute with ESDT tokens, prepare your transaction as follows:
 
-// ```
-// Fungible token // md-as-comment
-interaction.withSingleESDTTransfer(TokenTransfer.fungibleFromAmount("FOO-6ce17b", "1.5", 18));
 
-// Non-fungible token // md-as-comment
-interaction.withSingleESDTNFTTransfer(TokenTransfer.nonFungible("SDKJS-38f249", 1));
-// ```
 
-// For multiple payments:
 
-// ```
-interaction.withMultiESDTNFTTransfer([
-    TokenTransfer.fungibleFromAmount("FOO-6ce17b", "1.5", 18),
-    TokenTransfer.nonFungible("SDKJS-38f249", 1)
-]);
-// ```
+// TOKEN_CHOCOLATE="CHOCOLATE-daf625"
+// TOKEN_BEER="BEER-b16c6d"
 
-// ## Parsing contract results
 
-// :::important
-// When the default `ResultsParser` misbehaves, please open an issue [on GitHub](https://github.com/multiversx/mx-sdk-js-core/issues), and also provide as many details as possible about the unparsable results (e.g. provide a dump of the transaction object if possible - make sure to remove any sensitive information).
-// :::
 
-// ### When the ABI is not available
+// // For single payments, do as follows:
 
-// ```
-import { ResultsParser } from "@multiversx/sdk-core";
+// // ```
+// // Fungible token // md-as-comment
+// interaction.withSingleESDTTransfer(TokenTransfer.fungibleFromAmount("FOO-6ce17b", "1.5", 18));
 
-let resultsParser = new ResultsParser();
-let txHash = "d415901a9c88e564adf25b71b724b936b1274a2ad03e30752fdc79235af8ea3e";
-let transactionOnNetwork = await networkProvider.getTransaction(txHash);
-let untypedBundle = resultsParser.parseUntypedOutcome(transactionOnNetwork);
+// // Non-fungible token // md-as-comment
+// interaction.withSingleESDTNFTTransfer(TokenTransfer.nonFungible("SDKJS-38f249", 1));
+// // ```
 
-console.log(untypedBundle.returnCode, untypedBundle.values.length);
-// ```
+// // For multiple payments:
 
-// ### When the ABI is available
+// // ```
+// interaction.withMultiESDTNFTTransfer([
+//     TokenTransfer.fungibleFromAmount("FOO-6ce17b", "1.5", 18),
+//     TokenTransfer.nonFungible("SDKJS-38f249", 1)
+// ]);
+// // ```
 
-// ```
-let endpointDefinition = AbiRegistry.create({
-    "name": "counter",
-    "endpoints": [{
-        "name": "increment",
-        "inputs": [],
-        "outputs": [{ "type": "i64" }]
-    }]
-}).getEndpoint("increment");
 
-transactionOnNetwork = await networkProvider.getTransaction(txHash);
-let typedBundle = resultsParser.parseOutcome(transactionOnNetwork, endpointDefinition);
 
-console.log(typedBundle.returnCode, typedBundle.values.length);
-// ```
 
-// Above, `endpointDefinition` is manually constructed. 
-// However, in practice, it can be obtained from the `Interaction` object, if available in the context:
+// // ## Parsing contract results
 
-// ```
-endpointDefinition = interaction.getEndpoint();
-// ```
+// // :::important
+// // When the default `ResultsParser` misbehaves, please open an issue [on GitHub](https://github.com/multiversx/mx-sdk-js-core/issues), and also provide as many details as possible about the unparsable results (e.g. provide a dump of the transaction object if possible - make sure to remove any sensitive information).
+// // :::
 
-// Alternatively, the `endpointDefinition` can also be obtained from the `SmartContract` object:
+// // ### When the ABI is not available
 
-// ```
-// let endpointDefinition = smartContract.getEndpoint("myFunction");
-// ```
+// // ```
+// import { ResultsParser } from "@multiversx/sdk-core";
 
-// For customizing the default parser, also see [extending sdk-js](/sdk-and-tools/sdk-js/extending-sdk-js).
+// let resultsParser = new ResultsParser();
+// let txHash = "d415901a9c88e564adf25b71b724b936b1274a2ad03e30752fdc79235af8ea3e";
+// let transactionOnNetwork = await networkProvider.getTransaction(txHash);
+// let untypedBundle = resultsParser.parseUntypedOutcome(transactionOnNetwork);
+
+// console.log(untypedBundle.returnCode, untypedBundle.values.length);
+// // ```
+
+// // ### When the ABI is available
+
+// // ```
+// let endpointDefinition = AbiRegistry.create({
+//     "name": "counter",
+//     "endpoints": [{
+//         "name": "increment",
+//         "inputs": [],
+//         "outputs": [{ "type": "i64" }]
+//     }]
+// }).getEndpoint("increment");
+
+// transactionOnNetwork = await networkProvider.getTransaction(txHash);
+// let typedBundle = resultsParser.parseOutcome(transactionOnNetwork, endpointDefinition);
+
+// console.log(typedBundle.returnCode, typedBundle.values.length);
+// // ```
+

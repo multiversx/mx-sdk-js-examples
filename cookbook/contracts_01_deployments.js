@@ -1,5 +1,6 @@
 import { AbiRegistry, Address } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
+import { promises } from "fs"; // md-ignore
 import { addressOfAlice } from "./samples.js"; // md-ignore
 
 const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
@@ -14,7 +15,6 @@ let abi = AbiRegistry.create(abiObj); // md-ignore
 
 // ```
 import { Code } from "@multiversx/sdk-core";
-import { promises } from "fs";
 
 const codeBuffer = await promises.readFile("../contracts/adder.wasm");
 const code = Code.fromBuffer(codeBuffer);
@@ -68,15 +68,7 @@ const deployTransaction = factory.createTransactionForDeploy({
 });
 // ```
 
-// :::tip
-// When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
-// you can still use `TypedValue` objects as arguments for deployments and interactions.
-//
-// Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. E.g.
-// ```
-// let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
-// ```
-// :::
+// md-insert:mixedTypedValuesAndNativeValues
 
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand). 
 
