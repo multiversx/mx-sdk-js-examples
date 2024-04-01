@@ -1,7 +1,8 @@
-import { AbiRegistry, Address } from "@multiversx/sdk-core"; // md-ignore
+import { AbiRegistry, Address, Account, TransactionWatcher, TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import { addressOfAlice } from "./framework.js"; // md-ignore
+import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
 
 const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 
@@ -23,10 +24,10 @@ const code = Code.fromBuffer(codeBuffer);
 // ### Perform a contract deployment
 
 // In `sdk-core v13`, the recommended way to create transactions for deploying
-// (and, for that matter, upgrading and interacting with) 
+// (and, for that matter, upgrading and interacting with)
 // smart contracts is through a `SmartContractTransactionsFactory`.
 
-// The older (legacy) approach, using the method `SmartContract.deploy()`, is still available, however. 
+// The older (legacy) approach, using the method `SmartContract.deploy()`, is still available, however.
 // At some point in the future, `SmartContract.deploy()` will be deprecated and removed.
 
 // Now, let's create a `SmartContractTransactionsFactory`:
@@ -56,7 +57,7 @@ factory = new SmartContractTransactionsFactory({
 import { U32Value } from "@multiversx/sdk-core";
 
 // For deploy arguments, use `TypedValue` objects if you haven't provided an ABI to the factory: // md-as-comment
-let args = [new U32Value(42)]
+let args = [new U32Value(42)];
 // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
 args = [42];
 
@@ -64,13 +65,13 @@ const deployTransaction = factory.createTransactionForDeploy({
     sender: addressOfAlice,
     bytecode: code.valueOf(),
     gasLimit: 6000000n,
-    args: args,
+    args: args
 });
 // ```
 
 // md-insert:mixedTypedValuesAndNativeValues
 
-// Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand). 
+// Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 // ```
 import { Account } from "@multiversx/sdk-core"; // md-ignore
@@ -87,9 +88,6 @@ deployTransaction.nonce = deployer.getNonceThenIncrement();
 // md-insert:forSimplicityWeUseUserSigner
 
 // ```
-import { TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
-import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
-
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
 const walletObject = JSON.parse(fileContent);
 const signer = UserSigner.fromWallet(walletObject, "password");
@@ -103,18 +101,19 @@ deployTransaction.signature = await signer.sign(serializedTx);
 // Once you know the sender address and nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
 // ```
-import { AddressComputer } from "@multiversx/sdk-core"; // md-ignore
+import { AddressComputer } from "@multiversx/sdk-core";
 
 const addressComputer = new AddressComputer();
-const contractAddress = addressComputer.computeContractAddress(Address.fromBech32(deployTransaction.sender), deployTransaction.nonce);
+const contractAddress = addressComputer.computeContractAddress(
+    Address.fromBech32(deployTransaction.sender),
+    deployTransaction.nonce
+);
 console.log("Contract address:", contractAddress.bech32());
 // ```
 
 // Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
 
 // ```
-import { TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
-
 const txHash = await networkProvider.sendTransaction(deployTransaction);
 const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
 // ```
