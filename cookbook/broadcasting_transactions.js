@@ -3,6 +3,7 @@ import { addressOfAlice, addressOfBob, completedTransactionsHashes, getReadyToBr
 
 const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
 const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com"); // md-ignore
+const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
 TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 
 // ## Broadcasting transactions
@@ -13,7 +14,6 @@ TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 
 // ```
 import { Transaction } from "@multiversx/sdk-core";
-
 
 const tx = new Transaction({
     data: Buffer.from("food for cats"),
@@ -30,7 +30,7 @@ tx.nonce = 42n;
 // ### Signing a transaction
 
 // :::important
-// Note that the transactions **must be signed before being broadcasted**. 
+// Note that the transactions **must be signed before being broadcasted**.
 // On the front-end, signing can be achieved using a signing provider.
 // On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
 // :::
@@ -57,8 +57,6 @@ tx.signature = await signer.sign(serializedTx);
 // In order to broadcast a transaction, use a network provider:
 
 // ```
-const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
-
 try { // md-ignore
     const txHash = await apiNetworkProvider.sendTransaction(readyToBroadcastTx); // md-unindent
     console.log("TX hash:", txHash); // md-unindent
@@ -81,7 +79,9 @@ const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(txHash
 
 // ```
 const watcherUsingProxy = new TransactionWatcher({
-    getTransaction: async (hash) => { return await proxyNetworkProvider.getTransaction(hash, true) }
+    getTransaction: async (hash) => {
+        return await proxyNetworkProvider.getTransaction(hash, true);
+    }
 });
 
 const transactionOnNetworkUsingProxy = await watcherUsingProxy.awaitCompleted(txHash);
@@ -92,8 +92,8 @@ const transactionOnNetworkUsingProxy = await watcherUsingProxy.awaitCompleted(tx
 // ```
 const [txHash1, txHash2, txHash3] = completedTransactionsHashes; // md-ignore
 await Promise.all([
-    watcherUsingApi.awaitCompleted(txHash1), 
-    watcherUsingApi.awaitCompleted(txHash2), 
+    watcherUsingApi.awaitCompleted(txHash1),
+    watcherUsingApi.awaitCompleted(txHash2),
     watcherUsingApi.awaitCompleted(txHash3)
 ]);
 // ```

@@ -1,11 +1,4 @@
-import {
-    AbiRegistry,
-    Address,
-    TokenTransfer,
-    Token,
-    TransactionWatcher,
-    TransactionComputer
-} from "@multiversx/sdk-core"; // md-ignore
+import { AbiRegistry, Address, Account, TokenTransfer, Token, TransactionWatcher, TransactionComputer } from "@multiversx/sdk-core"; // md-ignore
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import { addressOfAlice } from "./framework.js"; // md-ignore
@@ -24,8 +17,8 @@ let abi = AbiRegistry.create(abiObj); // md-ignore
 // smart contracts is through a `SmartContractTransactionsFactory`.
 
 // The older (legacy) approaches, using `SmartContract.call()`, `SmartContract.methods.myFunction()`, `SmartContract.methodsExplicit.myFunction()` and
-// `new Interaction(contract, "myFunction", args)` are still available, however.
-// At some point in the (more distant) future,  they will be deprecated and removed.
+// `new Interaction(contract, "myFunction", args)` are still available.
+// However, at some point in the (more distant) future,  they will be deprecated and removed.
 
 // Now, let's create a `SmartContractTransactionsFactory`:
 
@@ -50,7 +43,7 @@ factory = new SmartContractTransactionsFactory({
 
 // ### Regular interactions
 
-// Now, let's prepare a contract execute transaction, to call the `add` function of our
+// Now, let's prepare a contract transaction, to call the `add` function of our
 // previously deployed smart contract:
 
 // ```
@@ -75,8 +68,6 @@ const transaction = factory.createTransactionForExecute({
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 // ```
-import { Account } from "@multiversx/sdk-core"; // md-ignore
-
 const caller = new Account(addressOfAlice);
 const callerOnNetwork = await networkProvider.getAccount(addressOfAlice);
 caller.update(callerOnNetwork);

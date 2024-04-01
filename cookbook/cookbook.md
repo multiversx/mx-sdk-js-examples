@@ -64,7 +64,6 @@ If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce t
 For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
 
 ```
-
 notYetSignedTx.nonce = alice.getNonceThenIncrement();
 ```
 
@@ -79,7 +78,6 @@ Since `sdk-core v13`, the `Transaction` class exhibits its state as public read-
 
 ```
 import { Transaction } from "@multiversx/sdk-core";
-
 
 const tx = new Transaction({
     data: Buffer.from("food for cats"),
@@ -96,7 +94,7 @@ tx.nonce = 42n;
 ### Signing a transaction
 
 :::important
-Note that the transactions **must be signed before being broadcasted**. 
+Note that the transactions **must be signed before being broadcasted**.
 On the front-end, signing can be achieved using a signing provider.
 On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
 :::
@@ -127,7 +125,6 @@ tx.signature = await signer.sign(serializedTx);
 In order to broadcast a transaction, use a network provider:
 
 ```
-
 const txHash = await apiNetworkProvider.sendTransaction(readyToBroadcastTx); 
 console.log("TX hash:", txHash); 
 ```
@@ -146,7 +143,9 @@ so that it instructs the network provider to fetch the so-called _processing sta
 
 ```
 const watcherUsingProxy = new TransactionWatcher({
-    getTransaction: async (hash) => { return await proxyNetworkProvider.getTransaction(hash, true) }
+    getTransaction: async (hash) => {
+        return await proxyNetworkProvider.getTransaction(hash, true);
+    }
 });
 
 const transactionOnNetworkUsingProxy = await watcherUsingProxy.awaitCompleted(txHash);
@@ -156,8 +155,8 @@ In order to wait for multiple transactions:
 
 ```
 await Promise.all([
-    watcherUsingApi.awaitCompleted(txHash1), 
-    watcherUsingApi.awaitCompleted(txHash2), 
+    watcherUsingApi.awaitCompleted(txHash1),
+    watcherUsingApi.awaitCompleted(txHash2),
     watcherUsingApi.awaitCompleted(txHash3)
 ]);
 ```
@@ -168,17 +167,17 @@ For a different awaiting strategy, also see [extending sdk-js](https://docs.mult
 Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the `TransferTransactionsFactory` class.
 
 :::note
-In `sdk-core v13`, the `TransferTransactionsFactory` class was extended with new methods, 
+In `sdk-core v13`, the `TransferTransactionsFactory` class was extended with new methods,
 to be aligned with the [SDKs specs](https://github.com/multiversx/mx-sdk-specs/blob/main/core/transactions-factories/transfer_transactions_factory.md).
 The old, legacy methods are still available (see below), thus existing client code isn't affected.
 :::
 
 :::note
-In `sdk-core v13`, the `TokenTransfer` class has changed, in a non-breaking manner. 
+In `sdk-core v13`, the `TokenTransfer` class has changed, in a non-breaking manner.
 Though, from now on, it should only be used for prepairing ESDT token transfers, not native EGLD transfers.
 
-A `TokenTransfer` object can be instantiated using the legacy approaches, e.g. `fungibleFromAmount`, `nonFungible` (which are still available), 
-or with the new approach (which, among others, makes abstraction of the number of decimals a token has).
+A `TokenTransfer` object can still be instantiated using the legacy methods, e.g. `fungibleFromAmount`, `nonFungible` (which are still available),
+but we recommend using the new approach instead (which, among others, makes abstraction of the number of decimals a token has).
 :::
 
 :::tip
@@ -204,7 +203,7 @@ const tx1 = factory.createTransactionForNativeTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
     // 1 EGLD 
-    nativeAmount: BigInt("1000000000000000000"),
+    nativeAmount: BigInt("1000000000000000000")
 });
 
 tx1.nonce = 42n;
@@ -219,9 +218,9 @@ const tx2 = factory.createTransactionForESDTTokenTransfer({
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "TEST-8b028f" }),
-            amount: 10000n,
+            amount: 10000n
         })
-    ],
+    ]
 });
 
 tx2.nonce = 43n;
@@ -236,9 +235,9 @@ const tx3 = factory.createTransactionForESDTTokenTransfer({
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "TEST-38f249", nonce: 1n }),
-            amount: 1n,
+            amount: 1n
         })
-    ],
+    ]
 });
 
 tx3.nonce = 44n;
@@ -253,9 +252,9 @@ const tx4 = factory.createTransactionForESDTTokenTransfer({
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "SEMI-9efd0f", nonce: 1n }),
-            amount: 5n,
+            amount: 5n
         })
-    ],
+    ]
 });
 
 tx4.nonce = 45n;
@@ -270,17 +269,17 @@ const tx5 = factory.createTransactionForESDTTokenTransfer({
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "TEST-8b028f" }),
-            amount: 10000n,
+            amount: 10000n
         }),
         new TokenTransfer({
             token: new Token({ identifier: "TEST-38f249", nonce: 1n }),
-            amount: 1n,
+            amount: 1n
         }),
         new TokenTransfer({
             token: new Token({ identifier: "SEMI-9efd0f", nonce: 1n }),
-            amount: 5n,
+            amount: 5n
         })
-    ],
+    ]
 });
 
 tx5.nonce = 46n;
@@ -413,7 +412,7 @@ const deployTransaction = factory.createTransactionForDeploy({
 When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `TypedValue` objects as arguments for deployments and interactions.
 
-Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. E.g.
+Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. For example:
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
@@ -422,7 +421,6 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 ```
-
 const deployer = new Account(addressOfAlice);
 const deployerOnNetwork = await networkProvider.getAccount(addressOfAlice);
 deployer.update(deployerOnNetwork);
@@ -459,6 +457,7 @@ const contractAddress = addressComputer.computeContractAddress(
     Address.fromBech32(deployTransaction.sender),
     deployTransaction.nonce
 );
+
 console.log("Contract address:", contractAddress.bech32());
 ```
 
@@ -493,16 +492,6 @@ const parsedOutcome = parser.parseDeploy({ transactionOutcome });
 
 console.log(parsedOutcome);
 ```
-import {
-    AbiRegistry,
-    Address,
-    TokenTransfer,
-    Token,
-    TransactionWatcher,
-    TransactionComputer
-
-
-
 ## Contract interactions
 
 In `sdk-core v13`, the recommended way to create transactions for calling
@@ -510,8 +499,8 @@ In `sdk-core v13`, the recommended way to create transactions for calling
 smart contracts is through a `SmartContractTransactionsFactory`.
 
 The older (legacy) approaches, using `SmartContract.call()`, `SmartContract.methods.myFunction()`, `SmartContract.methodsExplicit.myFunction()` and
-`new Interaction(contract, "myFunction", args)` are still available, however.
-At some point in the (more distant) future,  they will be deprecated and removed.
+`new Interaction(contract, "myFunction", args)` are still available.
+However, at some point in the (more distant) future,  they will be deprecated and removed.
 
 Now, let's create a `SmartContractTransactionsFactory`:
 
@@ -536,7 +525,7 @@ factory = new SmartContractTransactionsFactory({
 
 ### Regular interactions
 
-Now, let's prepare a contract execute transaction, to call the `add` function of our
+Now, let's prepare a contract transaction, to call the `add` function of our
 previously deployed smart contract:
 
 ```
@@ -560,7 +549,7 @@ const transaction = factory.createTransactionForExecute({
 When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `TypedValue` objects as arguments for deployments and interactions.
 
-Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. E.g.
+Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. For example:
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
@@ -569,7 +558,6 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 ```
-
 const caller = new Account(addressOfAlice);
 const callerOnNetwork = await networkProvider.getAccount(addressOfAlice);
 caller.update(callerOnNetwork);

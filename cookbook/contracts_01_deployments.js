@@ -74,8 +74,6 @@ const deployTransaction = factory.createTransactionForDeploy({
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 // ```
-import { Account } from "@multiversx/sdk-core"; // md-ignore
-
 const deployer = new Account(addressOfAlice);
 const deployerOnNetwork = await networkProvider.getAccount(addressOfAlice);
 deployer.update(deployerOnNetwork);
@@ -108,6 +106,7 @@ const contractAddress = addressComputer.computeContractAddress(
     Address.fromBech32(deployTransaction.sender),
     deployTransaction.nonce
 );
+
 console.log("Contract address:", contractAddress.bech32());
 // ```
 

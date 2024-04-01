@@ -1,5 +1,7 @@
 import { addressOfAlice, getNotYetSignedTx } from "./framework.js"; // md-ignore
 
+const notYetSignedTx = getNotYetSignedTx(); // md-ignore
+
 // ## Creating network providers
 
 // Creating an API provider:
@@ -64,8 +66,6 @@ console.log("Nonce:", alice.nonce);
 // For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
 
 // ```
-const notYetSignedTx = getNotYetSignedTx(); // md-ignore
-
 notYetSignedTx.nonce = alice.getNonceThenIncrement();
 // ```
 
