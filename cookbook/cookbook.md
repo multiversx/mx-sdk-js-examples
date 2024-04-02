@@ -68,6 +68,7 @@ notYetSignedTx.nonce = alice.getNonceThenIncrement();
 ```
 
 For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
+
 ## Broadcasting transactions
 
 ### Preparing a simple transaction
@@ -162,6 +163,7 @@ await Promise.all([
 ```
 
 For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
+
 ## Token transfers
 
 Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the `TransferTransactionsFactory` class.
@@ -284,6 +286,7 @@ const tx5 = factory.createTransactionForESDTTokenTransfer({
 
 tx5.nonce = 46n;
 ```
+
 ## Formatting and parsing amounts
 
 :::note
@@ -325,6 +328,7 @@ Or directly using `bignumber.js`:
 ```
 console.log("Parse using bignumber.js:", new BigNumber("1.5").shiftedBy(18).decimalPlaces(0).toFixed(0));
 ```
+
 ## Contract ABIs
 
 A contract's ABI describes the endpoints, data structure and events that a contract exposes.
@@ -389,6 +393,7 @@ abi = AbiRegistry.create({
         }
     ]
 });
+
 ## Contract deployments
 
 ### Load the bytecode from a file
@@ -533,6 +538,7 @@ const parsedOutcome = parser.parseDeploy({ transactionOutcome });
 
 console.log(parsedOutcome);
 ```
+
 ## Contract interactions
 
 In `sdk-core v13`, the recommended way to create transactions for calling

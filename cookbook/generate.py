@@ -65,7 +65,7 @@ def main():
         section = "\n".join(lines).strip()
         output_sections.append(section)
 
-    output_text = "\n".join(output_sections) + "\n"
+    output_text = "\n\n".join(output_sections) + "\n"
     output_file.write_text(output_text)
 
 
