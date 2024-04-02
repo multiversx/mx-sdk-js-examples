@@ -1,7 +1,7 @@
 // ## Contract ABIs
 
 // A contract's ABI describes the endpoints, data structure and events that a contract exposes.
-// While contract interactions are possible without the ABI, they are easier to implement when the definitions is available.
+// While contract interactions are possible without the ABI, they are easier to implement when the definitions are available.
 
 // ### Load the ABI from a file
 

@@ -48,7 +48,7 @@ However, this might change in the future - see the [sdk-specs](https://github.co
 When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `TypedValue` objects as arguments for deployments and interactions.
 
-Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. For example:
+Even further, you can use a mix of `TypedValue` objects and plain JavaScript values and objects. For example:
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
