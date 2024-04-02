@@ -1,7 +1,7 @@
 import { AbiRegistry, Address, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
 import { promises } from "fs"; // md-ignore
-import { addressOfAlice, apiNetworkProvider } from "./framework.js"; // md-ignore
+import { addressOfAlice, apiNetworkProvider, syncAccounts } from "./framework.js"; // md-ignore
 
 let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" }); // md-ignore
 let abiObj = JSON.parse(abiJson); // md-ignore
@@ -64,7 +64,7 @@ const deployTransaction = factory.createTransactionForDeploy({
     sender: addressOfAlice,
     bytecode: code.valueOf(),
     gasLimit: 6000000n,
-    args: args
+    arguments: args
 });
 // ```
 

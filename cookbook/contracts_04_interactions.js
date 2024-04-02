@@ -56,9 +56,9 @@ args = [42];
 const transaction = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args
+    arguments: args
 });
 // ```
 
@@ -102,9 +102,9 @@ const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).aw
 const transactionWithNativeTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args,
+    arguments: args,
     nativeTransferAmount: 1000000000000000000n
 });
 // ```
@@ -117,9 +117,9 @@ const transactionWithNativeTransfer = factory.createTransactionForExecute({
 const transactionWithTokenTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args,
+    arguments: args,
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "UTK-14d57d" }),
@@ -135,9 +135,9 @@ const transactionWithTokenTransfer = factory.createTransactionForExecute({
 const transactionWithMultipleTokenTransfers = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args,
+    arguments: args,
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "UTK-14d57d" }),

@@ -36,3 +36,30 @@ controller = new SmartContractQueriesController({
     abi: abi
 });
 // ```
+
+// Let's create a query object:
+
+// ```
+const query = controller.createQuery({
+    contract: "erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60",
+    function: "getSum",
+    arguments: [],
+});
+// ```
+
+// Then, run the query against the network. You will get a `SmartContractQueryResponse` object.
+
+// ```
+const response = await controller.runQuery(query);
+// ```
+
+// :::tip
+// The invocation of `controller.runQuery()` ultimately calls the VM query endpoints of the MultiversX REST API.
+// :::
+
+// The response object contains the raw output of the query, which can be parsed as follows:
+
+// ```
+const [sum] = controller.parseQueryResponse(response);
+console.log(sum);
+// ```

@@ -23,10 +23,6 @@ export const accounts = {
     carol: new Account(addressOfCarol),
 };
 
-// TODO: use another contract.
-export const legacyDelegationContractAddress = Address.fromBech32(
-    "erd1qqqqqqqqqqqqqpgqp699jngundfqw07d8jzkepucvpzush6k3wvqyc44rx"
-);
 export const addressOfFirstDevnetDelegator = new Address(
     "erd1s0us936aku52uxyvnhxspcaj4f4sp7d9azuyw7kf32ggm88ynlps7c0yr9"
 );

@@ -449,7 +449,7 @@ const deployTransaction = factory.createTransactionForDeploy({
     sender: addressOfAlice,
     bytecode: code.valueOf(),
     gasLimit: 6000000n,
-    args: args
+    arguments: args
 });
 ```
 
@@ -586,9 +586,9 @@ args = [42];
 const transaction = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args
+    arguments: args
 });
 ```
 
@@ -644,9 +644,9 @@ For transfer & execute with native EGLD, prepare your transaction as follows:
 const transactionWithNativeTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args,
+    arguments: args,
     nativeTransferAmount: 1000000000000000000n
 });
 ```
@@ -659,9 +659,9 @@ For transfer & execute with ESDT tokens, prepare your transaction as follows:
 const transactionWithTokenTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args,
+    arguments: args,
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "UTK-14d57d" }),
@@ -677,9 +677,9 @@ Or, for transferring multiple tokens (NFTs included):
 const transactionWithMultipleTokenTransfers = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
-    functionName: "add",
+    function: "add",
     gasLimit: 5000000,
-    args: args,
+    arguments: args,
     tokenTransfers: [
         new TokenTransfer({
             token: new Token({ identifier: "UTK-14d57d" }),
@@ -722,4 +722,72 @@ const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOn
 const parsedOutcome = parser.parseExecute({ transactionOutcome });
 
 console.log(parsedOutcome);
+```
+
+import { AbiRegistry } from "@multiversx/sdk-core";
+
+
+## Contract queries
+
+In order to perform Smart Contract queries, we recommend you to use should use a `SmartContractQueriesController`. 
+The legacy approaches that rely on `SmartContract.createQuery()` or `Interaction.buildQuery()` are still available, but they will be deprecated in the (distant) future.
+
+You will notice that the `SmartContractQueriesController` requires a `QueryRunner` object at initialization.
+A `NetworkProvider`, slighly adapted, is used to satisfy this requirement.
+
+:::important
+Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
+
+This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
+Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
+However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
+:::
+
+```
+import { QueryRunnerAdapter, SmartContractQueriesController } from "@multiversx/sdk-core";
+
+const queryRunner = new QueryRunnerAdapter({
+    networkProvider: apiNetworkProvider
+});
+
+let controller = new SmartContractQueriesController({ 
+    queryRunner: queryRunner
+});
+```
+
+If the contract ABI is available, provide it to the controller:
+
+```
+controller = new SmartContractQueriesController({ 
+    queryRunner: queryRunner,
+    abi: abi
+});
+```
+
+Let's create a query object:
+
+```
+const query = controller.createQuery({
+    contract: "erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60",
+    function: "getSum",
+    arguments: [],
+});
+```
+
+Then, run the query against the network. You will get a `SmartContractQueryResponse` object.
+
+```
+const response = await controller.runQuery(query);
+```
+
+:::tip
+The invocation of `controller.runQuery()` ultimately calls the VM query endpoints of the MultiversX REST API.
+:::
+
+The response object contains the raw output of the query, which can be parsed as follows:
+
+```
+const [sum] = controller.parseQueryResponse(response);
+console.log(sum);
 ```
