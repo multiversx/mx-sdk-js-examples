@@ -91,7 +91,17 @@ const serializedTx = computer.computeBytesForSigning(deployTransaction);
 deployTransaction.signature = await signer.sign(serializedTx);
 // ```
 
-// Once you know the sender address and nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
+// Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
+
+// ```
+const txHash = await apiNetworkProvider.sendTransaction(deployTransaction);
+const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
+// ```
+
+// ### Computing the contract address
+
+// Even before broadcasting, 
+// at the moment you know the _sender_ address and the _nonce_ for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
 // ```
 import { AddressComputer } from "@multiversx/sdk-core";
@@ -105,12 +115,7 @@ const contractAddress = addressComputer.computeContractAddress(
 console.log("Contract address:", contractAddress.bech32());
 // ```
 
-// Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
-
-// ```
-const txHash = await apiNetworkProvider.sendTransaction(deployTransaction);
-const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
-// ```
+// ### Parsing transaction outcome
 
 // In the end, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
 // However, since the `parseDeploy` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,

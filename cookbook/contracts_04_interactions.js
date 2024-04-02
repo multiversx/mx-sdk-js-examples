@@ -153,39 +153,24 @@ const transactionWithMultipleTokenTransfers = factory.createTransactionForExecut
 
 // Above, we've prepared the `TokenTransfer` objects as seen in the section [token transfers](#token-transfers).
 
-// // ## Parsing contract results
+// ### Parsing transaction outcome
 
-// // :::important
-// // When the default `ResultsParser` misbehaves, please open an issue [on GitHub](https://github.com/multiversx/mx-sdk-js-core/issues), and also provide as many details as possible about the unparsable results (e.g. provide a dump of the transaction object if possible - make sure to remove any sensitive information).
-// // :::
+// Once a transaction is completed, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
+// However, since the `parseExecute` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
+// we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a [`TransactionsConverter`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionsConverter.html).
 
-// // ### When the ABI is not available
+// md-insert:coreAndNetworkProvidersImpedanceMismatch
 
-// // ```
-// import { ResultsParser } from "@multiversx/sdk-core";
+// ```
+import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";
 
-// let resultsParser = new ResultsParser();
-// let txHash = "d415901a9c88e564adf25b71b724b936b1274a2ad03e30752fdc79235af8ea3e";
-// let transactionOnNetwork = await networkProvider.getTransaction(txHash);
-// let untypedBundle = resultsParser.parseUntypedOutcome(transactionOnNetwork);
+const converter = new TransactionsConverter();
+const parser = new SmartContractTransactionsOutcomeParser({
+    abi: abi
+});
 
-// console.log(untypedBundle.returnCode, untypedBundle.values.length);
-// // ```
+const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetwork);
+const parsedOutcome = parser.parseExecute({ transactionOutcome });
 
-// // ### When the ABI is available
-
-// // ```
-// let endpointDefinition = AbiRegistry.create({
-//     "name": "counter",
-//     "endpoints": [{
-//         "name": "increment",
-//         "inputs": [],
-//         "outputs": [{ "type": "i64" }]
-//     }]
-// }).getEndpoint("increment");
-
-// transactionOnNetwork = await networkProvider.getTransaction(txHash);
-// let typedBundle = resultsParser.parseOutcome(transactionOnNetwork, endpointDefinition);
-
-// console.log(typedBundle.returnCode, typedBundle.values.length);
-// // ```
+console.log(parsedOutcome);
+// ```

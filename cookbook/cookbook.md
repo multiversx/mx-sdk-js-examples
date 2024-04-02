@@ -328,7 +328,7 @@ console.log("Parse using bignumber.js:", new BigNumber("1.5").shiftedBy(18).deci
 ## Contract ABIs
 
 A contract's ABI describes the endpoints, data structure and events that a contract exposes.
-While contract interactions are possible without the ABI, they are easier to implement when the definitions is available.
+While contract interactions are possible without the ABI, they are easier to implement when the definitions are available.
 
 ### Load the ABI from a file
 
@@ -349,6 +349,46 @@ import axios from "axios";
 const response = await axios.get("https://github.com/multiversx/mx-sdk-js-core/raw/main/src/testdata/counter.abi.json");
 abi = AbiRegistry.create(response.data);
 ```
+
+### Manually construct the ABI
+
+If an ABI file isn't directly available, but you do have knowledge of the contract's endpoints and types, you can manually construct the ABI. Let's see a simple example:
+
+```
+abi = AbiRegistry.create({
+    "endpoints": [{
+        "name": "add",
+        "inputs": [],
+        "outputs": []
+    }]
+});
+```
+
+An endpoint with both inputs and outputs:
+
+abi = AbiRegistry.create({
+    "endpoints": [
+        {
+            "name": "foo",
+            "inputs": [
+                { "type": "BigUint" },
+                { "type": "u32" },
+                { "type": "Address" }
+            ],
+            "outputs": [
+                { "type": "u32" }
+            ]
+        },
+        {
+            "name": "bar",
+            "inputs": [
+                { "type": "counted-variadic<utf-8 string>" },
+                { "type": "variadic<u64>" }
+            ],
+            "outputs": []
+        }
+    ]
+});
 ## Contract deployments
 
 ### Load the bytecode from a file
@@ -412,7 +452,7 @@ const deployTransaction = factory.createTransactionForDeploy({
 When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `TypedValue` objects as arguments for deployments and interactions.
 
-Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. For example:
+Even further, you can use a mix of `TypedValue` objects and plain JavaScript values and objects. For example:
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
@@ -421,10 +461,6 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 ```
-const deployer = new Account(addressOfAlice);
-const deployerOnNetwork = await networkProvider.getAccount(addressOfAlice);
-deployer.update(deployerOnNetwork);
-
 deployTransaction.nonce = deployer.getNonceThenIncrement();
 ```
 
@@ -447,7 +483,17 @@ const serializedTx = computer.computeBytesForSigning(deployTransaction);
 deployTransaction.signature = await signer.sign(serializedTx);
 ```
 
-Once you know the sender address and nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
+Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
+
+```
+const txHash = await apiNetworkProvider.sendTransaction(deployTransaction);
+const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
+```
+
+### Computing the contract address
+
+Even before broadcasting, 
+at the moment you know the _sender_ address and the _nonce_ for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
 ```
 import { AddressComputer } from "@multiversx/sdk-core";
@@ -461,12 +507,7 @@ const contractAddress = addressComputer.computeContractAddress(
 console.log("Contract address:", contractAddress.bech32());
 ```
 
-Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
-
-```
-const txHash = await networkProvider.sendTransaction(deployTransaction);
-const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
-```
+### Parsing transaction outcome
 
 In the end, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
 However, since the `parseDeploy` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
@@ -549,7 +590,7 @@ const transaction = factory.createTransactionForExecute({
 When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `TypedValue` objects as arguments for deployments and interactions.
 
-Even further, you can use mix `TypedValue` objects with plain JavaScript values and objects. For example:
+Even further, you can use a mix of `TypedValue` objects and plain JavaScript values and objects. For example:
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
@@ -558,11 +599,7 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
 ```
-const caller = new Account(addressOfAlice);
-const callerOnNetwork = await networkProvider.getAccount(addressOfAlice);
-caller.update(callerOnNetwork);
-
-transaction.nonce = caller.getNonceThenIncrement();
+transaction.nonce = alice.getNonceThenIncrement();
 ```
 
 Now, **sign the transaction** using a wallet / signing provider of your choice.
@@ -587,8 +624,8 @@ transaction.signature = await signer.sign(serializedTx);
 Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
 
 ```
-const txHash = await networkProvider.sendTransaction(transaction);
-const transactionOnNetwork = await new TransactionWatcher(networkProvider).awaitCompleted(txHash);
+const txHash = await apiNetworkProvider.sendTransaction(transaction);
+const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
 ```
 
 ### Transfer & execute
@@ -652,39 +689,31 @@ const transactionWithMultipleTokenTransfers = factory.createTransactionForExecut
 
 Above, we've prepared the `TokenTransfer` objects as seen in the section [token transfers](#token-transfers).
 
-// ## Parsing contract results
+### Parsing transaction outcome
 
-// :::important
-// When the default `ResultsParser` misbehaves, please open an issue [on GitHub](https://github.com/multiversx/mx-sdk-js-core/issues), and also provide as many details as possible about the unparsable results (e.g. provide a dump of the transaction object if possible - make sure to remove any sensitive information).
-// :::
+Once a transaction is completed, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
+However, since the `parseExecute` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
+we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a [`TransactionsConverter`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionsConverter.html).
 
-// ### When the ABI is not available
+:::important
+Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
 
-// ```
-import { ResultsParser } from "@multiversx/sdk-core";
+This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
+Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
+However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
+:::
 
-let resultsParser = new ResultsParser();
-let txHash = "d415901a9c88e564adf25b71b724b936b1274a2ad03e30752fdc79235af8ea3e";
-let transactionOnNetwork = await networkProvider.getTransaction(txHash);
-let untypedBundle = resultsParser.parseUntypedOutcome(transactionOnNetwork);
+```
+import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";
 
-console.log(untypedBundle.returnCode, untypedBundle.values.length);
-// ```
+const converter = new TransactionsConverter();
+const parser = new SmartContractTransactionsOutcomeParser({
+    abi: abi
+});
 
-// ### When the ABI is available
+const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetwork);
+const parsedOutcome = parser.parseExecute({ transactionOutcome });
 
-// ```
-let endpointDefinition = AbiRegistry.create({
-"name": "counter",
-"endpoints": [{
-"name": "increment",
-"inputs": [],
-"outputs": [{ "type": "i64" }]
-}]
-}).getEndpoint("increment");
-
-transactionOnNetwork = await networkProvider.getTransaction(txHash);
-let typedBundle = resultsParser.parseOutcome(transactionOnNetwork, endpointDefinition);
-
-console.log(typedBundle.returnCode, typedBundle.values.length);
-// ```
+console.log(parsedOutcome);
+```

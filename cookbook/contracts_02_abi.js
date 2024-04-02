@@ -62,4 +62,3 @@ abi = AbiRegistry.create({
         }
     ]
 });
-
