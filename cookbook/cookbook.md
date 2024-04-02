@@ -370,6 +370,7 @@ abi = AbiRegistry.create({
 
 An endpoint with both inputs and outputs:
 
+```
 abi = AbiRegistry.create({
     "endpoints": [
         {
@@ -393,6 +394,7 @@ abi = AbiRegistry.create({
         }
     ]
 });
+```
 
 ## Contract deployments
 
@@ -547,7 +549,7 @@ smart contracts is through a `SmartContractTransactionsFactory`.
 
 The older (legacy) approaches, using `SmartContract.call()`, `SmartContract.methods.myFunction()`, `SmartContract.methodsExplicit.myFunction()` and
 `new Interaction(contract, "myFunction", args)` are still available.
-However, at some point in the (more distant) future,  they will be deprecated and removed.
+However, at some point in the (more distant) future, they will be deprecated and removed.
 
 Now, let's create a `SmartContractTransactionsFactory`:
 
@@ -724,12 +726,9 @@ const parsedOutcome = parser.parseExecute({ transactionOutcome });
 console.log(parsedOutcome);
 ```
 
-import { AbiRegistry } from "@multiversx/sdk-core";
-
-
 ## Contract queries
 
-In order to perform Smart Contract queries, we recommend you to use should use a `SmartContractQueriesController`. 
+In order to perform Smart Contract queries, we recommend the use of `SmartContractQueriesController`. 
 The legacy approaches that rely on `SmartContract.createQuery()` or `Interaction.buildQuery()` are still available, but they will be deprecated in the (distant) future.
 
 You will notice that the `SmartContractQueriesController` requires a `QueryRunner` object at initialization.

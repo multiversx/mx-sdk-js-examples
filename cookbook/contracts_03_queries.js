@@ -1,4 +1,4 @@
-import { AbiRegistry } from "@multiversx/sdk-core";
+import { AbiRegistry } from "@multiversx/sdk-core"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import { apiNetworkProvider } from "./framework.js"; // md-ignore
 
@@ -8,7 +8,7 @@ let abi = AbiRegistry.create(abiObj); // md-ignore
 
 // ## Contract queries
 
-// In order to perform Smart Contract queries, we recommend you to use should use a `SmartContractQueriesController`. 
+// In order to perform Smart Contract queries, we recommend the use of `SmartContractQueriesController`. 
 // The legacy approaches that rely on `SmartContract.createQuery()` or `Interaction.buildQuery()` are still available, but they will be deprecated in the (distant) future.
 
 // You will notice that the `SmartContractQueriesController` requires a `QueryRunner` object at initialization.

@@ -39,6 +39,7 @@ abi = AbiRegistry.create({
 
 // An endpoint with both inputs and outputs:
 
+// ```
 abi = AbiRegistry.create({
     "endpoints": [
         {
@@ -62,3 +63,4 @@ abi = AbiRegistry.create({
         }
     ]
 });
+// ```

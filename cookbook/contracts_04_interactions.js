@@ -17,7 +17,7 @@ const { alice } = await syncAccounts(); // md-ignore
 
 // The older (legacy) approaches, using `SmartContract.call()`, `SmartContract.methods.myFunction()`, `SmartContract.methodsExplicit.myFunction()` and
 // `new Interaction(contract, "myFunction", args)` are still available.
-// However, at some point in the (more distant) future,  they will be deprecated and removed.
+// However, at some point in the (more distant) future, they will be deprecated and removed.
 
 // Now, let's create a `SmartContractTransactionsFactory`:
 
