@@ -16,8 +16,8 @@ import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers";
 const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
 ```
 
-Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**. 
-As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements 
+Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**.
+As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements
 (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).
 
 On this topic, please see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
@@ -60,7 +60,7 @@ console.log("Nonce:", alice.nonce);
 Since `sdk-core v13`, the [`Transaction`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/Transaction.html) class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
 :::
 
-If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction. 
+If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction.
 For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
 
 ```
@@ -105,7 +105,6 @@ For the sake of simplicity, in this section we'll use a `UserSigner` object to s
 In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
 
-
 ```
 import { TransactionComputer } from "@multiversx/sdk-core";
 import { UserSigner } from "@multiversx/sdk-wallet";
@@ -126,8 +125,8 @@ tx.signature = await signer.sign(serializedTx);
 In order to broadcast a transaction, use a network provider:
 
 ```
-const txHash = await apiNetworkProvider.sendTransaction(readyToBroadcastTx); 
-console.log("TX hash:", txHash); 
+const txHash = await apiNetworkProvider.sendTransaction(readyToBroadcastTx);
+console.log("TX hash:", txHash);
 ```
 
 ### Wait for transaction completion
@@ -166,19 +165,19 @@ For a different awaiting strategy, also see [extending sdk-js](https://docs.mult
 
 ## Token transfers
 
-Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the `TransferTransactionsFactory` class.
+Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the [`TransferTransactionsFactory`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransferTransactionsFactory.html) class.
 
 :::note
-In `sdk-core v13`, the `TransferTransactionsFactory` class was extended with new methods,
+In `sdk-core v13`, the [`TransferTransactionsFactory`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransferTransactionsFactory.html) class was extended with new methods,
 to be aligned with the [SDKs specs](https://github.com/multiversx/mx-sdk-specs/blob/main/core/transactions-factories/transfer_transactions_factory.md).
 The old, legacy methods are still available (see below), thus existing client code isn't affected.
 :::
 
 :::note
-In `sdk-core v13`, the `TokenTransfer` class has changed, in a non-breaking manner.
+In `sdk-core v13`, the [`TokenTransfer`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TokenTransfer.html) class has changed, in a non-breaking manner.
 Though, from now on, it should only be used for prepairing ESDT token transfers, not native EGLD transfers.
 
-A `TokenTransfer` object can still be instantiated using the legacy methods, e.g. `fungibleFromAmount`, `nonFungible` (which are still available),
+A [`TokenTransfer`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TokenTransfer.html) object can still be instantiated using the legacy methods, e.g. `fungibleFromAmount`, `nonFungible` (which are still available),
 but we recommend using the new approach instead (which, among others, makes abstraction of the number of decimals a token has).
 :::
 
@@ -186,12 +185,12 @@ but we recommend using the new approach instead (which, among others, makes abst
 For formatting or parsing token amounts, see [formatting and parsing amounts](#formatting-and-parsing-amounts).
 :::
 
-First, let's create a `TransferTransactionsFactory`:
+First, let's create a [`TransferTransactionsFactory`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransferTransactionsFactory.html):
 
 ```
 import { Token, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
 
-// The new approach of creating a "TransferTransactionsFactory": 
+// The new approach of creating a "TransferTransactionsFactory":
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
 const factory = new TransferTransactionsFactory({ config: factoryConfig });
 ```
@@ -204,7 +203,7 @@ Now, we can use the factory to create transfer transactions.
 const tx1 = factory.createTransactionForNativeTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
-    // 1 EGLD 
+    // 1 EGLD
     nativeAmount: BigInt("1000000000000000000")
 });
 
@@ -442,9 +441,9 @@ Now, prepare the deploy transaction:
 ```
 import { U32Value } from "@multiversx/sdk-core";
 
-// For deploy arguments, use [`TypedValue`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TypedValue.html) objects if you haven't provided an ABI to the factory: 
+// For deploy arguments, use [`TypedValue`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TypedValue.html) objects if you haven't provided an ABI to the factory:
 let args = [new U32Value(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: 
+// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
 args = [42];
 
 const deployTransaction = factory.createTransactionForDeploy({
@@ -478,7 +477,6 @@ For the sake of simplicity, in this section we'll use a `UserSigner` object to s
 In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
 
-
 ```
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
 const walletObject = JSON.parse(fileContent);
@@ -499,7 +497,7 @@ const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).aw
 
 ### Computing the contract address
 
-Even before broadcasting, 
+Even before broadcasting,
 at the moment you know the _sender_ address and the _nonce_ for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
 ```
@@ -580,9 +578,9 @@ previously deployed smart contract:
 ```
 import { U32Value } from "@multiversx/sdk-core";
 
-// For arguments, use [`TypedValue`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TypedValue.html) objects if you haven't provided an ABI to the factory: 
+// For arguments, use [`TypedValue`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TypedValue.html) objects if you haven't provided an ABI to the factory:
 let args = [new U32Value(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: 
+// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
 args = [42];
 
 const transaction = factory.createTransactionForExecute({
@@ -616,7 +614,6 @@ Now, **sign the transaction** using a wallet / signing provider of your choice.
 For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
 In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
-
 
 ```
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
@@ -728,7 +725,7 @@ console.log(parsedOutcome);
 
 ## Contract queries
 
-In order to perform Smart Contract queries, we recommend the use of [`SmartContractQueriesController`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractQueriesController.html). 
+In order to perform Smart Contract queries, we recommend the use of [`SmartContractQueriesController`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractQueriesController.html).
 The legacy approaches that rely on [`SmartContract.createQuery()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContract.html#createQuery) or [`Interaction.buildQuery()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/Interaction.html#buildQuery) are still available, but they will be deprecated in the (distant) future.
 
 You will notice that the [`SmartContractQueriesController`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractQueriesController.html) requires a `QueryRunner` object at initialization.
@@ -750,7 +747,7 @@ const queryRunner = new QueryRunnerAdapter({
     networkProvider: apiNetworkProvider
 });
 
-let controller = new SmartContractQueriesController({ 
+let controller = new SmartContractQueriesController({
     queryRunner: queryRunner
 });
 ```
@@ -758,7 +755,7 @@ let controller = new SmartContractQueriesController({
 If the contract ABI is available, provide it to the controller:
 
 ```
-controller = new SmartContractQueriesController({ 
+controller = new SmartContractQueriesController({
     queryRunner: queryRunner,
     abi: abi
 });

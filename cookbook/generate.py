@@ -94,7 +94,7 @@ def render_file(input_file: Path) -> List[str]:
             line = line.lstrip()
 
         if is_comment and not should_keep_as_comment:
-            line = line[2:].lstrip()
+            line = line[2:].strip()
 
         line = line.replace(DIRECTIVE_UNINDENT, "")
         line = line.replace(DIRECTIVE_AS_COMMENT, "")
@@ -104,6 +104,7 @@ def render_file(input_file: Path) -> List[str]:
             box_content = notes[box_name]
             line = box_content
 
+        line = line.rstrip()
         output_lines.append(line)
 
     return output_lines
