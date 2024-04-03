@@ -21,7 +21,7 @@ const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.mu
 // ```
 
 // Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**. 
-// As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements 
+// As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements
 // (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).
 
 // On this topic, please see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
@@ -62,7 +62,7 @@ console.log("Nonce:", alice.nonce);
 
 // md-insert:transactionLegacyVsNext
 
-// If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction. 
+// If you are using `sdk-core v13` or later, use `tx.nonce = ` to apply the nonce to a transaction.
 // For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce to a transaction.
 
 // ```

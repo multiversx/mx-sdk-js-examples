@@ -1,11 +1,9 @@
-import { AbiRegistry, Address, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
+import { Address, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
 import { promises } from "fs"; // md-ignore
-import { addressOfAlice, apiNetworkProvider, syncAccounts } from "./framework.js"; // md-ignore
+import { addressOfAlice, apiNetworkProvider, loadAbi, syncAccounts } from "./framework.js"; // md-ignore
 
-let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" }); // md-ignore
-let abiObj = JSON.parse(abiJson); // md-ignore
-let abi = AbiRegistry.create(abiObj); // md-ignore
+const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
 
 const { alice: deployer } = await syncAccounts(); // md-ignore
 

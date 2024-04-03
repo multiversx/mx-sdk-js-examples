@@ -2,19 +2,19 @@ import { addressOfAlice, addressOfBob } from "./framework.js"; // md-ignore
 
 // ## Token transfers
 
-// Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the `TransferTransactionsFactory` class.
+// Generally speaking, in order to create transactions that transfer native tokens or ESDT tokens, one should use the `class:TransferTransactionsFactory` class.
 //
 // :::note
-// In `sdk-core v13`, the `TransferTransactionsFactory` class was extended with new methods,
+// In `sdk-core v13`, the `class:TransferTransactionsFactory` class was extended with new methods,
 // to be aligned with the [SDKs specs](https://github.com/multiversx/mx-sdk-specs/blob/main/core/transactions-factories/transfer_transactions_factory.md).
 // The old, legacy methods are still available (see below), thus existing client code isn't affected.
 // :::
 //
 // :::note
-// In `sdk-core v13`, the `TokenTransfer` class has changed, in a non-breaking manner.
+// In `sdk-core v13`, the `class:TokenTransfer` class has changed, in a non-breaking manner.
 // Though, from now on, it should only be used for prepairing ESDT token transfers, not native EGLD transfers.
 //
-// A `TokenTransfer` object can still be instantiated using the legacy methods, e.g. `fungibleFromAmount`, `nonFungible` (which are still available),
+// A `class:TokenTransfer` object can still be instantiated using the legacy methods, e.g. `fungibleFromAmount`, `nonFungible` (which are still available),
 // but we recommend using the new approach instead (which, among others, makes abstraction of the number of decimals a token has).
 // :::
 //
@@ -22,7 +22,7 @@ import { addressOfAlice, addressOfBob } from "./framework.js"; // md-ignore
 // For formatting or parsing token amounts, see [formatting and parsing amounts](#formatting-and-parsing-amounts).
 // :::
 
-// First, let's create a `TransferTransactionsFactory`:
+// First, let's create a `class:TransferTransactionsFactory`:
 
 // ```
 import { Token, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";

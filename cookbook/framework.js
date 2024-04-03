@@ -2,8 +2,9 @@
  * A minimalistic framework for writing & executing the cookbook.
  */
 
-import { Account, Address, Transaction } from "@multiversx/sdk-core";
+import { AbiRegistry, Account, Address, Transaction } from "@multiversx/sdk-core";
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
+import { promises } from "fs"; // md-ignore
 
 export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 
@@ -72,4 +73,11 @@ export async function syncAccounts() {
 
 export function signAndBroadcast(tx) {
     
+}
+
+export async function loadAbi(abiPath) {
+    const abiJson = await promises.readFile(abiPath, { encoding: "utf8" });
+    const abiObj = JSON.parse(abiJson);
+    const abi = AbiRegistry.create(abiObj);
+    return abi;
 }

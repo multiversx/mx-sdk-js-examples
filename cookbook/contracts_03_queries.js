@@ -1,10 +1,6 @@
-import { AbiRegistry } from "@multiversx/sdk-core"; // md-ignore
-import { promises } from "fs"; // md-ignore
-import { apiNetworkProvider } from "./framework.js"; // md-ignore
+import { apiNetworkProvider, loadAbi } from "./framework.js"; // md-ignore
 
-let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" }); // md-ignore
-let abiObj = JSON.parse(abiJson); // md-ignore
-let abi = AbiRegistry.create(abiObj); // md-ignore
+const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
 
 // ## Contract queries
 
