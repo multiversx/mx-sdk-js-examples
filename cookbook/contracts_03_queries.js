@@ -8,10 +8,10 @@ let abi = AbiRegistry.create(abiObj); // md-ignore
 
 // ## Contract queries
 
-// In order to perform Smart Contract queries, we recommend the use of `SmartContractQueriesController`. 
-// The legacy approaches that rely on `SmartContract.createQuery()` or `Interaction.buildQuery()` are still available, but they will be deprecated in the (distant) future.
+// In order to perform Smart Contract queries, we recommend the use of `class:SmartContractQueriesController`. 
+// The legacy approaches that rely on `func:SmartContract.createQuery()` or `func:Interaction.buildQuery()` are still available, but they will be deprecated in the (distant) future.
 
-// You will notice that the `SmartContractQueriesController` requires a `QueryRunner` object at initialization.
+// You will notice that the `class:SmartContractQueriesController` requires a `QueryRunner` object at initialization.
 // A `NetworkProvider`, slighly adapted, is used to satisfy this requirement.
 
 // md-insert:coreAndNetworkProvidersImpedanceMismatch
@@ -47,7 +47,7 @@ const query = controller.createQuery({
 });
 // ```
 
-// Then, run the query against the network. You will get a `SmartContractQueryResponse` object.
+// Then, run the query against the network. You will get a `class:SmartContractQueryResponse` object.
 
 // ```
 const response = await controller.runQuery(query);

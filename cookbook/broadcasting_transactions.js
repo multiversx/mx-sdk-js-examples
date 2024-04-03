@@ -74,7 +74,7 @@ const txHash = completedTransactionsHashes[0]; // md-ignore
 const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(txHash);
 // ```
 
-// If, instead, you use a `ProxyNetworkProvider` to instantiate the `TransactionWatcher`, you'll need to patch the `getTransaction` method,
+// If, instead, you use a `ProxyNetworkProvider` to instantiate the `class:TransactionWatcher`, you'll need to patch the `getTransaction` method,
 // so that it instructs the network provider to fetch the so-called _processing status_, as well (required by the watcher to detect transaction completion).
 
 // ```

@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from typing import Dict, List
 
@@ -25,9 +26,12 @@ DIRECTIVE_UNINDENT = "// md-unindent"
 DIRECTIVE_AS_COMMENT = "// md-as-comment"
 DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
 
+API_URL = "https://multiversx.github.io/mx-sdk-js-core"
+API_DEFAIULT_VERSION = "v13"
+
 notes: Dict[str, str] = {
     "transactionLegacyVsNext": """:::note
-Since `sdk-core v13`, the `Transaction` class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
+Since `sdk-core v13`, the `class:Transaction` class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
 :::""",
 
     "forSimplicityWeUseUserSigner": """:::important
@@ -46,10 +50,10 @@ However, this might change in the future - see the [sdk-specs](https://github.co
 :::""",
 
     "mixedTypedValuesAndNativeValues": """:::tip
-When creating transactions using `SmartContractTransactionsFactory`, even if the ABI is available and provided,
-you can still use `TypedValue` objects as arguments for deployments and interactions.
+When creating transactions using `class:SmartContractTransactionsFactory`, even if the ABI is available and provided,
+you can still use `class:TypedValue` objects as arguments for deployments and interactions.
 
-Even further, you can use a mix of `TypedValue` objects and plain JavaScript values and objects. For example:
+Even further, you can use a mix of `class:TypedValue` objects and plain JavaScript values and objects. For example:
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
@@ -67,6 +71,7 @@ def main():
         output_sections.append(section)
 
     output_text = "\n\n".join(output_sections) + "\n"
+    output_text = render_api_links(output_text)
     output_file.write_text(output_text)
 
 
@@ -102,6 +107,20 @@ def render_file(input_file: Path) -> List[str]:
         output_lines.append(line)
 
     return output_lines
+
+
+def render_api_links(input: str) -> str:
+    matches_func = re.findall(r"`func:(\w+\.\w+)\(\)`", input)
+    matches_class = re.findall(r"`class:(\w+)`", input)
+
+    for match in matches_func:
+        [class_name, method] = match.split(".")
+        input = input.replace(f"`func:{match}()`", f"[`{match}()`]({API_URL}/{API_DEFAIULT_VERSION}/classes/{class_name}.html#{method})")
+
+    for match in matches_class:
+        input = input.replace(f"`class:{match}`", f"[`{match}`]({API_URL}/{API_DEFAIULT_VERSION}/classes/{match}.html)")
+
+    return input
 
 
 if __name__ == "__main__":

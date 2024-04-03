@@ -13,13 +13,13 @@ const { alice } = await syncAccounts(); // md-ignore
 
 // In `sdk-core v13`, the recommended way to create transactions for calling
 // (and, for that matter, deploying and upgrading)
-// smart contracts is through a `SmartContractTransactionsFactory`.
+// smart contracts is through a `class:SmartContractTransactionsFactory`.
 
 // The older (legacy) approaches, using `SmartContract.call()`, `SmartContract.methods.myFunction()`, `SmartContract.methodsExplicit.myFunction()` and
 // `new Interaction(contract, "myFunction", args)` are still available.
 // However, at some point in the (more distant) future, they will be deprecated and removed.
 
-// Now, let's create a `SmartContractTransactionsFactory`:
+// Now, let's create a `class:SmartContractTransactionsFactory`:
 
 // ```
 import { SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core";
@@ -48,7 +48,7 @@ factory = new SmartContractTransactionsFactory({
 // ```
 import { U32Value } from "@multiversx/sdk-core";
 
-// For arguments, use `TypedValue` objects if you haven't provided an ABI to the factory: // md-as-comment
+// For arguments, use `class:TypedValue` objects if you haven't provided an ABI to the factory: // md-as-comment
 let args = [new U32Value(42)];
 // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
 args = [42];
@@ -151,13 +151,13 @@ const transactionWithMultipleTokenTransfers = factory.createTransactionForExecut
 });
 // ```
 
-// Above, we've prepared the `TokenTransfer` objects as seen in the section [token transfers](#token-transfers).
+// Above, we've prepared the `class:TokenTransfer` objects as seen in the section [token transfers](#token-transfers).
 
 // ### Parsing transaction outcome
 
-// Once a transaction is completed, you can parse the results using a [`SmartContractTransactionsOutcomeParser`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html).
-// However, since the `parseExecute` method requires a [`TransactionOutcome`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionOutcome.html) object as input,
-// we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a [`TransactionsConverter`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionsConverter.html).
+// Once a transaction is completed, you can parse the results using a `class:SmartContractTransactionsOutcomeParser`.
+// However, since the `parseExecute` method requires a `class:TransactionOutcome` object as input,
+// we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a `class:TransactionsConverter`.
 
 // md-insert:coreAndNetworkProvidersImpedanceMismatch
 
