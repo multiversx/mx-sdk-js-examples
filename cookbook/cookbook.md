@@ -161,6 +161,17 @@ await Promise.all([
 ]);
 ```
 
+In some circumstances, when awaiting for a transaction completion in order to retrieve its logs and events,
+it's possible that these pieces of information are missing at the very moment the transaction is marked as completed -
+they may not be immediately available. If this is an issue, you can configure the [`TransactionWatcher`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionWatcher.html) to have an extra **patience**
+before returning the transaction object. Below, we're adding a patience of 8 seconds:
+
+```
+const watcherWithPatience = new TransactionWatcher(apiNetworkProvider, { patienceMilliseconds: 8000 });
+```
+
+Alternatively, use [`TransactionWatcher.awaitAnyEvent()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionWatcher.html#awaitAnyEvent) or [`TransactionWatcher.awaitOnCondition()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionWatcher.html#awaitOnCondition) to customize the waiting strategy.
+
 For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
 
 ## Token transfers
