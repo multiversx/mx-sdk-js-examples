@@ -1,4 +1,4 @@
-import { Address, Token, TokenTransfer, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
+import { AbiRegistry, Address, Token, TokenTransfer, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
 import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import { addressOfAlice, apiNetworkProvider, loadAbi, syncAccounts } from "./framework.js"; // md-ignore
