@@ -15,7 +15,7 @@ input_files = [
     # current_dir / "contracts_arguments_kata.js",
     current_dir / "contracts_03_queries.js",
     current_dir / "codec.js",
-    # current_dir / "signing.js"
+    current_dir / "signing.js"
 ]
 
 MARKER_INSERT = "md-insert:"
