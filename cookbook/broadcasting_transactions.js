@@ -102,7 +102,7 @@ await Promise.all([
 // it's possible that these pieces of information are missing at the very moment the transaction is marked as completed - 
 // they may not be immediately available. 
 
-// If that is an issue, you can configure the `class:TransactionWatcher` to have an extra **patience**
+// If that is an issue, you can configure the `class:TransactionWatcher` to have additional **patience**
 // before returning the transaction object. Below, we're adding a patience of 8 seconds:
 
 // ```

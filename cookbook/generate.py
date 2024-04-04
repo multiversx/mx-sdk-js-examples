@@ -14,7 +14,7 @@ input_files = [
     current_dir / "contracts_04_interactions.js",
     # current_dir / "contracts_arguments_kata.js",
     current_dir / "contracts_03_queries.js",
-    # current_dir / "codec.js",
+    current_dir / "codec.js",
     # current_dir / "signing.js"
 ]
 

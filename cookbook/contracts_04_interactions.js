@@ -182,7 +182,7 @@ console.log(parsedOutcome);
 // Suppose we'd like to decode a `startPerformAction` event emitted by the [**multisig**](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract.
 
 // Let's fetch [a previously-processed transaction](https://devnet-explorer.multiversx.com/transactions/05d445cdd145ecb20374844dcc67f0b1e370b9aa28a47492402bc1a150c2bab4),
-// to serve as an example, and convert it to a `class:TransactionOutcome` (see above):
+// to serve as an example, and convert it to a `class:TransactionOutcome` (see above why):
 
 // ```
 const transactionOnNetworkMultisig = await apiNetworkProvider.getTransaction("05d445cdd145ecb20374844dcc67f0b1e370b9aa28a47492402bc1a150c2bab4");
