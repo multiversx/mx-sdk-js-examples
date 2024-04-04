@@ -5,7 +5,8 @@ const abiMultisig = await loadAbi("../contracts/multisig-full.abi.json"); // md-
 
 // ## Explicit decoding / encoding of values
 
-// When needed, you can use the `class:BinaryCodec` to [decode and encode values](https://docs.multiversx.com/developers/data/serialization-overview/) manually.
+// When needed, you can use the `class:BinaryCodec` to [decode and encode values](https://docs.multiversx.com/developers/data/serialization-overview/) manually,
+// leveraging contract ABIs.
 
 // ### Decoding a custom type
 

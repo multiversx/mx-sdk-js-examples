@@ -4,7 +4,6 @@ import { promises } from "fs"; // md-ignore
 import { addressOfAlice, apiNetworkProvider, loadAbi, syncAccounts } from "./framework.js"; // md-ignore
 
 const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
-const abiMultisig = await loadAbi("../contracts/multisig-full.abi.json"); // md-ignore
 
 const { alice } = await syncAccounts(); // md-ignore
 
@@ -193,6 +192,9 @@ const transactionOutcomeMultisig = converter.transactionOnNetworkToOutcome(trans
 
 // ```
 import { TransactionEventsParser, findEventsByFirstTopic } from "@multiversx/sdk-core";
+
+const abiJsonMultisig = await promises.readFile("../contracts/multisig-full.abi.json", { encoding: "utf8" });
+const abiMultisig = AbiRegistry.create(JSON.parse(abiJsonMultisig));
 
 const eventsParser = new TransactionEventsParser({
     abi: abiMultisig

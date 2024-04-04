@@ -20,7 +20,7 @@ Use the classes from `@multiversx/sdk-network-providers` **only as a starting po
 As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements
 (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).
 
-On this topic, please see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
+On this topic, please see [extending sdk-js](/sdk-and-tools/sdk-js/extending-sdk-js).
 
 ## Fetching network parameters
 
@@ -67,7 +67,7 @@ For `sdk-core v12` or earlier, use the legacy `tx.setNonce()` to apply the nonce
 notYetSignedTx.nonce = alice.getNonceThenIncrement();
 ```
 
-For further reference, please see [nonce management](https://docs.multiversx.com/integrators/creating-transactions/#nonce-management).
+For further reference, please see [nonce management](/integrators/creating-transactions/#nonce-management).
 
 ## Broadcasting transactions
 
@@ -102,7 +102,7 @@ On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/m
 
 :::important
 For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
-In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
+In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
 
 ```
@@ -174,7 +174,7 @@ const watcherWithPatience = new TransactionWatcher(apiNetworkProvider, { patienc
 
 Alternatively, use [`TransactionWatcher.awaitAnyEvent()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionWatcher.html#awaitAnyEvent) or [`TransactionWatcher.awaitOnCondition()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TransactionWatcher.html#awaitOnCondition) to customize the waiting strategy.
 
-For a different awaiting strategy, also see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
+For a different awaiting strategy, also see [extending sdk-js](/sdk-and-tools/sdk-js/extending-sdk-js).
 
 ## Token transfers
 
@@ -487,7 +487,7 @@ Now, **sign the transaction** using a wallet / signing provider of your choice.
 
 :::important
 For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
-In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
+In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
 
 ```
@@ -533,7 +533,7 @@ we need to first convert our `TransactionOnNetwork` object to a [`TransactionOut
 
 :::important
 Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
-The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](/sdk-and-tools/rest-api).
 
 This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
@@ -625,7 +625,7 @@ Now, **sign the transaction** using a wallet / signing provider of your choice.
 
 :::important
 For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
-In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
+In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
 
 ```
@@ -715,7 +715,7 @@ we need to first convert our `TransactionOnNetwork` object to a `TransactionOutc
 
 :::important
 Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
-The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](/sdk-and-tools/rest-api).
 
 This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
@@ -756,6 +756,9 @@ Now, let's find and parse the event we are interested in:
 ```
 import { TransactionEventsParser, findEventsByFirstTopic } from "@multiversx/sdk-core";
 
+const abiJsonMultisig = await promises.readFile("../contracts/multisig-full.abi.json", { encoding: "utf8" });
+const abiMultisig = AbiRegistry.create(JSON.parse(abiJsonMultisig));
+
 const eventsParser = new TransactionEventsParser({
     abi: abiMultisig
 });
@@ -776,7 +779,7 @@ A `NetworkProvider`, slighly adapted, is used to satisfy this requirement.
 
 :::important
 Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
-The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](/sdk-and-tools/rest-api).
 
 This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
@@ -833,7 +836,8 @@ console.log(sum);
 
 ## Explicit decoding / encoding of values
 
-When needed, you can use the [`BinaryCodec`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/BinaryCodec.html) to [decode and encode values](https://docs.multiversx.com/developers/data/serialization-overview/) manually.
+When needed, you can use the [`BinaryCodec`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/BinaryCodec.html) to [decode and encode values](/developers/data/serialization-overview/) manually,
+leveraging contract ABIs.
 
 ### Decoding a custom type
 

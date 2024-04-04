@@ -77,7 +77,6 @@ export function signAndBroadcast(tx) {
 
 export async function loadAbi(abiPath) {
     const abiJson = await promises.readFile(abiPath, { encoding: "utf8" });
-    const abiObj = JSON.parse(abiJson);
-    const abi = AbiRegistry.create(abiObj);
+    const abi = AbiRegistry.create(JSON.parse(abiJson));
     return abi;
 }

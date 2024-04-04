@@ -27,21 +27,22 @@ DIRECTIVE_INSERT = f"// {MARKER_INSERT}"
 
 API_URL = "https://multiversx.github.io/mx-sdk-js-core"
 API_DEFAIULT_VERSION = "v13"
+DOCS_URL = "https://docs.multiversx.com"
 
 notes: Dict[str, str] = {
     "transactionLegacyVsNext": """:::note
 Since `sdk-core v13`, the `class:Transaction` class exhibits its state as public read-write properties. For example, you can access and set the `nonce` property, instead of using `getNonce` and `setNonce`.
 :::""",
 
-    "forSimplicityWeUseUserSigner": """:::important
+    "forSimplicityWeUseUserSigner": f""":::important
 For the sake of simplicity, in this section we'll use a `UserSigner` object to sign the transaction.
-In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers).
+In real-world dApps, transactions are signed by end-users using their wallet, through a [signing provider]({DOCS_URL}/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 :::
 """,
 
-    "coreAndNetworkProvidersImpedanceMismatch": """:::important
+    "coreAndNetworkProvidersImpedanceMismatch": f""":::important
 Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
-The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs](https://docs.multiversx.com/sdk-and-tools/rest-api).
+The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs]({DOCS_URL}/sdk-and-tools/rest-api).
 
 This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
 Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
@@ -71,6 +72,7 @@ def main():
 
     output_text = "\n\n".join(output_sections) + "\n"
     output_text = render_api_links(output_text)
+    output_text = remove_docs_root_url(output_text)
     output_file.write_text(output_text)
 
 
@@ -121,6 +123,10 @@ def render_api_links(input: str) -> str:
         input = input.replace(f"`class:{match}`", f"[`{match}`]({API_URL}/{API_DEFAIULT_VERSION}/classes/{match}.html)")
 
     return input
+
+
+def remove_docs_root_url(input: str) -> str:
+    return input.replace(DOCS_URL, "")
 
 
 if __name__ == "__main__":
