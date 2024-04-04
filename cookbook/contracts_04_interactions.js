@@ -4,6 +4,7 @@ import { promises } from "fs"; // md-ignore
 import { addressOfAlice, apiNetworkProvider, loadAbi, syncAccounts } from "./framework.js"; // md-ignore
 
 const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
+const abiMultisig = await loadAbi("../contracts/multisig-full.abi.json"); // md-ignore
 
 const { alice } = await syncAccounts(); // md-ignore
 
@@ -171,4 +172,34 @@ const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOn
 const parsedOutcome = parser.parseExecute({ transactionOutcome });
 
 console.log(parsedOutcome);
+// ```
+
+// ### Decode transaction events
+
+// Additionally, you might be interested into decoding the events emitted by a contract.
+// You can do so by means of the `class:TransactionEventsParser`.
+
+// Suppose we'd like to decode a `startPerformAction` event emitted by the [**multisig**](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract.
+
+// Let's fetch [a previously-processed transaction](https://devnet-explorer.multiversx.com/transactions/05d445cdd145ecb20374844dcc67f0b1e370b9aa28a47492402bc1a150c2bab4),
+// to serve as an example, and convert it to a `class:TransactionOutcome` (see above):
+
+// ```
+const transactionOnNetworkMultisig = await apiNetworkProvider.getTransaction("05d445cdd145ecb20374844dcc67f0b1e370b9aa28a47492402bc1a150c2bab4");
+const transactionOutcomeMultisig = converter.transactionOnNetworkToOutcome(transactionOnNetworkMultisig);
+// ```
+
+// Now, let's find and parse the event we are interested in:
+
+// ```
+import { TransactionEventsParser, findEventsByFirstTopic } from "@multiversx/sdk-core";
+
+const eventsParser = new TransactionEventsParser({
+    abi: abiMultisig
+});
+
+const [event] = findEventsByFirstTopic(transactionOutcomeMultisig, "startPerformAction");
+const parsedEvent = eventsParser.parseEvent({ event });
+
+console.log(parsedEvent);
 // ```
