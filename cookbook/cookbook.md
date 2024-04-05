@@ -994,7 +994,7 @@ const bobVerifier = UserVerifier.fromAddress(addressOfBob);
 Verifying a signature:
 
 ```
-serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
+serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
 serializedMessage = messageComputer.computeBytesForVerifying(message);
 
 console.log("Is signature of Alice?", aliceVerifier.verify(serializedTransaction, transaction.signature));
@@ -1045,13 +1045,6 @@ Then, the transaction should be serialzed and signed as follows:
 ```
 const bytesToSign = transactionComputer.computeHashForSigning(transaction);
 transaction.signature = await signer.sign(bytesToSign);
-```
-
-If hash signing is used for transactions, make sure to handle the verification accordingly:
-
-```
-const bytesToVerify = transactionComputer.computeHashForSigning(transaction);
-console.log("Is signature of Alice?", aliceVerifier.verify(bytesToVerify, transaction.signature));
 ```
 
 :::note
