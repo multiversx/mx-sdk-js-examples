@@ -32,7 +32,7 @@ tx.nonce = 42n;
 // :::important
 // Note that the transactions **must be signed before being broadcasted**.
 // On the front-end, signing can be achieved using a signing provider.
-// On this purpose, **we recommend using [sdk-dapp](https://github.com/multiversx/mx-sdk-dapp)** instead of integrating the signing providers on your own.
+// On this purpose, **we recommend using [sdk-dapp](/sdk-and-tools/sdk-dapp)** instead of integrating the signing providers on your own.
 // :::
 
 // md-insert:forSimplicityWeUseUserSigner
