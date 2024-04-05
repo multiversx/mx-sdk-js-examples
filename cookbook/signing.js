@@ -1,10 +1,20 @@
-import { addressOfAlice, addressOfBob } from "./samples.js"; // md-ignore
+import { addressOfAlice, addressOfBob } from "./framework.js"; // md-ignore
 
-// ## Signing objects
+// ## Signing objects and verifying signatures
 
 // :::note
+// Skip this section if you're building a **dApp**. 
+// This section is destined for developers of **wallet-like applications** or backend (server-side) components that are concerned with signing transactions and messages.
+//
 // For **dApps**, use the available **[signing providers](/sdk-and-tools/sdk-js/sdk-js-signing-providers)** instead.
+// Note that we recommend using **[sdk-dapp](/sdk-and-tools/sdk-dapp)** instead of integrating the signing providers on your own.
 // :::
+
+// :::note
+// You might also be interested into the language-agnostic overview on [signing transactions](/developers/signing-transactions).
+// :::
+
+// ### Signing objects
 
 // Creating a `UserSigner` from a JSON wallet:
 
@@ -24,45 +34,44 @@ const pemText = await promises.readFile("../testwallets/alice.pem", { encoding: 
 signer = UserSigner.fromPem(pemText);
 // ```
 
-// Signing a transaction:
+// Signing a transaction, as we've seen [before](#signing-a-transaction):
 
 // ```
-import { Transaction } from "@multiversx/sdk-core";
+import { Transaction, TransactionComputer } from "@multiversx/sdk-core";
 
 const transaction = new Transaction({
-    gasLimit: 50000,
-    gasPrice: 1000000000,
-    sender: addressOfAlice,
-    receiver: addressOfBob,
-    chainID: "D",
-    version: 1
+    nonce: 91,
+    sender: "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th",
+    receiver: "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx",
+    value: 1000000000000000000n,
+    gasLimit: 50000n,
+    chainID: "D"
 });
 
-const serializedTransaction = transaction.serializeForSigning();
-const transactionSignature = await signer.sign(serializedTransaction);
-transaction.applySignature(transactionSignature);
+const transactionComputer = new TransactionComputer()
+let serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
+transaction.signature = await signer.sign(serializedTransaction);
 
-console.log("Transaction signature", transaction.getSignature().toString("hex"));
-console.log("Transaction hash", transaction.getHash().toString());
+console.log("Signature", Buffer.from(transaction.signature).toString("hex"));
 // ```
 
 // Signing an arbitrary message:
 
 // ```
-import { SignableMessage } from "@multiversx/sdk-core";
+import { Message, MessageComputer } from "@multiversx/sdk-core";
 
-let message = new SignableMessage({
-    message: Buffer.from("hello")
+let message = new Message({
+    data: Buffer.from("hello")
 });
 
-let serializedMessage = message.serializeForSigning();
-let messageSignature = await signer.sign(serializedMessage);
-message.applySignature(messageSignature);
+const messageComputer = new MessageComputer();
+let serializedMessage = messageComputer.computeBytesForSigning(message);
+message.signature = await signer.sign(serializedMessage);
 
-console.log("Message signature", message.getSignature().toString("hex"));
+console.log("Signature", Buffer.from(message.signature).toString("hex"));
 // ```
 
-// ## Verifying signatures
+// ### Verifying signatures
 
 // Creating a `UserVerifier`:
 
@@ -73,38 +82,62 @@ const aliceVerifier = UserVerifier.fromAddress(addressOfAlice);
 const bobVerifier = UserVerifier.fromAddress(addressOfBob);
 // ```
 
-// Suppose we have the following transaction:
+// Verifying a signature:
 
 // ```
-const tx = Transaction.fromPlainObject({
-    nonce: 42,
-    value: "12345",
-    sender: addressOfAlice.bech32(),
-    receiver: addressOfBob.bech32(),
-    gasPrice: 1000000000,
-    gasLimit: 50000,
-    chainID: "D",
-    version: 1,
-    signature: "3c5eb2d1c9b3ab2f578541e62dcfa5008976d11f85644a48884a8a6c4d2980fa14954ab2924d6e67c051562488096d2e79cd3c0378edf234a52e648e672d1b0a"
-});
+serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
+serializedMessage = messageComputer.computeBytesForVerifying(message);
 
-const serializedTx = tx.serializeForSigning();
-const txSignature = tx.getSignature();
+console.log("Is signature of Alice?", aliceVerifier.verify(serializedTransaction, transaction.signature));
+console.log("Is signature of Alice?", aliceVerifier.verify(serializedMessage, message.signature));
+console.log("Is signature of Bob?", bobVerifier.verify(serializedTransaction, transaction.signature));
+console.log("Is signature of Bob?", bobVerifier.verify(serializedMessage, message.signature));
 // ```
 
-// And / or the following message and signature:
+// ### Handling messages over boundaries
+
+// Generally speaking, signed `class:Message` objects are meant to be sent to a remote party (e.g. a service), which can then verify the signature.
+
+// In order to prepare a message for transmission, you can use the `func:MessageComputer.packMessage()` utility method:
 
 // ```
-message = new SignableMessage({ message: Buffer.from("hello") });
-serializedMessage = message.serializeForSigning();
-messageSignature = Buffer.from("561bc58f1dc6b10de208b2d2c22c9a474ea5e8cabb59c3d3ce06bbda21cc46454aa71a85d5a60442bd7784effa2e062fcb8fb421c521f898abf7f5ec165e5d0f", "hex");
+const packedMessage = messageComputer.packMessage(message);
+
+console.log("Packed message", packedMessage);
 // ```
 
-// We can verify their signatures as follows:
+// Then, on the receiving side, you can use `func:MessageComputer.unpackMessage()` to reconstruct the message, prior verification:
 
 // ```
-console.log("Is signature of Alice?", aliceVerifier.verify(serializedTx, txSignature));
-console.log("Is signature of Alice?", aliceVerifier.verify(serializedMessage, messageSignature));
-console.log("Is signature of Bob?", bobVerifier.verify(serializedTx, txSignature));
-console.log("Is signature of Bob?", bobVerifier.verify(serializedMessage, messageSignature));
+const unpackedMessage = messageComputer.unpackMessage(packedMessage);
+const serializedUnpackedMessage = messageComputer.computeBytesForVerifying(unpackedMessage);
+
+console.log("Unpacked message", unpackedMessage);
+console.log("Is signature of Alice?", aliceVerifier.verify(serializedUnpackedMessage, message.signature));
 // ```
+
+// ### Signing hashes of objects
+
+// Under the hood, `func:MessageComputer.computeBytesForSigning()` does not compute a plain serialization of the message.
+// Instead, it first decorates the message (with a special prefix, plus the message length), and computes a **`keccak256` hash** of this decorated variant.
+// Ultimately, the signature is computed over the hash.
+
+// However, for transactions, **by default**, the Network expects the signature to be computed over [the plain serialization](/developers/signing-transactions/#serialization-for-signing) of the transaction.
+// The function `func:TransactionComputer.computeBytesForSigning()` adheres to this default policy.
+//
+// The behavior can be overridden by setting the _sign using hash_ flag of `transaction.options`:
+
+// ```
+transactionComputer.applyOptionsForHashSigning(transaction);
+// ```
+
+// Then, the transaction should be serialzed and signed as follows:
+
+// ```
+const bytesToSign = transactionComputer.computeHashForSigning(transaction);
+transaction.signature = await signer.sign(bytesToSign);
+// ```
+
+// :::note
+// If you'd like to learn more about hash signing, please refer to the overview on [signing transactions](/developers/signing-transactions).
+// :::

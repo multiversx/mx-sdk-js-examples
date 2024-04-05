@@ -1,106 +1,61 @@
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
-import { addressOfFirstDevnetDelegator, legacyDelegationContractAddress } from "./samples.js"; // md-ignore
+import { apiNetworkProvider, loadAbi } from "./framework.js"; // md-ignore
 
-const networkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
+const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
 
 // ## Contract queries
 
-// ### When the ABI is not available
+// In order to perform Smart Contract queries, we recommend the use of `class:SmartContractQueriesController`. 
+// The legacy approaches that rely on `func:SmartContract.createQuery()` or `func:Interaction.buildQuery()` are still available, but they will be deprecated in the (distant) future.
+
+// You will notice that the `class:SmartContractQueriesController` requires a `QueryRunner` object at initialization.
+// A `NetworkProvider`, slighly adapted, is used to satisfy this requirement.
+
+// md-insert:coreAndNetworkProvidersImpedanceMismatch
 
 // ```
-import { AddressValue, BigUIntType, BinaryCodec, ResultsParser, SmartContract } from "@multiversx/sdk-core";
+import { QueryRunnerAdapter, SmartContractQueriesController } from "@multiversx/sdk-core";
 
-let legacyDelegationContract = new SmartContract({
-    address: legacyDelegationContractAddress
+const queryRunner = new QueryRunnerAdapter({
+    networkProvider: apiNetworkProvider
 });
 
-let query = legacyDelegationContract.createQuery({
-    func: "getClaimableRewards",
-    args: [new AddressValue(addressOfFirstDevnetDelegator)]
+let controller = new SmartContractQueriesController({ 
+    queryRunner: queryRunner
 });
-
-let queryResponse = await networkProvider.queryContract(query);
-let bundle = new ResultsParser().parseUntypedQueryResponse(queryResponse);
-let firstValue = bundle.values[0];
-let decodedValue = new BinaryCodec().decodeTopLevel(firstValue, new BigUIntType());
-
-console.log(bundle.returnCode);
-console.log(bundle.returnMessage);
-console.log(bundle.values);
-console.log(decodedValue.valueOf().toFixed(0));
 // ```
 
-// ### Using `Interaction`, when the ABI is not available
+// If the contract ABI is available, provide it to the controller:
 
 // ```
-import { Interaction } from "@multiversx/sdk-core";
-
-let args = [new AddressValue(addressOfFirstDevnetDelegator)];
-query = new Interaction(legacyDelegationContract, "getClaimableRewards", args)
-    .buildQuery();
-
-let queryResponseFromInteraction = await networkProvider.queryContract(query);
-
-console.assert(JSON.stringify(queryResponseFromInteraction) === JSON.stringify(queryResponse));
-// ```
-
-// Then, parse the response as above.
-
-// ### When the ABI is available
-
-// ```
-import { AbiRegistry } from "@multiversx/sdk-core";
-
-const legacyDelegationAbi = AbiRegistry.create({
-    "endpoints": [
-        {
-            "name": "getClaimableRewards",
-            "inputs": [{
-                "type": "Address"
-            }],
-            "outputs": [{
-                "type": "BigUint"
-            }]
-        }
-    ]
+controller = new SmartContractQueriesController({ 
+    queryRunner: queryRunner,
+    abi: abi
 });
+// ```
 
-const getClaimableRewardsEndpoint = legacyDelegationAbi.getEndpoint("getClaimableRewards");
+// Let's create a query object:
 
-query = legacyDelegationContract.createQuery({
-    func: "getClaimableRewards",
-    args: [new AddressValue(addressOfFirstDevnetDelegator)]
+// ```
+const query = controller.createQuery({
+    contract: "erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60",
+    function: "getSum",
+    arguments: [],
 });
-
-queryResponse = await networkProvider.queryContract(query);
-let { values } = new ResultsParser().parseQueryResponse(queryResponse, getClaimableRewardsEndpoint);
-console.log(values[0].valueOf().toFixed(0));
 // ```
 
-// ### Using `Interaction`, when the ABI is available
-
-// Prepare the interaction, check it, then build the query:
+// Then, run the query against the network. You will get a `class:SmartContractQueryResponse` object.
 
 // ```
-legacyDelegationContract = new SmartContract({
-    address: legacyDelegationContractAddress,
-    abi: legacyDelegationAbi
-});
-
-let interaction = legacyDelegationContract.methods.getClaimableRewards([addressOfFirstDevnetDelegator]);
-query = interaction.check().buildQuery();
+const response = await controller.runQuery(query);
 // ```
 
-// Then, run the query and parse the results:
+// :::tip
+// The invocation of `controller.runQuery()` ultimately calls the VM query endpoints of the MultiversX REST API.
+// :::
+
+// The response object contains the raw output of the query, which can be parsed as follows:
 
 // ```
-queryResponse = await networkProvider.queryContract(query);
-let typedBundle = new ResultsParser().parseQueryResponse(queryResponse, interaction.getEndpoint());
-console.log(typedBundle.values[0].valueOf().toFixed(0));
-// ```
-
-// Depending on the context, reinterpret (cast) the results:
-
-// ```
-// let firstValueAsStruct = <Struct>firstValue;
+const [sum] = controller.parseQueryResponse(response);
+console.log(sum);
 // ```
