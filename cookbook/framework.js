@@ -71,10 +71,6 @@ export async function syncAccounts() {
     return accounts;
 }
 
-export function signAndBroadcast(tx) {
-    
-}
-
 export async function loadAbi(abiPath) {
     const abiJson = await promises.readFile(abiPath, { encoding: "utf8" });
     const abi = AbiRegistry.create(JSON.parse(abiJson));
