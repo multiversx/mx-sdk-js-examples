@@ -16,6 +16,8 @@
     "@multiversx/sdk-wallet-connect-provider": "4.0.0",
     "@multiversx/sdk-web-wallet-provider": "3.0.0",
     "@multiversx/sdk-native-auth-client": "1.0.6",
+    "@multiversx/sdk-dapp-utils": "0.0.1",
+    "@multiversx/sdk-webview-provider": "0.0.6",
     "punycode": "2.3.0",
     "qrcode": "1.5.1",
     "qs": "6.10.3"

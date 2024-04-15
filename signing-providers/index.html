@@ -176,6 +176,8 @@
         </div>
     </div>
 
+    <iframe id="webviewChild" src="http://localhost:63342/mx-sdk-js-examples/signing-providers/webviewChild.html" style="width: 100%; height: 200px;"></iframe>
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -194,6 +196,67 @@
         const extension = new Extension();
         const walletConnectV2 = new WalletConnectV2();
         const hw = new HW();
+
+        const webviewChild = document.getElementById("webviewChild");
+        const targetWindow = webviewChild.contentWindow;
+
+        window.addEventListener("message", async e => {
+            const { type, payload } = e.data;
+
+            switch (type) {
+                case "LOGIN_REQUEST":
+                    await extension.login();
+
+                    // generate accessToken using native auth client
+                    const accessToken = "ZXJkMXdqeXRmbjZ6aHFmY3NlanZod3Y3cTR1c2F6czVyeWMzajhoYzc4ZmxkZ2pueWN0OHdlanFrYXN1bmM.Ykc5allXeG9iM04wLmY2ODE3NzUxMDc1NmVkY2U0NWVjYTg0Yjk0NTQ0YTZlYWNkZmEzNmU2OWRmZDNiOGYyNGM0MDEwZDE5OTA3NTEuMzAwLmV5SjBhVzFsYzNSaGJYQWlPakUyTnpNNU56SXlORFI5.a29dba3f0d2fb4712cb662bc8050c87bf9f0e7fd28f3c98efe0fda074be5b087bd75c075243e832c2985a9da044496b2cff3c852c8c963f9d3d840aed8799c07";
+
+                    targetWindow?.postMessage({
+                        type: "LOGIN_RESPONSE",
+                        payload: {
+                            data: {
+                                address: "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th",
+                                accessToken
+                            }
+                        },
+                    })
+                    break;
+                case "SIGN_TRANSACTIONS_REQUEST":
+                    console.log('transactions', payload)
+
+                    // Normally, the payload should be sent to the signing provider
+                    const signedTransactions = await extension.signTransactions();
+                    console.log('signedTransactions', signedTransactions);
+
+                    targetWindow?.postMessage({
+                        type: "SIGN_TRANSACTIONS_RESPONSE",
+                        payload: {
+                            data: signedTransactions
+                        },
+                    })
+                    break;
+                case "SIGN_MESSAGE_REQUEST":
+                    const messageToSign = payload?.message;
+
+                    await extension.signMessage(messageToSign);
+
+                    // Normally, the signature should be extracted from the signing provider response
+                    const signature = "1b7e8842c9f9716af4ca06ca0c4893e15b54489d0310ff829f5d42cbba44ce651d30d0c67e48c8d4347b57b3c28f973540db113122d928a852d00ed90e005c02";
+
+                    targetWindow?.postMessage({
+                        type: "SIGN_MESSAGE_RESPONSE",
+                        payload: {
+                            data: {
+                                signature,
+                                status: "signed"
+                            }
+                        },
+                    })
+                    break;
+                default:
+                    // handle other message types
+                    break;
+            }
+        })
     </script>
 </body>
 
