@@ -19,7 +19,6 @@ export class Webview {
         const response = await this._provider.login();
 
         console.log("Login response:" + JSON.stringify(response));
-
         alert("Login response:" + JSON.stringify(response));
 
         return response;
@@ -30,6 +29,7 @@ export class Webview {
 
         console.log("Logout response:" + JSON.stringify(response));
         alert("Logout response:" + JSON.stringify(response));
+
         return response;
     };
 
@@ -49,8 +49,6 @@ export class Webview {
     };
 
     async signTransaction() {
-        console.log("Sign transaction")
-
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
@@ -66,8 +64,8 @@ export class Webview {
         const response = await this._provider.signTransaction(transaction);
 
         console.log("Sign transaction response:" + JSON.stringify(response));
-
         alert("Sign transaction response:" + JSON.stringify(response));
+
         return response;
     }
 
@@ -91,7 +89,9 @@ export class Webview {
             return null;
         }
 
+        console.log("Sign transactions response:" + JSON.stringify(response));
         alert("Sign transactions response:" + JSON.stringify(response));
+
         return response;
     }
 
