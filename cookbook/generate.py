@@ -40,7 +40,7 @@ In real-world dApps, transactions are signed by end-users using their wallet, th
 """,
 
     "coreAndNetworkProvidersImpedanceMismatch": f""":::important
-Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns. 
+Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns.
 The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs]({DOCS_URL}/sdk-and-tools/rest-api).
 
 This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
@@ -56,7 +56,12 @@ Even further, you can use a mix of `class:TypedValue` objects and plain JavaScri
 ```
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
-:::"""
+:::""",
+
+    "customNetworkProviders": """Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**.
+As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements
+(whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).
+"""
 }
 
 

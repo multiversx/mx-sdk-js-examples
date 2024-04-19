@@ -20,9 +20,7 @@ import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers";
 const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
 // ```
 
-// Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**. 
-// As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements
-// (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).
+// md-insert:customNetworkProviders
 
 // On this topic, please see [extending sdk-js](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js).
 
