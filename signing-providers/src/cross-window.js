@@ -13,7 +13,7 @@ import {
 } from "./auth";
 
 const walletAddress = "https://testnet-wallet.multiversx.com";
-const callbackUrl = window.Location.href;
+const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
   constructor() {
