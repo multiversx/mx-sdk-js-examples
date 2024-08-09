@@ -29,7 +29,6 @@ export class CrossWindowWallet {
 
   async login() {
     await this.init();
-    console.log("\x1b[42m%s\x1b[0m", 11);
 
     const { address } = await this._provider.login({ callbackUrl });
     this._address = address;
