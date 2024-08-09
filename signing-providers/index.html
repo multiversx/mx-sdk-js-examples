@@ -45,6 +45,25 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
+                    <h3>Web Wallet Cross-Window</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="crossWindowWallet.login()">Login</button>
+                    <button class="btn btn-info" onclick="crossWindowWallet.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="crossWindowWallet.signTransaction()">Sign transaction</button>
+                    <button class="btn btn-info" onclick="crossWindowWallet.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="crossWindowWallet.signMessage()">Sign
+                        message</button>
+                    <button class="btn btn-info" onclick="crossWindowWallet.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
                     <h3>xAlias</h3>
                 </div>
             </div>
@@ -199,6 +218,12 @@
 
         const webviewChild = document.getElementById("webviewChild");
         const targetWindow = webviewChild.contentWindow;
+
+        const crossWindowWallet = new CrossWindowWallet();
+
+        /**
+         * NOTE: The following event listener must be commented out in order for **crossWindowWallet** to work
+         */
         window.addEventListener("message", async e => {
             const { type, payload } = e.data;
 

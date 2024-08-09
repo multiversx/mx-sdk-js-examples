@@ -3,6 +3,7 @@
 This example (a simple, frontend-only web application) depicts the usage of different signing providers for dApps, such as:
 
 - [(Web) Wallet provider](https://github.com/multiversx/mx-sdk-js-web-wallet-provider)
+- [(Web) Wallet Cross-Window provider](@multiversx/sdk-web-wallet-cross-window-provider)
 - [xAlias](https://github.com/multiversx/mx-sdk-js-web-wallet-provider) - from the perspective of a dApp, this one follows the interface of the Web Wallet provider (above)
 - [DeFi Wallet provider](https://github.com/multiversx/mx-sdk-js-extension-provider)
 - [Wallet Connect (xPortal) provider](https://github.com/multiversx/mx-sdk-js-wallet-connect-provider)
