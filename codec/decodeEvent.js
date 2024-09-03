@@ -34,7 +34,7 @@ async function main() {
     const eventDefinition = abiRegistry.getEvent(eventIdentifier);
     const resultsParser = new ResultsParser();
 
-    const provider = new ApiNetworkProvider(apiUrl, { clientName: "multivers-sdk-js-examples" });
+    const provider = new ApiNetworkProvider(apiUrl, { clientName: "multiversx-sdk-js-examples" });
     const transaction = await provider.getTransaction(transactionHash);
     const event = findTransactionEvent(transaction, eventIdentifier);
     if (!event) {

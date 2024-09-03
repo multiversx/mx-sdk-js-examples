@@ -9,7 +9,7 @@ const notYetSignedTx = getNotYetSignedTx(); // md-ignore
 // ```
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 
-const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { clientName: "multivers-sdk-js-examples" });
+const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { clientName: "multiversx-sdk-js-examples" });
 // ```
 
 // Creating a Proxy provider:
@@ -17,7 +17,7 @@ const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx
 // ```
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers";
 
-const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com", { clientName: "multivers-sdk-js-examples" });
+const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com", { clientName: "multiversx-sdk-js-examples" });
 // ```
 
 // md-insert:customNetworkProviders
