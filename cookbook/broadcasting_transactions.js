@@ -1,8 +1,8 @@
 import { ApiNetworkProvider, ProxyNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
 import { addressOfAlice, addressOfBob, completedTransactionsHashes, getReadyToBroadcastTx } from "./framework.js"; // md-ignore
 
-const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
-const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com"); // md-ignore
+const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { clientName: "multivers-sdk-js-examples" }); // md-ignore
+const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com", { clientName: "multivers-sdk-js-examples" }); // md-ignore
 const readyToBroadcastTx = getReadyToBroadcastTx(); // md-ignore
 TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 

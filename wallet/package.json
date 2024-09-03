@@ -5,9 +5,9 @@
   "scripts": {},
   "author": "MultiversX",
   "dependencies": {
-    "axios": "0.24.0",
-    "@multiversx/sdk-wallet": "4.0.0",
-    "@multiversx/sdk-core": "12.1.0"
+    "axios": "1.7.7",
+    "@multiversx/sdk-wallet": "4.5.1",
+    "@multiversx/sdk-core": "13.5.0"
   },
   "devDependencies": {}
 }

@@ -9,7 +9,7 @@ export class HW {
     constructor() {
         this.hwProvider = new HWProvider();
         this.walletProvider = new WalletProvider(WALLET_PROVIDER_URL);
-        this.apiNetworkProvider = new ApiNetworkProvider(API_URL);
+        this.apiNetworkProvider = new ApiNetworkProvider(API_URL, { clientName: "multivers-sdk-js-examples" });
     }
 
     async login() {
