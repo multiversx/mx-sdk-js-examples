@@ -24,7 +24,7 @@ import { addressOfAlice, addressOfBob } from "./framework.js"; // md-ignore
 
 // First, let's create a `class:TransferTransactionsFactory`:
 
-// ```
+// ```js
 import { Token, TokenTransfer, TransactionsFactoryConfig, TransferTransactionsFactory } from "@multiversx/sdk-core";
 
 // The new approach of creating a "TransferTransactionsFactory": // md-as-comment
@@ -36,7 +36,7 @@ const factory = new TransferTransactionsFactory({ config: factoryConfig });
 
 // ### **EGLD** transfers (value movements)
 
-// ```
+// ```js
 const tx1 = factory.createTransactionForNativeTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -49,7 +49,7 @@ tx1.nonce = 42n;
 
 // ### Single ESDT transfer
 
-// ```
+// ```js
 const tx2 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -66,7 +66,7 @@ tx2.nonce = 43n;
 
 // ### Single NFT transfer
 
-// ```
+// ```js
 const tx3 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -83,7 +83,7 @@ tx3.nonce = 44n;
 
 // ### Single SFT transfer
 
-// ```
+// ```js
 const tx4 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,
@@ -100,7 +100,7 @@ tx4.nonce = 45n;
 
 // ### Multi ESDT / NFT transfer
 
-// ```
+// ```js
 const tx5 = factory.createTransactionForESDTTokenTransfer({
     sender: addressOfAlice,
     receiver: addressOfBob,

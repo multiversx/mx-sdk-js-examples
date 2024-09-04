@@ -12,22 +12,22 @@ const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
 
 // md-insert:coreAndNetworkProvidersImpedanceMismatch
 
-// ```
+// ```js
 import { QueryRunnerAdapter, SmartContractQueriesController } from "@multiversx/sdk-core";
 
 const queryRunner = new QueryRunnerAdapter({
     networkProvider: apiNetworkProvider
 });
 
-let controller = new SmartContractQueriesController({ 
+let controller = new SmartContractQueriesController({
     queryRunner: queryRunner
 });
 // ```
 
 // If the contract ABI is available, provide it to the controller:
 
-// ```
-controller = new SmartContractQueriesController({ 
+// ```js
+controller = new SmartContractQueriesController({
     queryRunner: queryRunner,
     abi: abi
 });
@@ -35,7 +35,7 @@ controller = new SmartContractQueriesController({
 
 // Let's create a query object:
 
-// ```
+// ```js
 const query = controller.createQuery({
     contract: "erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60",
     function: "getSum",
@@ -45,7 +45,7 @@ const query = controller.createQuery({
 
 // Then, run the query against the network. You will get a `class:SmartContractQueryResponse` object.
 
-// ```
+// ```js
 const response = await controller.runQuery(query);
 // ```
 
@@ -55,7 +55,7 @@ const response = await controller.runQuery(query);
 
 // The response object contains the raw output of the query, which can be parsed as follows:
 
-// ```
+// ```js
 const [sum] = controller.parseQueryResponse(response);
 console.log(sum);
 // ```

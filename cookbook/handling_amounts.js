@@ -6,7 +6,7 @@
 
 // You can format amounts using `formatAmount` from `sdk-dapp`:
 
-// ```
+// ```js
 import { formatAmount } from "@multiversx/sdk-dapp/__commonjs/utils/operations/formatAmount.js"; // md-ignore (recommended import, without "__commonjs", is below)
 // import { formatAmount } from '@multiversx/sdk-dapp/utils/operations';
 
@@ -19,17 +19,17 @@ console.log("Format using sdk-dapp:", formatAmount({
 
 // Or directly using `bignumber.js`:
 
-// ```
+// ```js
 import BigNumber from "bignumber.js";
 
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
 
-console.log("Format using bignumber.js:",new BigNumber("1500000000000000000").shiftedBy(-18).toFixed(4));
+console.log("Format using bignumber.js:", new BigNumber("1500000000000000000").shiftedBy(-18).toFixed(4));
 // ```
 
 // You can parse amounts using `parseAmount` from `sdk-dapp`:
 
-// ```
+// ```js
 import { parseAmount } from "@multiversx/sdk-dapp/__commonjs/utils/operations/parseAmount.js"; // md-ignore (recommended import, without "__commonjs", is below)
 // import { formatAmount } from '@multiversx/sdk-dapp/utils/operations';
 
@@ -38,6 +38,6 @@ console.log("Parse using sdk-dapp:", parseAmount("1.5", 18));
 
 // Or directly using `bignumber.js`:
 
-// ```
+// ```js
 console.log("Parse using bignumber.js:", new BigNumber("1.5").shiftedBy(18).decimalPlaces(0).toFixed(0));
 // ```

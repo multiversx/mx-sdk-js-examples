@@ -12,7 +12,7 @@ TransactionWatcher.DefaultPollingInterval = 1; // md-ignore
 
 // md-insert:transactionLegacyVsNext
 
-// ```
+// ```js
 import { Transaction } from "@multiversx/sdk-core";
 
 const tx = new Transaction({
@@ -37,7 +37,7 @@ tx.nonce = 42n;
 
 // md-insert:forSimplicityWeUseUserSigner
 
-// ```
+// ```js
 import { TransactionComputer } from "@multiversx/sdk-core";
 import { UserSigner } from "@multiversx/sdk-wallet";
 import { promises } from "fs";
@@ -56,7 +56,7 @@ tx.signature = await signer.sign(serializedTx);
 
 // In order to broadcast a transaction, use a network provider:
 
-// ```
+// ```js
 try { // md-ignore
     const txHash = await apiNetworkProvider.sendTransaction(readyToBroadcastTx); // md-unindent
     console.log("TX hash:", txHash); // md-unindent
@@ -66,7 +66,7 @@ try { // md-ignore
 
 // ### Wait for transaction completion
 
-// ```
+// ```js
 import { TransactionWatcher } from "@multiversx/sdk-core";
 
 const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
@@ -77,7 +77,7 @@ const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(txHash
 // If, instead, you use a `ProxyNetworkProvider` to instantiate the `class:TransactionWatcher`, you'll need to patch the `getTransaction` method,
 // so that it instructs the network provider to fetch the so-called _processing status_, as well (required by the watcher to detect transaction completion).
 
-// ```
+// ```js
 const watcherUsingProxy = new TransactionWatcher({
     getTransaction: async (hash) => {
         return await proxyNetworkProvider.getTransaction(hash, true);
@@ -89,7 +89,7 @@ const transactionOnNetworkUsingProxy = await watcherUsingProxy.awaitCompleted(tx
 
 // In order to wait for multiple transactions:
 
-// ```
+// ```js
 const [txHash1, txHash2, txHash3] = completedTransactionsHashes; // md-ignore
 await Promise.all([
     watcherUsingApi.awaitCompleted(txHash1),
@@ -105,7 +105,7 @@ await Promise.all([
 // If that is an issue, you can configure the `class:TransactionWatcher` to have additional **patience**
 // before returning the transaction object. Below, we're adding a patience of 8 seconds:
 
-// ```
+// ```js
 const watcherWithPatience = new TransactionWatcher(apiNetworkProvider, { patienceMilliseconds: 8000 });
 // ```
 
