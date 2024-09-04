@@ -6,7 +6,7 @@ import { promises } from "fs"; // md-ignore
 // When needed, you can use the `class:BinaryCodec` to [decode and encode values](https://docs.multiversx.com/developers/data/serialization-overview/) manually,
 // leveraging contract ABIs:
 
-// ```
+// ```js
 const abiJsonExample = await promises.readFile("../contracts/example.abi.json", { encoding: "utf8" });
 const abiExample = AbiRegistry.create(JSON.parse(abiJsonExample));
 
@@ -22,7 +22,7 @@ const abiMultisig = AbiRegistry.create(JSON.parse(abiJsonMultisig));
 
 // Example of decoding a custom type (a structure) called `DepositEvent` from binary data:
 
-// ```
+// ```js
 import { BinaryCodec } from "@multiversx/sdk-core";
 
 const depositCustomType = abiExample.getCustomType("DepositEvent");
@@ -36,7 +36,7 @@ console.log(JSON.stringify(decodedValue, null, 4));
 
 // Example of decoding a custom type (a structure) called `Reward` from binary data:
 
-// ```
+// ```js
 const rewardStructType = abiExample.getStruct("Reward");
 data = Buffer.from("010000000445474c440000000201f400000000000003e80000000000000000", "hex");
 
@@ -47,7 +47,7 @@ console.log(JSON.stringify(decodedValue, null, 4));
 
 // Example of decoding a custom type (an enum) called `Action` (of [**multisig**](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract) from binary data:
 
-// ```
+// ```js
 const actionStructType = abiMultisig.getEnum("Action");
 data = Buffer.from("0500000000000000000500d006f73c4221216fa679bc559005584c4f1160e569e1000000012a0000000003616464000000010000000107", "hex");
 
@@ -60,7 +60,7 @@ console.log(JSON.stringify(decodedValue, null, 4));
 
 // Example of encoding a custom type (a struct) called `EsdtTokenPayment` (of [**multisig**](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract) into binary data:
 
-// ```
+// ```js
 import { BigUIntValue, Field, Struct, TokenIdentifierValue, U64Value } from "@multiversx/sdk-core";
 
 const paymentType = abiMultisig.getStruct("EsdtTokenPayment");

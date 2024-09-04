@@ -11,7 +11,7 @@ const { alice: deployer } = await syncAccounts(); // md-ignore
 
 // ### Load the bytecode from a file
 
-// ```
+// ```js
 import { Code } from "@multiversx/sdk-core";
 
 const codeBuffer = await promises.readFile("../contracts/adder.wasm");
@@ -29,7 +29,7 @@ const code = Code.fromBuffer(codeBuffer);
 
 // Now, let's create a `class:SmartContractTransactionsFactory`:
 
-// ```
+// ```js
 import { SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core";
 
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
@@ -41,7 +41,7 @@ let factory = new SmartContractTransactionsFactory({
 
 // If the contract ABI is available, provide it to the factory:
 
-// ```
+// ```js
 factory = new SmartContractTransactionsFactory({
     config: factoryConfig,
     abi: abi
@@ -50,7 +50,7 @@ factory = new SmartContractTransactionsFactory({
 
 // Now, prepare the deploy transaction:
 
-// ```
+// ```js
 import { U32Value } from "@multiversx/sdk-core";
 
 // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
@@ -70,7 +70,7 @@ const deployTransaction = factory.createTransactionForDeploy({
 
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
-// ```
+// ```js
 deployTransaction.nonce = deployer.getNonceThenIncrement();
 // ```
 
@@ -78,7 +78,7 @@ deployTransaction.nonce = deployer.getNonceThenIncrement();
 
 // md-insert:forSimplicityWeUseUserSigner
 
-// ```
+// ```js
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
 const walletObject = JSON.parse(fileContent);
 const signer = UserSigner.fromWallet(walletObject, "password");
@@ -91,7 +91,7 @@ deployTransaction.signature = await signer.sign(serializedTx);
 
 // Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
 
-// ```
+// ```js
 const txHash = await apiNetworkProvider.sendTransaction(deployTransaction);
 const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
 // ```
@@ -101,7 +101,7 @@ const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).aw
 // Even before broadcasting, 
 // at the moment you know the _sender_ address and the _nonce_ for your deployment transaction, you can (deterministically) compute the (upcoming) address of the contract:
 
-// ```
+// ```js
 import { AddressComputer } from "@multiversx/sdk-core";
 
 const addressComputer = new AddressComputer();
@@ -121,7 +121,7 @@ console.log("Contract address:", contractAddress.bech32());
 
 // md-insert:coreAndNetworkProvidersImpedanceMismatch
 
-// ```
+// ```js
 import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";
 
 const converter = new TransactionsConverter();

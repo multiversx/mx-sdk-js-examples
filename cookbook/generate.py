@@ -53,9 +53,11 @@ When creating transactions using `class:SmartContractTransactionsFactory`, even 
 you can still use `class:TypedValue` objects as arguments for deployments and interactions.
 
 Even further, you can use a mix of `class:TypedValue` objects and plain JavaScript values and objects. For example:
-```
+
+```js
 let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue("TEST-abcdef")];
 ```
+
 :::""",
 
     "customNetworkProviders": """Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**.

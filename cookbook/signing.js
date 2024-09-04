@@ -18,7 +18,7 @@ import { addressOfAlice, addressOfBob } from "./framework.js"; // md-ignore
 
 // Creating a `UserSigner` from a JSON wallet:
 
-// ```
+// ```js
 import { UserSigner } from "@multiversx/sdk-wallet";
 import { promises } from "fs";
 
@@ -29,14 +29,14 @@ let signer = UserSigner.fromWallet(walletObject, "password");
 
 // Creating a `UserSigner` from a PEM file:
 
-// ```
+// ```js
 const pemText = await promises.readFile("../testwallets/alice.pem", { encoding: "utf8" });
 signer = UserSigner.fromPem(pemText);
 // ```
 
 // Signing a transaction, as we've seen [before](#signing-a-transaction):
 
-// ```
+// ```js
 import { Transaction, TransactionComputer } from "@multiversx/sdk-core";
 
 const transaction = new Transaction({
@@ -57,7 +57,7 @@ console.log("Signature", Buffer.from(transaction.signature).toString("hex"));
 
 // Signing an arbitrary message:
 
-// ```
+// ```js
 import { Message, MessageComputer } from "@multiversx/sdk-core";
 
 let message = new Message({
@@ -75,7 +75,7 @@ console.log("Signature", Buffer.from(message.signature).toString("hex"));
 
 // Creating a `UserVerifier`:
 
-// ```
+// ```js
 import { UserVerifier } from "@multiversx/sdk-wallet";
 
 const aliceVerifier = UserVerifier.fromAddress(addressOfAlice);
@@ -84,7 +84,7 @@ const bobVerifier = UserVerifier.fromAddress(addressOfBob);
 
 // Verifying a signature:
 
-// ```
+// ```js
 serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
 serializedMessage = messageComputer.computeBytesForVerifying(message);
 
@@ -100,7 +100,7 @@ console.log("Is signature of Bob?", bobVerifier.verify(serializedMessage, messag
 
 // In order to prepare a message for transmission, you can use the `func:MessageComputer.packMessage()` utility method:
 
-// ```
+// ```js
 const packedMessage = messageComputer.packMessage(message);
 
 console.log("Packed message", packedMessage);
@@ -108,7 +108,7 @@ console.log("Packed message", packedMessage);
 
 // Then, on the receiving side, you can use `func:MessageComputer.unpackMessage()` to reconstruct the message, prior verification:
 
-// ```
+// ```js
 const unpackedMessage = messageComputer.unpackMessage(packedMessage);
 const serializedUnpackedMessage = messageComputer.computeBytesForVerifying(unpackedMessage);
 
@@ -127,13 +127,13 @@ console.log("Is signature of Alice?", aliceVerifier.verify(serializedUnpackedMes
 //
 // The behavior can be overridden by setting the _sign using hash_ flag of `transaction.options`:
 
-// ```
+// ```js
 transactionComputer.applyOptionsForHashSigning(transaction);
 // ```
 
 // Then, the transaction should be serialzed and signed as follows:
 
-// ```
+// ```js
 const bytesToSign = transactionComputer.computeHashForSigning(transaction);
 transaction.signature = await signer.sign(bytesToSign);
 // ```

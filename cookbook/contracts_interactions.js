@@ -19,7 +19,7 @@ const { alice } = await syncAccounts(); // md-ignore
 
 // Now, let's create a `class:SmartContractTransactionsFactory`:
 
-// ```
+// ```js
 import { SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core";
 
 const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
@@ -31,7 +31,7 @@ let factory = new SmartContractTransactionsFactory({
 
 // If the contract ABI is available, provide it to the factory:
 
-// ```
+// ```js
 factory = new SmartContractTransactionsFactory({
     config: factoryConfig,
     abi: abi
@@ -43,7 +43,7 @@ factory = new SmartContractTransactionsFactory({
 // Now, let's prepare a contract transaction, to call the `add` function of our
 // previously deployed smart contract:
 
-// ```
+// ```js
 import { U32Value } from "@multiversx/sdk-core";
 
 // For arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
@@ -64,7 +64,7 @@ const transaction = factory.createTransactionForExecute({
 
 // Then, as [previously seen](#working-with-accounts), set the transaction nonce (the account nonce must be synchronized beforehand).
 
-// ```
+// ```js
 transaction.nonce = alice.getNonceThenIncrement();
 // ```
 
@@ -72,7 +72,7 @@ transaction.nonce = alice.getNonceThenIncrement();
 
 // md-insert:forSimplicityWeUseUserSigner
 
-// ```
+// ```js
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
 const walletObject = JSON.parse(fileContent);
 const signer = UserSigner.fromWallet(walletObject, "password");
@@ -85,7 +85,7 @@ transaction.signature = await signer.sign(serializedTx);
 
 // Then, broadcast the transaction and await its completion, as seen in the section [broadcasting transactions](#broadcasting-transactions):
 
-// ```
+// ```js
 const txHash = await apiNetworkProvider.sendTransaction(transaction);
 const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(txHash);
 // ```
@@ -96,7 +96,7 @@ const transactionOnNetwork = await new TransactionWatcher(apiNetworkProvider).aw
 
 // For transfer & execute with native EGLD, prepare your transaction as follows:
 
-// ```
+// ```js
 const transactionWithNativeTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
@@ -111,7 +111,7 @@ const transactionWithNativeTransfer = factory.createTransactionForExecute({
 
 // For transfer & execute with ESDT tokens, prepare your transaction as follows:
 
-// ```
+// ```js
 const transactionWithTokenTransfer = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
@@ -129,7 +129,7 @@ const transactionWithTokenTransfer = factory.createTransactionForExecute({
 
 // Or, for transferring multiple tokens (NFTs included):
 
-// ```
+// ```js
 const transactionWithMultipleTokenTransfers = factory.createTransactionForExecute({
     sender: addressOfAlice,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqpgq6qr0w0zzyysklfneh32eqp2cf383zc89d8sstnkl60"),
@@ -159,7 +159,7 @@ const transactionWithMultipleTokenTransfers = factory.createTransactionForExecut
 
 // md-insert:coreAndNetworkProvidersImpedanceMismatch
 
-// ```
+// ```js
 import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";
 
 const converter = new TransactionsConverter();
@@ -183,14 +183,14 @@ console.log(parsedOutcome);
 // Let's fetch [a previously-processed transaction](https://devnet-explorer.multiversx.com/transactions/05d445cdd145ecb20374844dcc67f0b1e370b9aa28a47492402bc1a150c2bab4),
 // to serve as an example, and convert it to a `class:TransactionOutcome` (see above why):
 
-// ```
+// ```js
 const transactionOnNetworkMultisig = await apiNetworkProvider.getTransaction("05d445cdd145ecb20374844dcc67f0b1e370b9aa28a47492402bc1a150c2bab4");
 const transactionOutcomeMultisig = converter.transactionOnNetworkToOutcome(transactionOnNetworkMultisig);
 // ```
 
 // Now, let's find and parse the event we are interested in:
 
-// ```
+// ```js
 import { TransactionEventsParser, findEventsByFirstTopic } from "@multiversx/sdk-core";
 
 const abiJsonMultisig = await promises.readFile("../contracts/multisig-full.abi.json", { encoding: "utf8" });
