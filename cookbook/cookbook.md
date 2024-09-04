@@ -5,7 +5,7 @@ Creating an API provider:
 ```
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 
-const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com");
+const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { clientName: "multiversx-your-client-name" });
 ```
 
 Creating a Proxy provider:
@@ -13,7 +13,7 @@ Creating a Proxy provider:
 ```
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers";
 
-const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
+const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com", { clientName: "multiversx-your-client-name" });
 ```
 
 Use the classes from `@multiversx/sdk-network-providers` **only as a starting point**.

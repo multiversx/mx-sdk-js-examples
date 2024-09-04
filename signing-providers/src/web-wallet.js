@@ -2,7 +2,7 @@ import { Address, SignableMessage, Transaction, TransactionPayload } from "@mult
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { WALLET_PROVIDER_URL } from "./config";
+import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 
 export class WebWallet {
     constructor() {

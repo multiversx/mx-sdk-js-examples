@@ -28,7 +28,7 @@ export const addressOfFirstDevnetDelegator = new Address(
     "erd1s0us936aku52uxyvnhxspcaj4f4sp7d9azuyw7kf32ggm88ynlps7c0yr9"
 );
 
-export const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com"); // md-ignore
+export const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { clientName: "multiversx-sdk-js-examples" }); // md-ignore
 
 export function getNotYetSignedTx() {
     return new Transaction({
