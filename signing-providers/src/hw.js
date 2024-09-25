@@ -1,9 +1,10 @@
 import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
-import { WalletProvider } from '@multiversx/sdk-web-wallet-provider';
+import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
+import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { API_URL, WALLET_PROVIDER_URL } from "./config";
+import { API_URL, WALLET_PROVIDER_URL, CHAIN_ID } from "./config";
 
 export class HW {
     constructor() {
@@ -83,7 +84,13 @@ export class HW {
         const signedTransaction = await this.hwProvider.signTransaction(transaction);
 
         if (guardian) {
-            await this.walletProvider.guardTransactions([signedTransaction], { callbackUrl: getCurrentLocation() });
+            const guardedTransactions = await this.guardTransactions([
+              signedTransaction,
+            ]);
+            this.displayOutcome(
+              "Transaction signed & guarded.",
+              JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
+            );
         } else {
             this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
         }
@@ -127,7 +134,13 @@ export class HW {
         const signedTransactions = await this.hwProvider.signTransactions(transactions);
 
         if (guardian) {
-            await this.walletProvider.guardTransactions(signedTransactions, { callbackUrl: getCurrentLocation() });
+            const guardedTransactions = await this.guardTransactions(
+              signedTransactions
+            );
+            this.displayOutcome(
+              "Transactions signed & guarded.",
+              JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
+            );
         } else {
             this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
         }
@@ -168,6 +181,28 @@ export class HW {
         this.displayOutcome("Message signed.", signedMessage);
     }
 
+    async guardTransactions(transactions) {
+        // instantiate wallet cross-window provider
+        await CrossWindowProvider.getInstance().init();
+        const crossWindowProvider = CrossWindowProvider.getInstance();
+        crossWindowProvider.setWalletUrl(WALLET_PROVIDER_URL);
+
+        // set sender
+        const senderBech32 = await this.hwProvider.getAddress();
+        const sender = new Address(senderBech32);
+        crossWindowProvider.setAddress(sender);
+
+        // the user signs transactions on ledger so we need to perform an extra
+        // user action so the popup is opened
+        crossWindowProvider.setShouldShowConsentPopup(true);
+
+        const guardedTransactions = await crossWindowProvider.guardTransactions(
+          transactions
+        );
+
+        return guardedTransactions;
+    }
+
     displayOutcome(message, outcome) {
         if (!outcome) {
             console.log(message);
@@ -183,8 +218,4 @@ export class HW {
         console.error(error);
         alert(`Error: ${error}`);
     }
-}
-
-function getCurrentLocation() {
-    return window.location.href.split("?")[0];
 }
