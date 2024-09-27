@@ -1,6 +1,6 @@
 import {
   Address,
-  SignableMessage,
+  Message,
   Transaction,
   TransactionPayload,
 } from "@multiversx/sdk-core";
@@ -133,8 +133,9 @@ export class Metamask {
   async signMessage() {
     await this._provider.init();
 
-    const message = new SignableMessage({
-      message: Buffer.from("hello"),
+    const message = new Message({
+      address: new Address(this._address),
+      data: Buffer.from("hello"),
     });
 
     const response = await this._provider.signMessage(message);
