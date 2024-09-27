@@ -1,4 +1,4 @@
-import { Address, SignableMessage, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
@@ -171,14 +171,19 @@ export class HW {
 
     async signMessage() {
         await this.hwProvider.init();
-
-        const message = new SignableMessage({
-            message: Buffer.from("hello")
+        const address = await this.hwProvider.getAddress();
+    
+        const message = new Message({
+          address: new Address(address),
+          data: Buffer.from("hello"),
         });
-
+    
         const signedMessage = await this.hwProvider.signMessage(message);
-
-        this.displayOutcome("Message signed.", signedMessage);
+    
+        this.displayOutcome(
+          "Message signed. Signature: ",
+          Buffer.from(signedMessage?.signature).toString("hex")
+        );
     }
 
     async guardTransactions(transactions) {
