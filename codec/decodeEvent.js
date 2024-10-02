@@ -1,5 +1,4 @@
-import { AbiRegistry, ResultsParser } from "@multiversx/sdk-core";
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
+import { AbiRegistry, ApiNetworkProvider, ResultsParser } from "@multiversx/sdk-core";
 import * as fs from "fs";
 import minimist from "minimist";
 import { homedir } from "os";

@@ -1,8 +1,7 @@
 {
     "type": "module",
     "dependencies": {
-        "@multiversx/sdk-core": "13.5.0",
-        "@multiversx/sdk-network-providers": "2.7.1",
+        "@multiversx/sdk-core": "13.7.0",
         "minimist": "1.2.8"
     }
 }

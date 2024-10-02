@@ -1,4 +1,4 @@
-import { ApiNetworkProvider, ProxyNetworkProvider } from "@multiversx/sdk-network-providers"; // md-ignore
+import { ApiNetworkProvider, ProxyNetworkProvider } from "@multiversx/sdk-core"; // md-ignore
 import { addressOfAlice, addressOfBob, completedTransactionsHashes, getReadyToBroadcastTx } from "./framework.js"; // md-ignore
 
 const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { clientName: "multiversx-sdk-js-examples" }); // md-ignore
