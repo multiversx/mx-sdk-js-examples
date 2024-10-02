@@ -7,7 +7,7 @@
   "dependencies": {
     "axios": "1.7.7",
     "@multiversx/sdk-wallet": "4.5.1",
-    "@multiversx/sdk-core": "13.5.0"
+    "@multiversx/sdk-core": "13.7.0"
   },
   "devDependencies": {}
 }

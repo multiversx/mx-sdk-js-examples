@@ -2,8 +2,7 @@
  * A minimalistic framework for writing & executing the cookbook.
  */
 
-import { AbiRegistry, Account, Address, Transaction } from "@multiversx/sdk-core";
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
+import { AbiRegistry, Account, Address, ApiNetworkProvider, Transaction } from "@multiversx/sdk-core";
 import { promises } from "fs"; // md-ignore
 
 export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");

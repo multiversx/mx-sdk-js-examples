@@ -1,6 +1,5 @@
-import { Address, Message, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, ApiNetworkProvider, Message, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
@@ -85,11 +84,11 @@ export class HW {
 
         if (guardian) {
             const guardedTransactions = await this.guardTransactions([
-              signedTransaction,
+                signedTransaction,
             ]);
             this.displayOutcome(
-              "Transaction signed & guarded.",
-              JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
+                "Transaction signed & guarded.",
+                JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
             );
         } else {
             this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
@@ -135,11 +134,11 @@ export class HW {
 
         if (guardian) {
             const guardedTransactions = await this.guardTransactions(
-              signedTransactions
+                signedTransactions
             );
             this.displayOutcome(
-              "Transactions signed & guarded.",
-              JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
+                "Transactions signed & guarded.",
+                JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
             );
         } else {
             this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
@@ -172,17 +171,17 @@ export class HW {
     async signMessage() {
         await this.hwProvider.init();
         const address = await this.hwProvider.getAddress();
-    
+
         const message = new Message({
-          address: new Address(address),
-          data: Buffer.from("hello"),
+            address: new Address(address),
+            data: Buffer.from("hello"),
         });
-    
+
         const signedMessage = await this.hwProvider.signMessage(message);
-    
+
         this.displayOutcome(
-          "Message signed. Signature: ",
-          Buffer.from(signedMessage?.signature).toString("hex")
+            "Message signed. Signature: ",
+            Buffer.from(signedMessage?.signature).toString("hex")
         );
     }
 
@@ -202,7 +201,7 @@ export class HW {
         crossWindowProvider.setShouldShowConsentPopup(true);
 
         const guardedTransactions = await crossWindowProvider.guardTransactions(
-          transactions
+            transactions
         );
 
         return guardedTransactions;
