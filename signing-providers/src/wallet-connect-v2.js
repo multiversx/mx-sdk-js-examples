@@ -1,4 +1,4 @@
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import QRCode from "qrcode";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
@@ -15,7 +15,7 @@ export class WalletConnectV2 {
         return {
             onClientLogin: async function () {
                 closeModal();
-                const address = await self.provider.getAddress();
+                const address = self.provider.getAddress();
                 alert(`onClientLogin(), address: ${address}`);
             },
             onClientLogout: function () {
@@ -49,10 +49,10 @@ export class WalletConnectV2 {
         await openModal(uri);     
         
         try {
-            await this.provider.login({ approval, token: nativeAuthInitialPart });
+            const account = await this.provider.login({ approval, token: nativeAuthInitialPart });
 
-            const address = await this.provider.getAddress();
-            const signature = await this.provider.getSignature();
+            const address = account.address;
+            const signature = account.signature;
             const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
             verifyNativeAuthToken(nativeAuthToken);
@@ -70,7 +70,7 @@ export class WalletConnectV2 {
     async signTransaction() {
         await this.provider.init();
 
-        const sender = await this.provider.getAddress();
+        const sender = this.provider.getAddress();
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
@@ -91,7 +91,7 @@ export class WalletConnectV2 {
     async signTransactions() {
         await this.provider.init();
 
-        const sender = await this.provider.getAddress();
+        const sender = this.provider.getAddress();
         const firstTransaction = new Transaction({
             nonce: 43,
             value: "1",
@@ -124,13 +124,30 @@ export class WalletConnectV2 {
 
     async signMessage() {
       await this.provider.init();
+      const address = this.provider.getAddress();
 
-      const message = new SignableMessage({
-          message: Buffer.from("hello")
+      const message = new Message({
+          address: new Address(address),
+          data: Buffer.from("hello"),
       });
 
-      await this.provider.signMessage(message);
-      alert(JSON.stringify(message.toJSON(), null, 4));
+      const signedMessage = await this.provider.signMessage(message);
+
+      this.displayOutcome(
+          "Message signed. Signature: ",
+          Buffer.from(signedMessage?.signature).toString("hex")
+      );
+    }
+
+    displayOutcome(message, outcome) {
+      if (!outcome) {
+        console.log(message);
+        alert(message);
+        return;
+      }
+
+      console.log(message, outcome);
+      alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
     }
 }
 
