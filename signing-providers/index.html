@@ -14,7 +14,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Web Wallet</h3>
+                    <h3>[🌐] Web Wallet URL</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -45,7 +45,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Web Wallet Cross-Window</h3>
+                    <h3>[🗂️] Web Wallet Cross-Window</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -64,7 +64,26 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>xAlias</h3>
+                    <h3>[🦊] Metamask</h3>
+                    <p style="display: inline;"><b>NOTE:</b> use <u><b><pre style="display: inline;">localhost:8080</pre></b></u> to connect</p>                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="metamask.login()">Login</button>
+                    <button class="btn btn-info" onclick="metamask.loginWithToken()">Login with token</button>
+                    <button class="btn btn-info" onclick="metamask.signTransaction()">Sign transaction</button>
+                    <button class="btn btn-info" onclick="metamask.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="metamask.signMessage()">Sign
+                        message</button>
+                    <button class="btn btn-info" onclick="metamask.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>[﹫] xAlias</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -95,7 +114,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Extension (MultiversX DeFi Wallet)</h3>
+                    <h3>[🧩] Extension (MultiversX DeFi Wallet)</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -113,7 +132,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Wallet Connect V2 ( xPortal )</h3>
+                    <h3>[📱] Wallet Connect V2 ( xPortal )</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -151,7 +170,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <div class="card-title">
-                    <h3>Hardware Wallet</h3>
+                    <h3>[𝍍] Hardware Wallet</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -214,6 +233,7 @@
         const xAlias = new XAlias();
         const extension = new Extension();
         const walletConnectV2 = new WalletConnectV2();
+        const metamask = new Metamask();
         const hw = new HW();
 
         const webviewChild = document.getElementById("webviewChild");
