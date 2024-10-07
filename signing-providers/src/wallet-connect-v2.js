@@ -15,7 +15,7 @@ export class WalletConnectV2 {
         return {
             onClientLogin: async function () {
                 closeModal();
-                const address = await self.provider.getAddress();
+                const address = self.provider.getAddress();
                 alert(`onClientLogin(), address: ${address}`);
             },
             onClientLogout: function () {
@@ -49,10 +49,10 @@ export class WalletConnectV2 {
         await openModal(uri);     
         
         try {
-            await this.provider.login({ approval, token: nativeAuthInitialPart });
+            const account = await this.provider.login({ approval, token: nativeAuthInitialPart });
 
-            const address = await this.provider.getAddress();
-            const signature = await this.provider.getSignature();
+            const address = account.address;
+            const signature = account.signature;
             const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
             verifyNativeAuthToken(nativeAuthToken);
@@ -70,7 +70,7 @@ export class WalletConnectV2 {
     async signTransaction() {
         await this.provider.init();
 
-        const sender = await this.provider.getAddress();
+        const sender = this.provider.getAddress();
         const transaction = new Transaction({
             nonce: 42,
             value: "1",
@@ -91,7 +91,7 @@ export class WalletConnectV2 {
     async signTransactions() {
         await this.provider.init();
 
-        const sender = await this.provider.getAddress();
+        const sender = this.provider.getAddress();
         const firstTransaction = new Transaction({
             nonce: 43,
             value: "1",
