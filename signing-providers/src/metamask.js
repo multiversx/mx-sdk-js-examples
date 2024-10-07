@@ -4,8 +4,9 @@ import {
   Transaction,
   TransactionPayload,
 } from "@multiversx/sdk-core";
-import { CHAIN_ID } from "./config";
-import { MetamaskProvider } from "@multiversx/sdk-metamask-provider/out/metamaskProvider";
+import { CHAIN_ID, METAMASK_SNAP_WALLET_ADDRESS } from "./config.devnet";
+import { IframeProvider } from "@multiversx/sdk-web-wallet-iframe-provider/out";
+import { IframeLoginTypes } from "@multiversx/sdk-web-wallet-iframe-provider/out/constants";
 import {
   createNativeAuthInitialPart,
   packNativeAuthToken,
@@ -16,11 +17,15 @@ const callbackUrl = window.location.href;
 
 export class Metamask {
   constructor() {
-    this._provider = MetamaskProvider.getInstance();
+    this._provider = IframeProvider.getInstance();
     this._address = "";
   }
 
   async init() {
+    this._provider.setLoginType(IframeLoginTypes.metamask);
+    console.log("Metamask snap wallet address:" + METAMASK_SNAP_WALLET_ADDRESS);
+
+    this._provider.setWalletUrl(METAMASK_SNAP_WALLET_ADDRESS);
     await this._provider.init();
   }
 
@@ -40,7 +45,7 @@ export class Metamask {
     await this.init();
 
     const nativeAuthInitialPart = await createNativeAuthInitialPart();
-    await this._provider.login({ token: nativeAuthInitialPart, callbackUrl });
+    await this._provider.login({ token: nativeAuthInitialPart });
 
     const address = this._provider.account.address;
     const signature = this._provider.account.signature;
@@ -138,11 +143,22 @@ export class Metamask {
       data: Buffer.from("hello"),
     });
 
-    const response = await this._provider.signMessage(message);
+    const signedMessage = await this._provider.signMessage(message);
 
-    console.log("Message, upon signing:", message.toJSON());
-    console.log("Response:", response.toJSON());
+    this.displayOutcome(
+      "Message signed. Signature: ",
+      Buffer.from(signedMessage?.signature).toString("hex")
+    );
+  }
 
-    alert(JSON.stringify(response, null, 4));
+  displayOutcome(message, outcome) {
+    if (!outcome) {
+      console.log(message);
+      alert(message);
+      return;
+    }
+
+    console.log(message, outcome);
+    alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
   }
 }
