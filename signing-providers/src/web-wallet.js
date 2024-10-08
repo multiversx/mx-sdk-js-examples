@@ -1,4 +1,4 @@
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
@@ -7,6 +7,7 @@ import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 export class WebWallet {
     constructor() {
         this.provider = new WalletProvider(WALLET_PROVIDER_URL);
+        this._address = "";
     }
 
     async login() {
@@ -18,7 +19,7 @@ export class WebWallet {
         const nativeAuthInitialPart = await createNativeAuthInitialPart();
         // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage"). 
         // In real-life, use the approach that best suits your application.
-        await localStorage.setItem("web-wallet-example:nativeAuthInitialPart", nativeAuthInitialPart);
+        localStorage.setItem("web-wallet-example:nativeAuthInitialPart", nativeAuthInitialPart);
         const callbackUrl = getCurrentLocation();
         await this.provider.login({ callbackUrl: callbackUrl, token: nativeAuthInitialPart });
     }
@@ -29,11 +30,17 @@ export class WebWallet {
     }
 
     async showAddress() {
-        alert(getUrlParams().address || "Try to login first.");
+        const address = getUrlParams().address;
+        this._address = address;
+        alert(address || "Try to login first.");
     }
 
     async showTokenSignature() {
-        alert(getUrlParams().signature || "Try to login (with token) first.");
+        const signature = getUrlParams().signature;
+        this.displayOutcome(
+            signature ? "Signature: " : "Error: ",
+            signature ? signature : "Try to login (with token) first."
+        );
     }
 
     async validateTokenSignature() {
@@ -114,14 +121,33 @@ export class WebWallet {
     }
 
     async signMessage() {
-        const message = new SignableMessage({ message: "hello" });
+        if(!this._address) {
+            return this.displayOutcome("Unable to sign.", "Login & press Show address first.")
+        }
+
+        const message = new Message({
+          address: new Address(this._address),
+          data: Buffer.from("hello"),
+        });
+    
         const callbackUrl = getCurrentLocation();
         await this.provider.signMessage(message, { callbackUrl });
     }
 
     async showMessageSignature() {
         const signature = this.provider.getMessageSignatureFromWalletUrl();
-        alert(`Signature: ${signature}`);
+        return this.displayOutcome("Signature:", signature)
+    }
+
+    displayOutcome(message, outcome) {
+        if (!outcome) {
+          console.log(message);
+          alert(message);
+          return;
+        }
+    
+        console.log(message, outcome);
+        alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
     }
 }
 
