@@ -3,6 +3,7 @@ import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
+import { displayOutcome } from "./helpers";
 
 export class WebWallet {
     constructor() {
@@ -32,12 +33,15 @@ export class WebWallet {
     async showAddress() {
         const address = getUrlParams().address;
         this._address = address;
-        alert(address || "Try to login first.");
+        displayOutcome(
+            address ? "Address: " : "Error: ",
+            address ? address : "Try to login first."
+        );
     }
 
     async showTokenSignature() {
         const signature = getUrlParams().signature;
-        this.displayOutcome(
+        displayOutcome(
             signature ? "Signature: " : "Error: ",
             signature ? signature : "Try to login (with token) first."
         );
@@ -55,7 +59,7 @@ export class WebWallet {
     async signTransaction() {
         const sender = getUrlParams().address;
         if (!sender) {
-            alert("Try to login first.");
+            displayOutcome("Try to login first.");
             return;
         }
 
@@ -76,7 +80,7 @@ export class WebWallet {
     async signTransactions() {
         const sender = getUrlParams().address;
         if (!sender) {
-            alert("Try to login first.");
+            displayOutcome("Try to login first.");
             return;
         }
 
@@ -122,7 +126,7 @@ export class WebWallet {
 
     async signMessage() {
         if(!this._address) {
-            return this.displayOutcome("Unable to sign.", "Login & press Show address first.")
+            return displayOutcome("Unable to sign.", "Login & press Show address first.")
         }
 
         const message = new Message({
@@ -136,18 +140,7 @@ export class WebWallet {
 
     async showMessageSignature() {
         const signature = this.provider.getMessageSignatureFromWalletUrl();
-        return this.displayOutcome("Signature:", signature)
-    }
-
-    displayOutcome(message, outcome) {
-        if (!outcome) {
-          console.log(message);
-          alert(message);
-          return;
-        }
-    
-        console.log(message, outcome);
-        alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
+        return displayOutcome("Signature:", signature)
     }
 }
 

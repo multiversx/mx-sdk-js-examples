@@ -12,6 +12,7 @@ import {
   packNativeAuthToken,
   verifyNativeAuthToken,
 } from "./auth";
+import { displayOutcome } from "./helpers";
 
 const callbackUrl = window.location.href;
 
@@ -145,20 +146,9 @@ export class Metamask {
 
     const signedMessage = await this._provider.signMessage(message);
 
-    this.displayOutcome(
+    displayOutcome(
       "Message signed. Signature: ",
       Buffer.from(signedMessage?.signature).toString("hex")
     );
-  }
-
-  displayOutcome(message, outcome) {
-    if (!outcome) {
-      console.log(message);
-      alert(message);
-      return;
-    }
-
-    console.log(message, outcome);
-    alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
   }
 }
