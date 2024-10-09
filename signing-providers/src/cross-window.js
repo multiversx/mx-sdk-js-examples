@@ -1,6 +1,6 @@
 import {
   Address,
-  SignableMessage,
+  Message,
   Transaction,
   TransactionPayload,
 } from "@multiversx/sdk-core";
@@ -11,6 +11,7 @@ import {
   packNativeAuthToken,
   verifyNativeAuthToken,
 } from "./auth";
+import { displayOutcome } from "./helpers";
 
 const walletAddress = "https://testnet-wallet.multiversx.com";
 const callbackUrl = window.location.href;
@@ -58,7 +59,7 @@ export class CrossWindowWallet {
   async logout() {
     const response = await this._provider.logout();
 
-    console.log("Logout response:" + JSON.stringify(response));
+    displayOutcome("Logout response:", response);
 
     return response;
   }
@@ -133,16 +134,18 @@ export class CrossWindowWallet {
 
   async signMessage() {
     await this._provider.init();
+    const address = this._address;
 
-    const message = new SignableMessage({
-      message: Buffer.from("hello"),
+    const message = new Message({
+        address: new Address(address),
+        data: Buffer.from("hello"),
     });
 
-    const response = await this._provider.signMessage(message);
+    const signedMessage = await this._provider.signMessage(message);
 
-    console.log("Message, upon signing:", message.toJSON());
-    console.log("Response:", response.toJSON());
-
-    alert(JSON.stringify(response, null, 4));
+    displayOutcome(
+        "Message signed. Signature: ",
+        Buffer.from(signedMessage?.signature).toString("hex")
+    );
   }
 }

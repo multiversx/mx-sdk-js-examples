@@ -3,6 +3,8 @@ import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider
 import QRCode from "qrcode";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { CHAIN_ID, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from "./config";
+import { displayOutcome } from "./helpers";
+
 
 export class WalletConnectV2 {
     constructor() {
@@ -133,21 +135,10 @@ export class WalletConnectV2 {
 
       const signedMessage = await this.provider.signMessage(message);
 
-      this.displayOutcome(
+      displayOutcome(
           "Message signed. Signature: ",
           Buffer.from(signedMessage?.signature).toString("hex")
       );
-    }
-
-    displayOutcome(message, outcome) {
-      if (!outcome) {
-        console.log(message);
-        alert(message);
-        return;
-      }
-
-      console.log(message, outcome);
-      alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
     }
 }
 

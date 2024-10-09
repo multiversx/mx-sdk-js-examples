@@ -1,7 +1,8 @@
-import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { ExtensionProvider } from "@multiversx/sdk-extension-provider";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { CHAIN_ID } from "./config";
+import { displayOutcome } from "./helpers";
 
 export class Extension {
     constructor() {
@@ -10,19 +11,19 @@ export class Extension {
 
     async login() {
         await this.provider.init();
-        const address = await this.provider.login();
+        const account = await this.provider.login();
 
-        alert(`Address: ${address}`);
+        alert(`Address: ${account.address}`);
     }
 
     async loginWithToken() {
         await this.provider.init();
 
         const nativeAuthInitialPart = await createNativeAuthInitialPart();
-        await this.provider.login({ token: nativeAuthInitialPart });
+        const account = await this.provider.login({ token: nativeAuthInitialPart });
 
-        const address = this.provider.account.address;
-        const signature = this.provider.account.signature;
+        const address = account.address;
+        const signature = account.signature;
         const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
 
         verifyNativeAuthToken(nativeAuthToken);
@@ -92,12 +93,19 @@ export class Extension {
     async signMessage() {
         await this.provider.init();
 
-        const message = new SignableMessage({
-            message: Buffer.from("hello")
+        const address = await this.provider.getAddress();
+
+        const message = new Message({
+            address: new Address(address),
+            data: Buffer.from("hello"),
         });
 
-        await this.provider.signMessage(message);
-        alert(JSON.stringify(message.toJSON(), null, 4));
+        const signedMessage = await this.provider.signMessage(message);
+
+        displayOutcome(
+            "Message signed. Signature: ",
+            Buffer.from(signedMessage?.signature).toString("hex")
+        );
     }
 }
 

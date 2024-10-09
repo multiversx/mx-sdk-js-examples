@@ -4,6 +4,7 @@ import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { API_URL, WALLET_PROVIDER_URL, CHAIN_ID } from "./config";
+import { displayOutcome } from "./helpers";
 
 export class HW {
     constructor() {
@@ -22,7 +23,7 @@ export class HW {
 
         const address = await this.hwProvider.getAddress();
 
-        this.displayOutcome("Logged in. Address:", address);
+        displayOutcome("Logged in. Address:", address);
     }
 
     async loginWithToken() {
@@ -57,7 +58,7 @@ export class HW {
 
         await this.hwProvider.setAddressIndex(addressIndex);
 
-        this.displayOutcome(`Address has been set: ${await this.hwProvider.getAddress()}.`)
+        displayOutcome(`Address has been set: ${await this.hwProvider.getAddress()}.`)
     }
 
     async signTransaction() {
@@ -86,12 +87,12 @@ export class HW {
             const guardedTransactions = await this.guardTransactions([
                 signedTransaction,
             ]);
-            this.displayOutcome(
+            displayOutcome(
                 "Transaction signed & guarded.",
                 JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
             );
         } else {
-            this.displayOutcome("Transaction signed.", signedTransaction.toSendable());
+            displayOutcome("Transaction signed.", signedTransaction.toSendable());
         }
     }
 
@@ -136,12 +137,12 @@ export class HW {
             const guardedTransactions = await this.guardTransactions(
                 signedTransactions
             );
-            this.displayOutcome(
+            displayOutcome(
                 "Transactions signed & guarded.",
                 JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
             );
         } else {
-            this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
+            displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
         }
     }
 
@@ -165,7 +166,7 @@ export class HW {
             signedTransactions.push(transaction);
         }
 
-        this.displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
+        displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
     }
 
     async signMessage() {
@@ -179,7 +180,7 @@ export class HW {
 
         const signedMessage = await this.hwProvider.signMessage(message);
 
-        this.displayOutcome(
+        displayOutcome(
             "Message signed. Signature: ",
             Buffer.from(signedMessage?.signature).toString("hex")
         );
@@ -205,21 +206,5 @@ export class HW {
         );
 
         return guardedTransactions;
-    }
-
-    displayOutcome(message, outcome) {
-        if (!outcome) {
-            console.log(message);
-            alert(message);
-            return;
-        }
-
-        console.log(message, outcome);
-        alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
-    }
-
-    displayError(error) {
-        console.error(error);
-        alert(`Error: ${error}`);
     }
 }
