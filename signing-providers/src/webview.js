@@ -101,7 +101,7 @@ export class Webview {
             address: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: Buffer.from("hello"),
         });
-
+        
         const signedMessage = await this._provider.signMessage(message);
 
         displayOutcome(
