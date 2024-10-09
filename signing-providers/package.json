@@ -16,7 +16,7 @@
     "@multiversx/sdk-wallet": "4.5.1",
     "@multiversx/sdk-wallet-connect-provider": "5.0.0",
     "@multiversx/sdk-web-wallet-cross-window-provider": "2.0.1",
-    "@multiversx/sdk-web-wallet-iframe-provider": "2.0.0",
+    "@multiversx/sdk-web-wallet-iframe-provider": "2.0.0-alpha.0",
     "@multiversx/sdk-web-wallet-provider": "4.0.0",
     "@multiversx/sdk-webview-provider": "1.0.0",
     "protobufjs": "^7.4.0",
