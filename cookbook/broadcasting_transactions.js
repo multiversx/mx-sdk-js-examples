@@ -38,8 +38,7 @@ tx.nonce = 42n;
 // md-insert:forSimplicityWeUseUserSigner
 
 // ```js
-import { TransactionComputer } from "@multiversx/sdk-core";
-import { UserSigner } from "@multiversx/sdk-wallet";
+import { TransactionComputer, UserSigner } from "@multiversx/sdk-core";
 import { promises } from "fs";
 
 const fileContent = await promises.readFile("../testwallets/alice.json", { encoding: "utf8" });
