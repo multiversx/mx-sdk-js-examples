@@ -1,5 +1,4 @@
-const { Mnemonic, UserSigner, UserVerifier } = require("@multiversx/sdk-wallet");
-const { Address, GasEstimator, SignableMessage, Transaction, TokenTransfer, TransactionPayload } = require("@multiversx/sdk-core");
+const { Address, GasEstimator, SignableMessage, Transaction, TokenTransfer, TransactionPayload, Mnemonic, UserSigner, UserVerifier } = require("@multiversx/sdk-core");
 const axios = require("axios");
 
 // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/mnemonic.txt
