@@ -6,7 +6,7 @@
   "author": "MultiversX",
   "dependencies": {
     "axios": "1.7.7",
-    "@multiversx/sdk-core": "13.10.0"
+    "@multiversx/sdk-core": "13.13.0"
   },
   "devDependencies": {}
 }
