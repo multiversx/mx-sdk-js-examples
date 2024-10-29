@@ -156,8 +156,6 @@ const transactionWithMultipleTokenTransfers = factory.createTransactionForExecut
 // However, since the `parseExecute` method requires a `class:TransactionOutcome` object as input,
 // we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a `class:TransactionsConverter`.
 
-// md-insert:coreAndNetworkProvidersImpedanceMismatch
-
 // ```js
 import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";
 
