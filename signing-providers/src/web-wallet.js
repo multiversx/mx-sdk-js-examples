@@ -1,4 +1,4 @@
-import { Address, Message, Transaction, TransactionPayload, ApiNetworkProvider } from "@multiversx/sdk-core";
+import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
@@ -8,7 +8,6 @@ import { displayOutcome } from "./helpers";
 export class WebWallet {
     constructor() {
         this.provider = new WalletProvider(WALLET_PROVIDER_URL);
-        this.apiProvder = new ApiNetworkProvider("https://testnet-api.multiversx.com", { clientName: "multiversx-sdk-js-examples" });
         this._address = "";
     }
 
@@ -110,7 +109,6 @@ export class WebWallet {
 
     async showSignedTransactions() {
         const plainSignedTransactions = this.provider.getTransactionsFromWalletUrl();
-        console.log(await this.apiProvder.getAccount(new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa")))
         alert(JSON.stringify(plainSignedTransactions, null, 4));
 
         // Now let's convert them back to sdk-js' Transaction objects.
