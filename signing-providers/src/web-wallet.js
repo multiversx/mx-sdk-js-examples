@@ -125,15 +125,15 @@ export class WebWallet {
     }
 
     async signMessage() {
-        if(!this._address) {
+        if (!this._address) {
             return displayOutcome("Unable to sign.", "Login & press Show address first.")
         }
 
         const message = new Message({
-          address: new Address(this._address),
-          data: Buffer.from("hello"),
+            address: new Address(this._address),
+            data: Buffer.from("hello"),
         });
-    
+
         const callbackUrl = getCurrentLocation();
         await this.provider.signMessage(message, { callbackUrl });
     }
