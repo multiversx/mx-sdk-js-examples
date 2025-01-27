@@ -8,7 +8,7 @@
   },
   "author": "MultiversX",
   "dependencies": {
-    "@multiversx/sdk-core": "13.15.0",
+    "@multiversx/sdk-core": "13.17.1",
     "@multiversx/sdk-dapp-utils": "0.1.0",
     "@multiversx/sdk-extension-provider": "4.0.0",
     "@multiversx/sdk-hw-provider": "7.0.0",
@@ -16,7 +16,7 @@
     "@multiversx/sdk-wallet-connect-provider": "5.0.0",
     "@multiversx/sdk-web-wallet-cross-window-provider": "2.0.1",
     "@multiversx/sdk-web-wallet-iframe-provider": "2.0.0",
-    "@multiversx/sdk-web-wallet-provider": "4.0.0",
+    "@multiversx/sdk-web-wallet-provider": "4.1.0-beta.1",
     "@multiversx/sdk-webview-provider": "2.0.0-alpha.0",
     "protobufjs": "^7.4.0",
     "punycode": "2.3.0",
