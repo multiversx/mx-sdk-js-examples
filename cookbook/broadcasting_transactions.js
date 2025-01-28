@@ -30,11 +30,12 @@ tx.nonce = 42n;
 // ### Preparing a relayed transaction
 
 // We are currently on the third iteration of relayed transactions. V1 and V2 are soon to be deactivated so we'll focus on V3. 
-// For V3, two new fields have been added on transactions: relayer and relayerSignature. 
+// For V3, two new fields have been added on transactions: `relayer` and `relayerSignature`. 
 // Before the sender signs the transaction, the relayer needs to be set. After the sender has signed the transaction, the relayer can also sign the transaction and broadcast it. 
 // Keep in mind that, for relayed V3 transactions we need an extra 50_000 gas. Let's see how we can create a relayed transaction:
 
 // ```js
+import { Transaction } from "@multiversx/sdk-core";
 
 const grace = await loadTestWallet("grace");
 
@@ -46,7 +47,7 @@ const transactionComputer = new TransactionComputer();
 const nonce = (await apiProvider.getAccount(grace.getAddress())).nonce;
 
 // # create the transaction
-const transaction = {
+const transaction = new Transaction({
     receiver: grace.getAddress().bech32(),
     sender: grace.getAddress().bech32(),
     gasPrice: BigInt(1000000000),
@@ -56,15 +57,7 @@ const transaction = {
     nonce: BigInt(nonce),
     relayer: alice.getAddress(),
     value: BigInt(1),
-    senderUsername: "",
-    receiverUsername: "",
-    guardian: "",
-    guardianSignature: new Uint8Array(),
-    options: 0,
-    data: new Uint8Array(),
-    signature: new Uint8Array(),
-    relayerSignature: new Uint8Array(),
-};
+});
 
 // # sender signs the transaction
 transaction.signature = await grace.signer.sign(transactionComputer.computeBytesForSigning(transaction));
