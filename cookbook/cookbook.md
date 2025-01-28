@@ -118,7 +118,6 @@ const transaction = new Transaction({
     gasPrice: BigInt(1000000000),
     gasLimit: BigInt(150000),
     chainID: "D",
-    version: 1,
     nonce: BigInt(nonce),
     relayer: alice.getAddress(),
     value: BigInt(1),
