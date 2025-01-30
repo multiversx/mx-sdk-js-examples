@@ -23,6 +23,7 @@
                     <button class="btn btn-info" onclick="webWallet.loginWithToken()">Login with token</button>
                     <button class="btn btn-info" onclick="webWallet.signTransaction()">Sign transaction</button>
                     <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
+                    <button class="btn btn-info" onclick="webWallet.signRelayedTransaction()">Sign relayed transaction</button>
                     <button class="btn btn-info" onclick="webWallet.signMessage()">Sign
                         message</button>
                     <button class="btn btn-info" onclick="webWallet.logout()">Logout</button>
@@ -38,6 +39,11 @@
                         transactions</button>
                     <button class="btn btn-info" onclick="webWallet.showMessageSignature()">Show message
                         signature</button>
+                </div>
+                <div class="mt-4">
+                    <h5>Broadcast</h5>
+
+                    <button class="btn btn-info" onclick="webWallet.sendSignedTransactions()">Send signed transactions</button>
                 </div>
             </div>
         </div>
