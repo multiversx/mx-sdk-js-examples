@@ -117,8 +117,11 @@ export class WebWallet {
 
         const senderShard = new AddressComputer().getShardOfAddress(Address.newFromBech32(sender));
         const relayer = {
+            // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/mike.pem
             0: "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa",
+            // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/grace.pem
             1: "erd1r69gk66fmedhhcg24g2c5kn2f2a5k4kvpr6jfw67dn2lyydd8cfswy6ede",
+            // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/carol.pem
             2: "erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8"
         }[senderShard];
 
