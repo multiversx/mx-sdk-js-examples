@@ -1,5 +1,4 @@
-import { AbiRegistry, Address, Token, TokenTransfer, TransactionComputer, TransactionWatcher } from "@multiversx/sdk-core"; // md-ignore
-import { UserSigner } from "@multiversx/sdk-wallet"; // md-ignore
+import { AbiRegistry, Address, Token, TokenTransfer, TransactionComputer, TransactionWatcher, UserSigner } from "@multiversx/sdk-core"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import { addressOfAlice, apiNetworkProvider, loadAbi, syncAccounts } from "./framework.js"; // md-ignore
 
@@ -156,8 +155,6 @@ const transactionWithMultipleTokenTransfers = factory.createTransactionForExecut
 // Once a transaction is completed, you can parse the results using a `class:SmartContractTransactionsOutcomeParser`.
 // However, since the `parseExecute` method requires a `class:TransactionOutcome` object as input,
 // we need to first convert our `TransactionOnNetwork` object to a `TransactionOutcome`, by means of a `class:TransactionsConverter`.
-
-// md-insert:coreAndNetworkProvidersImpedanceMismatch
 
 // ```js
 import { SmartContractTransactionsOutcomeParser, TransactionsConverter } from "@multiversx/sdk-core";

@@ -39,15 +39,6 @@ In real-world dApps, transactions are signed by end-users using their wallet, th
 :::
 """,
 
-    "coreAndNetworkProvidersImpedanceMismatch": f""":::important
-Generally speaking, the components of `sdk-core` and `sdk-network-providers` have different concerns.
-The former aims to be agnostic to network providers, while the latter is designed to cover specifics of [the available REST APIs]({DOCS_URL}/sdk-and-tools/rest-api).
-
-This being said, a certain impedance mismatch is expected between the two packages. This is resolved by means of specially crafted _converters_ and _adapters_.
-Currently, for the JavaScript / TypeScript SDKs, the _converters_ and _adapters_ are residents of the `sdk-core` package.
-However, this might change in the future - see the [sdk-specs](https://github.com/multiversx/mx-sdk-specs).
-:::""",
-
     "mixedTypedValuesAndNativeValues": """:::tip
 When creating transactions using `class:SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `class:TypedValue` objects as arguments for deployments and interactions.

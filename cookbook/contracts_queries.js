@@ -10,8 +10,6 @@ const abi = await loadAbi("../contracts/adder.abi.json"); // md-ignore
 // You will notice that the `class:SmartContractQueriesController` requires a `QueryRunner` object at initialization.
 // A `NetworkProvider`, slighly adapted, is used to satisfy this requirement.
 
-// md-insert:coreAndNetworkProvidersImpedanceMismatch
-
 // ```js
 import { QueryRunnerAdapter, SmartContractQueriesController } from "@multiversx/sdk-core";
 

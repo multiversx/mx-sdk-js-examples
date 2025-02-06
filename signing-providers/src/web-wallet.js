@@ -1,13 +1,14 @@
-import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, AddressComputer, ApiNetworkProvider, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
+import { API_URL, CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 import { displayOutcome } from "./helpers";
 
 export class WebWallet {
     constructor() {
         this.provider = new WalletProvider(WALLET_PROVIDER_URL);
+        this.apiNetworkProvider = new ApiNetworkProvider(API_URL, { clientName: "multiversx-sdk-js-examples" });
         this._address = "";
     }
 
@@ -107,6 +108,44 @@ export class WebWallet {
         await this.provider.signTransactions([firstTransaction, secondTransaction]);
     }
 
+    async signRelayedTransaction() {
+        const sender = getUrlParams().address;
+        if (!sender) {
+            displayOutcome("Try to login first.");
+            return;
+        }
+
+        const senderShard = new AddressComputer().getShardOfAddress(Address.newFromBech32(sender));
+        const relayer = {
+            // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/mike.pem
+            0: "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa",
+            // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/grace.pem
+            1: "erd1r69gk66fmedhhcg24g2c5kn2f2a5k4kvpr6jfw67dn2lyydd8cfswy6ede",
+            // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/carol.pem
+            2: "erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8"
+        }[senderShard];
+
+        console.log("Relayer shard:", senderShard);
+        console.log("Relayer:", relayer);
+
+        const senderNonce = await this.recallNonce(sender);
+        const data = Buffer.from("hello");
+
+        const transaction = new Transaction({
+            nonce: senderNonce,
+            value: "10000000000000000",
+            sender: Address.newFromBech32(sender),
+            receiver: Address.newFromBech32("erd1testnlersh4z0wsv8kjx39me4rmnvjkwu8dsaea7ukdvvc9z396qykv7z7"),
+            relayer: Address.newFromBech32(relayer),
+            gasPrice: 1000000000,
+            gasLimit: 100000 + 1500 * data.length,
+            data: data,
+            chainID: CHAIN_ID
+        });
+
+        await this.provider.signTransaction(transaction);
+    }
+
     async showSignedTransactions() {
         const plainSignedTransactions = this.provider.getTransactionsFromWalletUrl();
         alert(JSON.stringify(plainSignedTransactions, null, 4));
@@ -124,16 +163,28 @@ export class WebWallet {
         }
     }
 
+    async sendSignedTransactions() {
+        const plainSignedTransactions = this.provider.getTransactionsFromWalletUrl();
+
+        for (const plainTransaction of plainSignedTransactions) {
+            const plainTransactionClone = structuredClone(plainTransaction);
+            plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
+            const transaction = Transaction.fromPlainObject(plainTransactionClone);
+
+            await this.apiNetworkProvider.sendTransaction(transaction);
+        }
+    }
+
     async signMessage() {
-        if(!this._address) {
+        if (!this._address) {
             return displayOutcome("Unable to sign.", "Login & press Show address first.")
         }
 
         const message = new Message({
-          address: new Address(this._address),
-          data: Buffer.from("hello"),
+            address: new Address(this._address),
+            data: Buffer.from("hello"),
         });
-    
+
         const callbackUrl = getCurrentLocation();
         await this.provider.signMessage(message, { callbackUrl });
     }
@@ -142,11 +193,23 @@ export class WebWallet {
         const signature = this.provider.getMessageSignatureFromWalletUrl();
         return displayOutcome("Signature:", signature)
     }
+
+    async recallNonce(address) {
+        const accountOnNetwork = await this.apiNetworkProvider.getAccount(Address.newFromBech32(address));
+        const nonce = accountOnNetwork.nonce;
+
+        console.log(`recallNonce(), address = ${address}, nonce = ${nonce}`);
+
+        return nonce;
+    }
 }
 
 function getUrlParams() {
     const queryString = window.location.search.slice(1);
     const params = qs.parse(queryString);
+
+    console.log("URL params", params);
+
     return params;
 }
 
