@@ -13,7 +13,8 @@ import {
 } from "./auth";
 import { displayOutcome } from "./helpers";
 
-const walletAddress = "https://testnet-wallet.multiversx.com";
+const walletAddress = "https://localhost:3002";
+// const walletAddress = "https://testnet-wallet.multiversx.com";
 const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
@@ -132,20 +133,74 @@ export class CrossWindowWallet {
     alert(JSON.stringify(response, null, 4));
   }
 
+  async signRelayedTransaction() {
+    console.log(112, this._provider.account);
+
+    const address = this._provider.account.address;
+
+    const firstTransaction = new Transaction({
+      value: "0",
+      data: new TransactionPayload(""),
+      receiver: address,
+      sender: address,
+      relayer: new Address(address),
+      gasLimit: 50000,
+      gasPrice: 1000000000,
+      chainID: CHAIN_ID,
+      version: 1,
+    });
+
+    const [signedFirstTransaction] = await this._provider.signTransactions(
+      [firstTransaction],
+      {
+        callbackUrl: encodeURIComponent(callbackUrl),
+      }
+    );
+
+    const signedTx = signedFirstTransaction?.[0].toPlainObject();
+
+    if (!signedTx) {
+      return;
+    }
+
+    const { signature: relayerSignature, ...rest } = signedTx;
+
+    const secondTransaction = Transaction.fromPlainObject({
+      ...rest,
+      relayerSignature,
+    });
+
+    const response = await this._provider.signTransactions(
+      [secondTransaction],
+      {
+        callbackUrl: encodeURIComponent(callbackUrl),
+      }
+    );
+
+    console.log("First transaction, upon signing:", firstTransaction);
+    console.log("Second transaction, upon signing:", secondTransaction);
+    console.log(
+      "Response:",
+      response.map((r) => r.toPlainObject())
+    );
+
+    alert(JSON.stringify(response, null, 4));
+  }
+
   async signMessage() {
     await this._provider.init();
     const address = this._address;
 
     const message = new Message({
-        address: new Address(address),
-        data: Buffer.from("hello"),
+      address: new Address(address),
+      data: Buffer.from("hello"),
     });
 
     const signedMessage = await this._provider.signMessage(message);
 
     displayOutcome(
-        "Message signed. Signature: ",
-        Buffer.from(signedMessage?.signature).toString("hex")
+      "Message signed. Signature: ",
+      Buffer.from(signedMessage?.signature).toString("hex")
     );
   }
 }
