@@ -13,8 +13,8 @@ import {
 } from "./auth";
 import { displayOutcome } from "./helpers";
 
-const walletAddress = "https://localhost:3002";
-// const walletAddress = "https://testnet-wallet.multiversx.com";
+const walletAddress = "https://testnet-wallet.multiversx.com";
+const explorerAddress = "https://testnet-api.multiversx.com";
 const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
@@ -134,9 +134,11 @@ export class CrossWindowWallet {
   }
 
   async signRelayedTransaction() {
-    console.log(112, this._provider.account);
-
     const address = this._provider.account.address;
+    const nonceResponse = await fetch(`${explorerAddress}/accounts/${address}`);
+    const { nonce } = await nonceResponse.json();
+
+    const transactionSignedByRelayer = sessionStorage.getItem("relayerTx");
 
     const firstTransaction = new Transaction({
       value: "0",
@@ -146,45 +148,48 @@ export class CrossWindowWallet {
       relayer: new Address(address),
       gasLimit: 50000,
       gasPrice: 1000000000,
+      nonce,
       chainID: CHAIN_ID,
       version: 1,
     });
 
-    const [signedFirstTransaction] = await this._provider.signTransactions(
-      [firstTransaction],
-      {
-        callbackUrl: encodeURIComponent(callbackUrl),
-      }
-    );
+    const transaction = transactionSignedByRelayer
+      ? Transaction.fromPlainObject(JSON.parse(transactionSignedByRelayer))
+      : firstTransaction;
 
-    const signedTx = signedFirstTransaction?.[0].toPlainObject();
+    const response = await this._provider.signTransactions([transaction], {
+      callbackUrl: encodeURIComponent(callbackUrl),
+    });
 
-    if (!signedTx) {
+    const signedTransaction = response[0].toPlainObject();
+
+    if (!signedTransaction) {
       return;
     }
 
-    const { signature: relayerSignature, ...rest } = signedTx;
+    if (transactionSignedByRelayer) {
+      sessionStorage.removeItem("relayerTx");
+      document.getElementById("relayed-tx-id").innerHTML = "1<sup>st</sup>";
+      console.log("Relayed Transaction, upon signing:", transaction);
+    } else {
+      const { signature: relayerSignature, ...rest } = signedTransaction;
+      const plainObjectTransaction = {
+        ...rest,
+        relayerSignature,
+      };
 
-    const secondTransaction = Transaction.fromPlainObject({
-      ...rest,
-      relayerSignature,
-    });
+      sessionStorage.setItem(
+        "relayerTx",
+        JSON.stringify(plainObjectTransaction)
+      );
+      document.getElementById("relayed-tx-id").innerHTML = "2<sup>nd</sup>";
+      console.log("First Transaction, upon signing:", transaction);
+    }
 
-    const response = await this._provider.signTransactions(
-      [secondTransaction],
-      {
-        callbackUrl: encodeURIComponent(callbackUrl),
-      }
-    );
-
-    console.log("First transaction, upon signing:", firstTransaction);
-    console.log("Second transaction, upon signing:", secondTransaction);
     console.log(
       "Response:",
       response.map((r) => r.toPlainObject())
     );
-
-    alert(JSON.stringify(response, null, 4));
   }
 
   async signMessage() {
