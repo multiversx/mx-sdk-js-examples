@@ -77,12 +77,12 @@ const key = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
 const accountWithNonce = new Account(secretKey);
 const devnetEntrypoint = new DevnetEntrypoint();
 
-// Fetch the current nonce from the network // md-comment
+// Fetch the current nonce from the network // md-as-comment
 account.nonce = await entrypoint.recallAccountNonce(account.address);
 
-// Create and send a transaction here... // md-comments 
+// Create and send a transaction here...
 
-// Increment nonce after each transaction // md-comment
+// Increment nonce after each transaction // md-as-comment
 const nonce = account.getNonceThenIncrement();
 // ```
 
@@ -105,21 +105,6 @@ const nonce = account.getNonceThenIncrement();
   account.saveToPem({ path: path.resolve("wallet.pem") });
 }
 // ```
-
-// Saving the Account to a Keystore File
-
-// ```js
-
-{
-  const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
-  const secretKey = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
-
-  const account = new Account(secretKey);
-  account.saveToKeystore({
-    path: path.resolve("keystoreWallet.json"),
-    password: "password"
-  });
-}
 
 // ```
 

@@ -46,15 +46,16 @@ import { TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
         chainID: "D"
     });
 
-    // serialize the transaction // md-comment
+    // serialize the transaction // md-as-comment
     const transactionComputer = new TransactionComputer()
     const serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
 
-    // apply the signature on the transaction // md-comment
+    // apply the signature on the transaction // md-as-comment
     transaction.signature = await secretKey.sign(serializedTransaction);
 
     console.log(transaction.toPlainObject());
 }
+// ```
 
 // Signing a Transaction by hash
 
@@ -75,13 +76,13 @@ import { TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
 
     const transactionComputer = new TransactionComputer();
 
-    // sets the least significant bit of the options field to `1` // md-comment
+    // sets the least significant bit of the options field to `1` // md-as-comment
     transactionComputer.applyOptionsForHashSigning(transaction);
 
-    // compute a keccak256 hash for signing // md-comment
+    // compute a keccak256 hash for signing // md-as-comment
     const hash = transactionComputer.computeHashForSigning(transaction)
 
-    // sign and apply the signature on the transaction // md-comment
+    // sign and apply the signature on the transaction // md-as-comment
     transaction.signature = await alice.sign(hash);
 
     console.log(transaction.toPlainObject());

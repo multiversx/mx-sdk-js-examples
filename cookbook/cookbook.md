@@ -20,8 +20,7 @@ If you'd like to connect to a third-party API, you can specify the url parameter
 
 ```js
 import { DevnetEntrypoint } from 'multiversx_sdk';
-
-const apiEntrypoint = new DevnetEntrypoint({ url: 'https://custom-multiversx-devnet-api.com' });
+const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-devnet-api.com' } ); s;
 ```
 
 ## Using a Proxy
@@ -32,10 +31,10 @@ By default, the DevnetEntrypoint uses the standard API. However, you can create 
 ```js
 import { DevnetEntrypoint } from 'multiversx_sdk';
 
-const customEntrypoint = new DevnetEntrypoint({
+const customEntrypoint = new DevnetEntrypoint( {
   url: 'https://devnet-gateway.multiversx.com',
   kind: 'proxy'
-});
+} );
 ```
 
 ## Creating Accounts
@@ -117,12 +116,12 @@ const key = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
 const accountWithNonce = new Account(secretKey);
 const devnetEntrypoint = new DevnetEntrypoint();
 
-Fetch the current nonce from the network // md-comment
+// Fetch the current nonce from the network
 account.nonce = await entrypoint.recallAccountNonce(account.address);
 
-Create and send a transaction here... // md-comments
+Create and send a transaction here...
 
-Increment nonce after each transaction // md-comment
+// Increment nonce after each transaction
 const nonce = account.getNonceThenIncrement();
 ```
 
@@ -145,21 +144,6 @@ Saving the Account to a PEM File
   account.saveToPem({ path: path.resolve("wallet.pem") });
 }
 ```
-
-Saving the Account to a Keystore File
-
-```js
-
-{
-  const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
-  const secretKey = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
-
-  const account = new Account(secretKey);
-  account.saveToKeystore({
-    path: path.resolve("keystoreWallet.json"),
-    password: "password"
-  });
-}
 
 ```
 
@@ -185,11 +169,9 @@ You can manage your account with a Ledger device, allowing you to sign both tran
 The Ledger device also stores the nonce.
 
 Note: The multiversx-sdk package does not include Ledger support by default. To enable it, install the package with Ledger dependencies:
-/*
 ```bash
 npm install @multiversx/sdk-ledger
 ```
-*/
 
 ## Creating a Ledger Account
 When instantiating a LedgerAccount, you can specify the index of the address to use. By default, index 0 is used.
@@ -272,7 +254,6 @@ The classes returned by the API expose the most commonly used fields directly fo
 Fetching the network config
 
 ```js
-import { DevnetEntrypoint } from '@multiversx/sdk-core';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -285,12 +266,11 @@ import { DevnetEntrypoint } from '@multiversx/sdk-core';
 Fetching the network status
 
 ```js
-import { DevnetEntrypoint } from '@multiversx/sdk-core';
   const entrypoint = new DevnetEntrypoint();
   const networkProvider = entrypoint.createNetworkProvider();
 
   const metaNetworkStatus = entrypoint.getNetworkStatus(); // fetches status from metachain
-  const networkStatus = entrypoint.getNetworkStatus(1); // fetches status from metachain}
+  const networkStatus = entrypoint.getNetworkStatus(1); // fetches status from metachain
 ```
 
 **Fetching a Block from the Network**
@@ -300,7 +280,6 @@ When using the **PROXY**, keep in mind that the shard must also be specified in 
 
 Fetching a block using the **API**
 ```js
-import { ApiNetworkProvider } from "multiversx-sdk";
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
   const blockHash = "1147e111ce8dd860ae43a0f0d403da193a940bfd30b7d7f600701dd5e02f347a";
   const block = await api.getBlock(blockHash);
@@ -309,7 +288,6 @@ import { ApiNetworkProvider } from "multiversx-sdk";
 Additionally, we can fetch the latest block from the network:
 
 ```js
-import { ApiNetworkProvider } from "multiversx-sdk";
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
   const latestBlock = await api.getLatestBlock();
 ```
@@ -328,7 +306,6 @@ We can also fetch the latest block from the network.
 By default, the shard will be the metachain, but we can specify a different shard if needed.
 
 ```js
-import { ProxyNetworkProvider } from "multiversx-sdk";
 
 const proxy = new ProxyNetworkProvider("https://devnet-api.multiversx.com");
 const latestBlock = proxy.getLatestBlock();
@@ -338,7 +315,7 @@ const latestBlock = proxy.getLatestBlock();
 To fetch an account, we need its address. Once we have the address, we create an `Address` object and pass it as an argument to the method.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
+import { Address } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
@@ -349,7 +326,6 @@ import { Address, DevnetEntrypoint } from "multiversx-sdk";
 We can also fetch an account's storage, allowing us to retrieve all key-value pairs saved for that account.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
@@ -359,7 +335,6 @@ import { Address, DevnetEntrypoint } from "multiversx-sdk";
 If we only want to fetch a specific key, we can do so as follows:
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
@@ -375,7 +350,6 @@ To implement this, we need to define the condition to check each time the accoun
 Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 ```js
-import { Address, AccountOnNetwork, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -392,7 +366,7 @@ To execute transactions, we use the network providers to broadcast them to the n
 Sending a Transaction
 
 ```js
-import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
+import { Transaction } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -412,7 +386,6 @@ import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 
 Sending multiple transactions
 ```js
-import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -452,7 +425,6 @@ import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 A transaction can be simulated before being sent for processing by the network. This is primarily used for smart contract calls, allowing you to preview the results produced by the smart contract.
 
 ```js
-import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -474,7 +446,6 @@ import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 Before sending a transaction to the network for processing, you can retrieve the estimated gas limit required for the transaction to be executed.
 
 ```js
-import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -499,7 +470,6 @@ import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 After sending a transaction, you may want to wait until it is processed before proceeding with another action. Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -511,7 +481,6 @@ import { Address, DevnetEntrypoint } from "multiversx-sdk";
 Similar to accounts, we can wait until a transaction meets a specific condition.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -525,7 +494,6 @@ import { Address, DevnetEntrypoint } from "multiversx-sdk";
 After sending a transaction, you may want to wait until it is processed before proceeding with another action. Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -537,7 +505,6 @@ import { Address, DevnetEntrypoint } from "multiversx-sdk";
 After sending a transaction, we can fetch it from the network using the transaction hash, which we receive after broadcasting the transaction.
 
 ```js
-import { Address, DevnetEntrypoint, TransactionOnNetwork } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -551,7 +518,7 @@ import { Address, DevnetEntrypoint, TransactionOnNetwork } from "multiversx-sdk"
 We can fetch a specific token (ESDT, MetaESDT, SFT, NFT) from an account by providing the account's address and the token identifier.
 
 ```js
-import { Address, DevnetEntrypoint, Token } from "multiversx-sdk";
+import { Token } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -568,7 +535,6 @@ import { Address, DevnetEntrypoint, Token } from "multiversx-sdk";
 Fetches all fungible tokens held by an account. Note that this method does not handle pagination, but it can be achieved using `doGetGeneric`.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -580,7 +546,6 @@ import { Address, DevnetEntrypoint } from "multiversx-sdk";
 Fetches all non-fungible tokens held by an account. Note that this method does not handle pagination, but it can be achieved using `doGetGeneric`.
 
 ```js
-import { DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -592,7 +557,6 @@ import { DevnetEntrypoint } from "multiversx-sdk";
 If we want to fetch the metadata of a token (e.g., owner, decimals, etc.), we can use the following methods:
 
 ```js
-import { DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -607,7 +571,6 @@ import { DevnetEntrypoint } from "multiversx-sdk";
 Smart contract queries, or view functions, are endpoints that only read data from the contract. To send a query to the observer nodes, we can proceed as follows:
 
 ```js
-import { Address, DevnetEntrypoint, Token } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -624,7 +587,6 @@ The methods exposed by the `ApiNetworkProvider` or `ProxyNetworkProvider` are th
 Let’s assume we want to retrieve all the transactions sent by Alice and call the `testFunction` function.
 
 ```js
-import { Address, DevnetEntrypoint } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
@@ -649,7 +611,7 @@ There are two ways to create controllers and factories:
 2. Manually instantiate them.
 
 ```js
-import { DevnetEntrypoint, TransfersController, TransferTransactionsFactory, TransactionsFactoryConfig } from '@multiversx/sdk-core';
+import { DevnetEntrypoint, TransactionsFactoryConfig, TransfersController, TransferTransactionsFactory } from '@multiversx/sdk-core';
 {
   const entrypoint = new DevnetEntrypoint();
 
@@ -671,7 +633,7 @@ We can send both native tokens (EGLD) and ESDT tokens using either the controlle
 When using the controller, the transaction will be signed because we’ll be working with an Account.
 
 ```js
-import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
+import { Account } from '@multiversx/sdk-core';
 {
   const entrypoint = new DevnetEntrypoint();
 
@@ -702,7 +664,6 @@ If you know you’ll only be sending native tokens, you can create the transacti
 When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 ```js
-import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
 import path from 'path';
 
 {
@@ -737,8 +698,7 @@ If you know you’ll only be sending native tokens, you can create the transacti
 ## Custom token transfers using the controller
 
 ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
+import { Token, TokenTransfer } from '@multiversx/sdk-core';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -775,8 +735,6 @@ If you know you'll only send ESDT tokens, the same transaction can be created us
 When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -820,8 +778,6 @@ Both native and custom tokens can now be sent. If a `nativeAmount` is provided a
 We can send both types of tokens using either the `controller` or the `factory`, but for simplicity, we’ll use the controller in this example.
 
 ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -857,8 +813,6 @@ To decode the data field, we use a tool called the `TransactionDecoder`. First, 
 TODO check how to decode data in js
 
 ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -900,7 +854,6 @@ Loading the ABI from a file
 ```js
 import { AbiRegistry } from "@multiversx/sdk-core";
 import { promises } from "fs";
-
 let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
 let abiObj = JSON.parse(abiJson);
 let abi = AbiRegistry.create(abiObj)
@@ -910,7 +863,6 @@ Loading the ABI from an URL
 
 ```js
 import axios from "axios";
-
 const response = await axios.get("https://github.com/multiversx/mx-sdk-js-core/raw/main/src/testdata/adder.abi.json");
 abi = AbiRegistry.create(response.data);
 ```
@@ -920,8 +872,6 @@ Manually construct the ABI
 If an ABI file isn’t available, but you know the contract’s endpoints and data types, you can manually construct the ABI.
 
 ```js
-import { AbiRegistry } from "@multiversx/sdk-core";
-
 abi = AbiRegistry.create({
   "endpoints": [{
       "name": "add",
@@ -932,8 +882,6 @@ abi = AbiRegistry.create({
 ```
 
 ```js
-import { AbiRegistry } from "@multiversx/sdk-core";
-
 abi = AbiRegistry.create({
   "endpoints": [
       {
@@ -967,10 +915,8 @@ This allows arguments to be passed as native values. If the ABI is not available
 # Deploying a Smart Contract Using the Controller
 
 ```js
-import { Account, Code, DevnetEntrypoint, AbiRegistry, U32Value } from '@multiversx/sdk-core';
-import { promises } from "fs";
+import { Account, Code, DevnetEntrypoint, U32Value } from '@multiversx/sdk-core';
 import path from 'path';
-
 
 const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
 const sender = await Account.newFromPem(filePath);
@@ -1043,7 +989,6 @@ Even before broadcasting, at the moment you know the sender's address and the no
 
 ```js
 import { Address, AddressComputer } from "@multiversx/sdk-core";
-
 const addressComputer = new AddressComputer();
 const contractAddress = addressComputer.computeContractAddress(
     Address.fromBech32(deployTransaction.sender),
@@ -1057,9 +1002,7 @@ console.log("Contract address:", contractAddress.bech32());
 After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 ```js
-import { AbiRegistry, Account, BigUIntValue, DevnetEntrypoint, SmartContractTransactionsOutcomeParser } from '@multiversx/sdk-core';
-import path from 'path';
-
+import { BigUIntValue, SmartContractTransactionsOutcomeParser } from '@multiversx/sdk-core';
 const abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
 const abiObj = JSON.parse(abiJson);
 const abi = AbiRegistry.create(abiObj)
@@ -1118,10 +1061,6 @@ In this section we'll see how we can call an endpoint of our previously deployed
 **Calling a smart contract using the controller**
 
 ```js
-import { Account, Code, DevnetEntrypoint, AbiRegistry, U32Value } from '@multiversx/sdk-core';
-import { promises } from "fs";
-import path from 'path';
-
 
 const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
 const sender = await Account.newFromPem(filePath);
@@ -1177,10 +1116,6 @@ Additionally, if an endpoint requires a payment when called, we can send tokens 
 Both EGLD and ESDT tokens or a combination of both can be sent. This functionality is supported by both the controller and the factory.
 
 ```js
-import { Account, Code, DevnetEntrypoint, AbiRegistry, U32Value } from '@multiversx/sdk-core';
-import { promises } from "fs";
-import path from 'path';
-
 const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
 const sender = await Account.newFromPem(filePath);
 
@@ -1235,10 +1170,6 @@ console.log(txHash);
 Let's create the same smart contract call transaction, but using the `factory`.
 
 ```js
-import { Account, Code, DevnetEntrypoint, AbiRegistry, U32Value } from '@multiversx/sdk-core';
-import { promises } from "fs";
-import path from 'path';
-
 const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
 const sender = await Account.newFromPem(filePath);
 
@@ -1296,10 +1227,6 @@ As said before, the add endpoint we called does not return anything, but we coul
 
 ```js
 
-import { DevnetEntrypoint, AbiRegistry, SmartContractTransactionsOutcomeParser } from '@multiversx/sdk-core';
-import { promises } from "fs";
-import path from 'path';
-
 load the abi file
 abi = await loadAbiRegistry("src/testdata/adder.abi.json")
 const parser = SmartContractTransactionsOutcomeParser({transactionOnNetwork, function: 'add'})
@@ -1315,10 +1242,6 @@ Suppose we'd like to decode a `startPerformAction` event emitted by the [multisi
 First, we load the abi file, then we fetch the transaction, we extract the event from the transaction and then we parse it.
 
 ```js
-
-import { DevnetEntrypoint, AbiRegistry, SmartContractTransactionsOutcomeParser } from '@multiversx/sdk-core';
-import { promises } from "fs";
-import path from 'path';
 
 load the abi file
 abi = await loadAbiRegistry("src/testdata/adder.abi.json")
@@ -1382,8 +1305,7 @@ import path from 'path';
 
 **Issuing fungible tokens using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
+import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // create the entrypoint and the token management transactions factory
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTokenManagementTransactionsFactory();
@@ -1431,8 +1353,7 @@ import path from 'path';
 Setting special roles for fungible tokens using the controller
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
+import { Address } from "@multiversx/sdk-core";
 
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
@@ -1472,8 +1393,6 @@ import path from 'path';
 
 **Setting special roles for fungible tokens using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
 
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
@@ -1520,8 +1439,6 @@ import path from 'path';
 **Issuing semi-fungible tokens using the controller**
 
 ```js
-import { Account, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
 
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
@@ -1561,8 +1478,6 @@ import path from 'path';
 
 **Issuing semi-fungible tokens using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
 
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
@@ -1610,8 +1525,6 @@ import path from 'path';
 **Issuing NFT collection & creating NFTs using the controller**
 
 ```js
-import { Account, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
 
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
@@ -1677,8 +1590,6 @@ import path from 'path';
 **Issuing NFT collection & creating NFTs using the factory**
 ```js
 
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
 
   // create the entrypoint and the token management transdactions factory
   const entrypoint = new DevnetEntrypoint();
@@ -1804,8 +1715,6 @@ import path from 'path';
 
 **Guarding an account using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
 {
   // create the entrypoint and the account management factory
   const entrypoint = new DevnetEntrypoint();
@@ -1818,7 +1727,7 @@ import path from 'path';
   // we can use a trusted service that provides a guardian, or simply set another address we own or trust
   const guardian = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  const transaction = await factory.createTransactionForIssuingFungible(
+  const transaction = await factory.createTransactionForSettingGuardian(
     alice,
     {
       guardianAddress: guardian,
@@ -1828,7 +1737,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -1843,8 +1752,6 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 
 **Activating the guardian using the controller**
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the account controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createAccountController();
@@ -1867,8 +1774,6 @@ import path from 'path';
 
 **Activating the guardian using the factory**
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the account factory
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createAccountTransactionsFactory();
@@ -1897,8 +1802,6 @@ import path from 'path';
 **Unguarding the account using the controller**
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the account controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createAccountController();
@@ -1926,8 +1829,6 @@ import path from 'path';
 
 **Unguarding the guardian using the factory**
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the account factory
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createAccountTransactionsFactory();
@@ -1958,8 +1859,6 @@ import path from 'path';
 **Saving a key-value pair to an account using the controller**
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the account controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createAccountController();
@@ -1988,8 +1887,6 @@ import path from 'path';
 
 **Saving a key-value pair to an account using the factory**
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the account factory
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createAccountTransactionsFactory();
@@ -2038,7 +1935,7 @@ These operations can be performed using both the controller and the **factory**.
 
 ```js
   import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-  import path from 'path';
+import path from 'path';
   // create the entrypoint and the delegation controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
@@ -2069,11 +1966,10 @@ These operations can be performed using both the controller and the **factory**.
 
 **Creating a new delegation contract using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
+import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // create the entrypoint and the delegation factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -2088,7 +1984,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -2110,8 +2006,6 @@ import path from 'path';
 We can send funds to a delegation contract to earn rewards.
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
@@ -2122,7 +2016,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await controller.createTransactionForDelegating(
     alice.address,
@@ -2138,11 +2032,9 @@ import path from 'path';
 
 **Delegating funds to the contract using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -2157,7 +2049,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -2171,8 +2063,6 @@ import path from 'path';
 Over time, as rewards accumulate, we may choose to redelegate them to the contract to maximize earnings.
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
@@ -2197,11 +2087,9 @@ import path from 'path';
 
 **Redelegating rewards using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -2215,7 +2103,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -2229,8 +2117,6 @@ import path from 'path';
 We can also claim our rewards when needed.
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
@@ -2255,11 +2141,9 @@ import path from 'path';
 
 **Claiming rewards using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -2273,7 +2157,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -2287,8 +2171,6 @@ import path from 'path';
 By **undelegating**, we signal the contract that we want to retrieve our staked funds. This process requires a **10-epoch unbonding period** before the funds become available.
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
@@ -2314,11 +2196,9 @@ import path from 'path';
 
 **Undelegating funds using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -2333,7 +2213,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -2347,8 +2227,6 @@ import path from 'path';
 After the `10-epoch unbonding period` is complete, we can proceed with withdrawing our staked funds using the controller. This final step allows us to regain access to the previously delegated funds.
 
 ```js
-import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
@@ -2374,11 +2252,9 @@ import path from 'path';
 
 **Withdrawing funds using the factory**
 ```js
-import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
-import path from 'path';
   // create the entrypoint and the delegation factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -2392,7 +2268,7 @@ import path from 'path';
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
@@ -2455,17 +2331,15 @@ Each controller includes a relayer argument, which must be set if we want to cre
 Let’s issue a fungible token using a relayed transaction:
 
 ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
-import path from 'path';
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our relayer, that means she is paying the gas for the transaction // md-comment
+  // carol will be our relayer, that means she is paying the gas for the transaction
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   // fetch the nonce of the network
@@ -2503,17 +2377,15 @@ This approach is beneficial because the **transaction is not signed by the sende
 Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
-import path from 'path';
   // create the entrypoint and the token management factory
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.creatTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our relayer, that means she is paying the gas for the transaction // md-comment
+  // carol will be our relayer, that means she is paying the gas for the transaction
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   const transaction = await factory.createTransactionForIssuingFungible(
@@ -2561,22 +2433,22 @@ Each controller includes an argument for the guardian. The transaction can eithe
 Let’s issue a token using a guarded account:
 
 **Creating guarded transactions using controllers**
-We can create relayed transactions using any of the available controllers.
-Each controller includes a relayer argument, which must be set if we want to create a relayed transaction.
+We can create guarded transactions using any of the available controllers.
+Each controller includes a guarded argument, which must be set if we want to create a guarded transaction.
 Let’s issue a fungible token using a relayed transaction:
 
 ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
+import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
 import path from 'path';
   // create the entrypoint and the token management controller
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our guardian // md-comment
+  // carol will be our guardian
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   // fetch the nonce of the network
@@ -2585,7 +2457,6 @@ import path from 'path';
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
     alice.getNonceThenIncrement(),
-    carol.address,
     {
       tokenName: "NEWFNG",
       tokenTicker: "FNG",
@@ -2597,11 +2468,12 @@ import path from 'path';
       canChangeOwner: true,
       canUpgrade: true,
       canAddSpecialRoles: false,
+      guardian: carol.address,
     },
   );
 
   // guardian also signs the transaction
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.guardianSignature = carol.signTransaction(transaction);
 
   // broadcast the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2609,22 +2481,20 @@ import path from 'path';
 
 **Creating guarded transactions using factories**
 Unlike controllers, `transaction factories` do not have a `guardian` argument. Instead, the **guardian must be set after creating the transaction**.
-This approach is beneficial because the **transaction is not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
+This approach is beneficial because the transaction is *not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
 
 Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
-import path from 'path';
   // create the entrypoint and the token management factory
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.creatTokenManagementController();
+  const factory = entrypoint.createTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our guardian // md-comment
+  // carol will be our guardian
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   const transaction = await factory.createTransactionForIssuingFungible(
@@ -2683,7 +2553,7 @@ Create an `Address` object from a bech32-encoded string:
 ``` js
 import { Address } from "@multiversx/sdk-core";
 
-    // Create an Address object from a bech32-encoded string // md-comment
+    // Create an Address object from a bech32-encoded string
     const address = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 
     console.log("Address (bech32-encoded):", address.toBech32());
@@ -2696,8 +2566,7 @@ Here’s how you can create an address from a hex-encoded string using the Multi
 If the HRP (human-readable part) is not provided, the SDK will use the default one ("erd").
 
 ``` js
-import { Address } from "@multiversx/sdk-core";
-    // Create an address from a hex-encoded string with a specified HRP // md-comment
+    // Create an address from a hex-encoded string with a specified HRP
     const address = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "erd");
 
     console.log("Address (bech32-encoded):", address.toBech32());
@@ -2707,15 +2576,16 @@ import { Address } from "@multiversx/sdk-core";
 Create an address from a raw public key
 
 ``` js
-import { Address } from "@multiversx/sdk-core";
 
 const pubkey = Buffer.from("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "hex");
 const addressFromPubkey = new Address(pubkey, "erd");
 ```
 
-Using an AddressFactory to create addresses
+**Using an AddressFactory to create addresses**
+AddressFactory allows creating multiple addresses with a custom HRP, ensuring consistency across your application.
+
 ``` js
-import { Address, AddressFactory } from "@multiversx/sdk-core";
+import { AddressFactory } from "@multiversx/sdk-core";
 const factory = new AddressFactory("erd");
 
 const address1 = factory.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
@@ -2725,25 +2595,24 @@ const address3 = factory.fromPublicKey(Buffer.from("0139472eff6886771a982f3083da
 
 Getting the shard of an address
 ``` js
-import { Address, AddressComputer } from "@multiversx/sdk-core";
+import { AddressComputer } from "@multiversx/sdk-core";
 
 const addressComputer = new AddressComputer();
 console.log("Shard:", addressComputer.getShardOfAddress(address));
 ```
 
-Checking if an address is a smart contractress
+Checking if an address is a smart contract
 ``` js
-import { Address } from "@multiversx/sdk-core";
 
 const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0p4rjys0qtp3la07gz4d396qn50nnm");
 console.log("Is contract address:", contractAddress.isSmartContract());
 ```
 
-**Checking if an address is a smart contractress**
+**Checking if an address is a smart contract**
 The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default.
 You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 ``` js
-import { Address, LibraryConfig } from "@multiversx/sdk-core";
+import { LibraryConfig } from "@multiversx/sdk-core";
 
 console.log(LibraryConfig.defaultAddressHrp);
 const defaultAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
@@ -2753,7 +2622,7 @@ LibraryConfig.defaultAddressHrp = "test";
 const testAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
 console.log(testAddress.toBech32());
 
-Resetting HRP to default
+Reset HRP back to "erd" to avoid affecting other parts of the application. //md-as-comment
 LibraryConfig.defaultAddressHrp = "erd";
 ```
 
@@ -2774,12 +2643,12 @@ console.log({ words });
 The mnemonic can be saved to a keystore file:
 
 ``` js
+import { UserWallet } from "@multiversx/sdk-core";
 import path from 'path';
-import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
 
     const mnemonic = Mnemonic.generate();
 
-    // saves the mnemonic to a keystore file with kind=mnemonic // md-comment
+    // saves the mnemonic to a keystore file with kind=mnemonic
     const wallet = UserWallet.fromMnemonic({ mnemonic: mnemonic.getText(), password: "password" });
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
@@ -2790,7 +2659,6 @@ import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
 Given a mnemonic, we can derive keypairs:
 
 ``` js
-import { Mnemonic } from "@multiversx/sdk-core";
     const mnemonic = Mnemonic.generate();
 
     const secretKey = mnemonic.deriveKey(0);
@@ -2804,13 +2672,11 @@ import { Mnemonic } from "@multiversx/sdk-core";
 The secret key can also be saved to a keystore file:
 
 ``` js
-import path from 'path';
-import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
     const mnemonic = Mnemonic.generate();
 
     const secretKey = mnemonic.deriveKey();
 
-    // saves the mnemonic to a keystore file with kind=mnemonic // md-comment
+    // saves the mnemonic to a keystore file with kind=mnemonic
     const wallet = UserWallet.fromSecretKey({ secretKey: aliceSecretKey, password: password });
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
@@ -2821,11 +2687,10 @@ import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
 We can save a secret key to a pem file. *This is not recommended as it is not secure, but it's very convenient for testing purposes.*
 
 ``` js
-import path from 'path';
-import { Mnemonic, UserPem } from "@multiversx/sdk-core";
+import { UserPem } from "@multiversx/sdk-core";
     const mnemonic = Mnemonic.generate();
 
-    // by default, derives using the index = 0 // md-comment
+    // by default, derives using the index = 0
     const secretKey = mnemonic.deriveKey();
     const publicKey = secretKey.generatePublicKey();
 
@@ -2844,7 +2709,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 
     const keypair = KeyPair.generate();
 
-    // by default, derives using the index = 0 // md-comment
+    // by default, derives using the index = 0
     const secretKey = keypair.getSecretKey();
     const publicKey = keypair.getPublicKey();
 ```
@@ -2853,19 +2718,17 @@ import { KeyPair } from "@multiversx/sdk-core";
 Load a keystore that holds an encrypted mnemonic (and perform wallet derivation at the same time):
 
 ``` js
-import { UserWallet } from "@multiversx/sdk-core";
-import path from 'path';
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
 
-    // loads the mnemonic and derives the a secret key; default index = 0 // md-comment
+    // loads the mnemonic and derives the a secret key; default index = 0
     let secretKey = UserWallet.loadSecretKey(path, "password");
     let address = secretKey.generatePublicKey().toAddress('erd')
 
     console.log("Secret key: ", secretKey.hex())
     console.log("Address: ", address.toBech32())
 
-    // derive secret key with index = 7 // md-comment
+    // derive secret key with index = 7
     secretKey = UserWallet.loadSecretKey(path, "password", 7);
     address = secretKey.generatePublicKey().toAddress()
 
@@ -2877,11 +2740,10 @@ import path from 'path';
 A `KeyPair` is a wrapper over a secret key and a public key. We can create a keypair and use it for signing or verifying.
 
 ``` js
-import { KeyPair } from "@multiversx/sdk-core";
 
     const keypair = KeyPair.generate();
 
-    // by default, derives using the index = 0 // md-comment
+    // by default, derives using the index = 0
     const secretKey = keypair.getSecretKey();
     const publicKey = keypair.getPublicKey();
 ```
@@ -2889,8 +2751,6 @@ import { KeyPair } from "@multiversx/sdk-core";
 **Loading a wallet from a keystore secret key file**
 
 ``` js
-import { UserWallet } from "@multiversx/sdk-core";
-import path from 'path';
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
 
@@ -2904,8 +2764,6 @@ import path from 'path';
 **Loading a wallet from a PEM file**
 
 ``` js
-import { UserPem } from "@multiversx/sdk-core";
-import path from 'path';
     const filePath = path.join("src", "testdata", "testwallets", "wallet.pem");
 
     let pem = UserPem.fromFile(path);
@@ -2946,7 +2804,7 @@ import path from 'path';
 Signing a Transaction using a SecretKey
 
 ```js
-import { Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
+import { TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     const secretKey = UserSecretKey.fromString(secretKeyHex);
@@ -2961,21 +2819,20 @@ import { Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk
         chainID: "D"
     });
 
-    // serialize the transaction // md-comment
+    // serialize the transaction
     const transactionComputer = new TransactionComputer()
     const serializedTransaction = transactionComputer.computeBytesForSigning(transaction);
 
-    // apply the signature on the transaction // md-comment
+    // apply the signature on the transaction
     transaction.signature = await secretKey.sign(serializedTransaction);
 
     console.log(transaction.toPlainObject());
 }
+```
 
 Signing a Transaction by hash
 
 ```js
-import { Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
-import path from 'path';
 {
     // create the issuer ot the token
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -2992,13 +2849,13 @@ import path from 'path';
 
     const transactionComputer = new TransactionComputer();
 
-    // sets the least significant bit of the options field to `1` // md-comment
+    // sets the least significant bit of the options field to `1`
     transactionComputer.applyOptionsForHashSigning(transaction);
 
-    // compute a keccak256 hash for signing // md-comment
+    // compute a keccak256 hash for signing
     const hash = transactionComputer.computeHashForSigning(transaction)
 
-    // sign and apply the signature on the transaction // md-comment
+    // sign and apply the signature on the transaction
     transaction.signature = await alice.sign(hash);
 
     console.log(transaction.toPlainObject());
@@ -3009,7 +2866,6 @@ Signing a Message using an Account:
 
 ```js
 import { Message } from "@multiversx/sdk-core";
-import path from 'path';
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const alice = await Account.newFromPem(filePath);
@@ -3026,7 +2882,7 @@ import path from 'path';
 Signing a Message using an SecretKey:
 
 ```js
-import { Message, MessageComputer } from "@multiversx/sdk-core";
+import { MessageComputer } from "@multiversx/sdk-core";
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     const secretKey = UserSecretKey.fromString(secretKeyHex);
@@ -3067,18 +2923,18 @@ import path from 'path';
         chainID: "D"
     });
 
-    // sign and apply the signature on the transaction // md-comment
+    // sign and apply the signature on the transaction
     transaction.signature = await account.sign(hash);
 
-    // instantiating a user verifier; basically gets the public key // md-comment
+    // instantiating a user verifier; basically gets the public key
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
     const aliceVerifier = UserVerifier.fromAddress(alice);
 
-    // serialize the transaction for verification // md-comment
+    // serialize the transaction for verification
     const transactionComputer = new TransactionComputer();
     const serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
 
-    // verify the signatureg // md-comment
+    // verify the signatureg
     const isSignedByAlice = aliceVerifier.verify(serializedTransaction, transaction.signature);
 
 
@@ -3089,8 +2945,7 @@ import path from 'path';
 **Verifying Message signature using a UserVerifier**:
 
 ```js
-import { Account, Address, Message, MessageComputer, UserVerifier } from "@multiversx/sdk-core";
-import path from 'path';
+import { Message, MessageComputer } from "@multiversx/sdk-core";
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const account = await Account.newFromPem(filePath);
@@ -3100,18 +2955,18 @@ import path from 'path';
         address: account.address
     });
 
-    // sign and apply the signature on the message // md-comment
+    // sign and apply the signature on the message
     message.signature = await account.sign(hash);
 
-    // instantiating a user verifier; basically gets the public key // md-comment
+    // instantiating a user verifier; basically gets the public key
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
     const aliceVerifier = UserVerifier.fromAddress(alice);
 
-    // serialize the message for verification // md-comment
+    // serialize the message for verification
     const messageComputer = new MessageComputer();
     const serializedMessage = messageComputer.computeBytesForVerifying(message);
 
-    // verify the signatureg // md-comment
+    // verify the signatureg
     const isSignedByAlice = aliceVerifier.verify(serializedMessage, message.signature);
 
     console.log("Message is signed by Alice: ", isSignedByAlice);
@@ -3121,8 +2976,7 @@ import path from 'path';
 **Verifying a signature using a public key**:
 
 ```js
-import { Account, Address, Transaction, TransactionComputer, UserPublicKey } from "@multiversx/sdk-core";
-import path from 'path';
+import { UserPublicKey } from "@multiversx/sdk-core";
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const account = await Account.newFromPem(filePath);
@@ -3136,18 +2990,18 @@ import path from 'path';
         chainID: "D"
     });
 
-    // sign and apply the signature on the transaction // md-comment
+    // sign and apply the signature on the transaction
     transaction.signature = await account.sign(hash);
 
-    // instantiating a public key // md-comment
+    // instantiating a public key
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
     const publicKey = new UserPublicKey(alice.getPublicKey());
 
-    // serialize the transaction for verification // md-comment
+    // serialize the transaction for verification
     const transactionComputer = new TransactionComputer();
     const serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
 
-    // verify the signatureg // md-comment
+    // verify the signatureg
     const isSignedByAlice = publicKey.verify(serializedTransaction, transaction.signature);
     console.log("Transaction is signed by Alice: ", isSignedByAlice);
 }
@@ -3160,8 +3014,6 @@ Signed Message objects are typically sent to a remote party (e.g., a service), w
 To prepare a message for transmission, you can use the `MessageComputer.packMessage()` utility method.
 
 ```js
-import { Account, Message, MessageComputer } from "@multiversx/sdk-core";
-import path from 'path';
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const account = await Account.newFromPem(filePath);
@@ -3171,7 +3023,7 @@ import path from 'path';
         address: account.address
     });
 
-    // sign and apply the signature on the message // md-comment
+    // sign and apply the signature on the message
     message.signature = await account.sign(hash);
 
     const messageComputer = new MessageComputer();
@@ -3184,16 +3036,15 @@ import path from 'path';
 Then, on the receiving side, you can use [`MessageComputer.unpackMessage()`](https://multiversx.github.io/mx-sdk-js-core/v13/classes/MessageComputer.html#unpackMessage) to reconstruct the message, prior verification:
 
 ```js
-import { Account, Message, MessageComputer } from "@multiversx/sdk-core";
 {
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 
     const messageComputer = new MessageComputer();
 
-    // restore message // md-comment
+    // restore message
     const message = messageComputer.unpackMessage(packedMessage);
 
-    // verify the signature // md-comment
+    // verify the signature
     const publicKey = new UserPublicKey(alice.getPublicKey());
     const isSignedByAlice = publicKey.verify(messageComputer.computeBytesForVerifying(message), message.signature);
 

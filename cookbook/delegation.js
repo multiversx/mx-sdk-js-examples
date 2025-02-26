@@ -54,7 +54,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the delegation factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -69,7 +69,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
@@ -103,7 +103,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await controller.createTransactionForDelegating(
     alice.address,
@@ -123,7 +123,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the delegation factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -138,7 +138,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
@@ -182,7 +182,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the delegation factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -196,7 +196,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
@@ -240,7 +240,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the delegation factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -254,7 +254,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
@@ -299,7 +299,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the delegation factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -314,7 +314,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
@@ -359,7 +359,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the delegation factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransactionForNewDelegationContract();
+  const factory = entrypoint.createDelegationTransactionsFactory();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -373,7 +373,7 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment

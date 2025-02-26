@@ -58,11 +58,11 @@ import path from 'path';
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token // md-as-comment
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our relayer, that means she is paying the gas for the transaction // md-comment
+  // carol will be our relayer, that means she is paying the gas for the transaction // md-as-comment
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   // fetch the nonce of the network // md-as-comment
@@ -106,11 +106,11 @@ import path from 'path';
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.creatTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token // md-as-comment
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our relayer, that means she is paying the gas for the transaction // md-comment
+  // carol will be our relayer, that means she is paying the gas for the transaction // md-as-comment
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   const transaction = await factory.createTransactionForIssuingFungible(

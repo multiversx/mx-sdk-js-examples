@@ -21,7 +21,7 @@ import path from 'path';
 { // md-ignore
     const mnemonic = Mnemonic.generate();
 
-    // saves the mnemonic to a keystore file with kind=mnemonic // md-comment
+    // saves the mnemonic to a keystore file with kind=mnemonic // md-as-comment
     const wallet = UserWallet.fromMnemonic({ mnemonic: mnemonic.getText(), password: "password" });
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
@@ -53,7 +53,7 @@ import path from 'path';
 
     const secretKey = mnemonic.deriveKey();
 
-    // saves the mnemonic to a keystore file with kind=mnemonic // md-comment
+    // saves the mnemonic to a keystore file with kind=mnemonic // md-as-comment
     const wallet = UserWallet.fromSecretKey({ secretKey: aliceSecretKey, password: password });
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
@@ -69,7 +69,7 @@ import { UserPem } from "@multiversx/sdk-core";
 { // md-ignore
     const mnemonic = Mnemonic.generate();
 
-    // by default, derives using the index = 0 // md-comment
+    // by default, derives using the index = 0 // md-as-comment
     const secretKey = mnemonic.deriveKey();
     const publicKey = secretKey.generatePublicKey();
 
@@ -90,7 +90,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 { // md-ignore
     const keypair = KeyPair.generate();
 
-    // by default, derives using the index = 0 // md-comment
+    // by default, derives using the index = 0 // md-as-comment
     const secretKey = keypair.getSecretKey();
     const publicKey = keypair.getPublicKey();
 } // md-ignore
@@ -104,14 +104,14 @@ import { KeyPair } from "@multiversx/sdk-core";
 { // md-ignore
     const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
 
-    // loads the mnemonic and derives the a secret key; default index = 0 // md-comment
+    // loads the mnemonic and derives the a secret key; default index = 0 // md-as-comment
     let secretKey = UserWallet.loadSecretKey(path, "password");
     let address = secretKey.generatePublicKey().toAddress('erd')
 
     console.log("Secret key: ", secretKey.hex())
     console.log("Address: ", address.toBech32())
 
-    // derive secret key with index = 7 // md-comment
+    // derive secret key with index = 7 // md-as-comment
     secretKey = UserWallet.loadSecretKey(path, "password", 7);
     address = secretKey.generatePublicKey().toAddress()
 
@@ -128,7 +128,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 { // md-ignore
     const keypair = KeyPair.generate();
 
-    // by default, derives using the index = 0 // md-comment
+    // by default, derives using the index = 0 // md-as-comment
     const secretKey = keypair.getSecretKey();
     const publicKey = keypair.getPublicKey();
 } // md-ignore

@@ -39,7 +39,7 @@ import { ApiNetworkProvider } from "multiversx-sdk";
 const config = {
   clientName: "hello-multiversx",
   requestsOptions: {
-    timeout: 1000,  // Timeout in milliseconds
+    timeout: 1000,  // Timeout in milliseconds // md-as-comment
     auth: {
       username: "user",
       password: "password"
@@ -80,8 +80,8 @@ const api = new ApiNetworkProvider("https://devnet-api.multiversx.com", config);
   const entrypoint = new DevnetEntrypoint();
   const networkProvider = entrypoint.createNetworkProvider();
 
-  const metaNetworkStatus = entrypoint.getNetworkStatus(); // fetches status from metachain
-  const networkStatus = entrypoint.getNetworkStatus(1); // fetches status from metachain}
+  const metaNetworkStatus = entrypoint.getNetworkStatus(); // fetches status from metachain // md-as-comment
+  const networkStatus = entrypoint.getNetworkStatus(1); // fetches status from metachain // md-as-comment
 } // md-ignore
 // ```
 
@@ -179,7 +179,7 @@ import { Address } from "multiversx-sdk";
   const api = entrypoint.createNetworkProvider();
 
   const condition = (account) => {
-    return account.balance >= 7000000000000000000; // 7 EGLD
+    return account.balance >= 7000000000000000000; // 7 EGLD // md-as-comment
   };
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const account = await api.awaitAccountOnCondition(alice, condition)
@@ -200,7 +200,7 @@ import { Transaction } from "multiversx-sdk";
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  // this transaction is not signed
+  // this transaction is not signed // md-as-comment
   const transaction = new Transaction({
     sender: alice,
     receiver: bob,
@@ -221,7 +221,7 @@ import { Transaction } from "multiversx-sdk";
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  // this transaction is not signed
+  // this transaction is not signed // md-as-comment
   const firstTransaction = new Transaction({
     sender: alice,
     receiver: bob,
@@ -366,11 +366,11 @@ import { Token } from "multiversx-sdk";
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
-  let token = new Token({ identifier: "TEST-ff155e" }) // ESDT
+  let token = new Token({ identifier: "TEST-ff155e" }) // ESDT // md-as-comment
   let tokeOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 
 
-  token = new Token({ identifier: "NFT-987654" }) // NFT
+  token = new Token({ identifier: "NFT-987654" }) // NFT // md-as-comment
   tokeOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 } // md-ignore
 // ```
@@ -409,10 +409,10 @@ import { Token } from "multiversx-sdk";
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  // used for ESDT
+  // used for ESDT // md-as-comment
   const fungibleTokenDefinition = await apiProvider.getDefinitionOfFungibleToken("TEST-ff155e");
 
-  // used for METAESDT, SFT, NFT
+  // used for METAESDT, SFT, NFT // md-as-comment
   const nonFungibleTokenDefinition = await apiProvider.getDefinitionOfTokenCollection("NFTEST-ec88b8");
 } // md-ignore
 // ```

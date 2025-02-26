@@ -6,7 +6,7 @@
 import { Address } from "@multiversx/sdk-core";
 
 { // md-ignore
-    // Create an Address object from a bech32-encoded string // md-comment
+    // Create an Address object from a bech32-encoded string // md-as-comment
     const address = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 
     console.log("Address (bech32-encoded):", address.toBech32());
@@ -21,7 +21,7 @@ import { Address } from "@multiversx/sdk-core";
 
 // ``` js
 { // md-ignore
-    // Create an address from a hex-encoded string with a specified HRP // md-comment
+    // Create an address from a hex-encoded string with a specified HRP // md-as-comment
     const address = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "erd");
 
     console.log("Address (bech32-encoded):", address.toBech32());
@@ -37,7 +37,9 @@ const pubkey = Buffer.from("0139472eff6886771a982f3083da5d421f24c29181e63888228d
 const addressFromPubkey = new Address(pubkey, "erd");
 // ```
 
-// Using an AddressFactory to create addresses
+// **Using an AddressFactory to create addresses**
+// AddressFactory allows creating multiple addresses with a custom HRP, ensuring consistency across your application.
+
 // ``` js
 import { AddressFactory } from "@multiversx/sdk-core";
 const factory = new AddressFactory("erd");
@@ -55,14 +57,14 @@ const addressComputer = new AddressComputer();
 console.log("Shard:", addressComputer.getShardOfAddress(address));
 // ```
 
-// Checking if an address is a smart contractress
+// Checking if an address is a smart contract
 // ``` js
 
 const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0p4rjys0qtp3la07gz4d396qn50nnm");
 console.log("Is contract address:", contractAddress.isSmartContract());
 // ```
 
-// **Checking if an address is a smart contractress**
+// **Checking if an address is a smart contract**
 // The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default. 
 // You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 // ``` js
@@ -76,7 +78,7 @@ LibraryConfig.defaultAddressHrp = "test";
 const testAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
 console.log(testAddress.toBech32());
 
-// Resetting HRP to default
+// Reset HRP back to "erd" to avoid affecting other parts of the application. //md-as-comment
 LibraryConfig.defaultAddressHrp = "erd";
 // ```
 

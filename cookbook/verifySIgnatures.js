@@ -21,18 +21,18 @@ import path from 'path';
         chainID: "D"
     });
 
-    // sign and apply the signature on the transaction // md-comment
+    // sign and apply the signature on the transaction // md-as-comment
     transaction.signature = await account.sign(hash);
 
-    // instantiating a user verifier; basically gets the public key // md-comment
+    // instantiating a user verifier; basically gets the public key // md-as-comment
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
     const aliceVerifier = UserVerifier.fromAddress(alice);
 
-    // serialize the transaction for verification // md-comment
+    // serialize the transaction for verification // md-as-comment
     const transactionComputer = new TransactionComputer();
     const serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
 
-    // verify the signatureg // md-comment
+    // verify the signatureg // md-as-comment
     const isSignedByAlice = aliceVerifier.verify(serializedTransaction, transaction.signature);
 
 
@@ -53,18 +53,18 @@ import { Message, MessageComputer } from "@multiversx/sdk-core";
         address: account.address
     });
 
-    // sign and apply the signature on the message // md-comment
+    // sign and apply the signature on the message // md-as-comment
     message.signature = await account.sign(hash);
 
-    // instantiating a user verifier; basically gets the public key // md-comment
+    // instantiating a user verifier; basically gets the public key // md-as-comment
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
     const aliceVerifier = UserVerifier.fromAddress(alice);
 
-    // serialize the message for verification // md-comment
+    // serialize the message for verification // md-as-comment
     const messageComputer = new MessageComputer();
     const serializedMessage = messageComputer.computeBytesForVerifying(message);
 
-    // verify the signatureg // md-comment
+    // verify the signatureg // md-as-comment
     const isSignedByAlice = aliceVerifier.verify(serializedMessage, message.signature);
 
     console.log("Message is signed by Alice: ", isSignedByAlice);
@@ -88,18 +88,18 @@ import { UserPublicKey } from "@multiversx/sdk-core";
         chainID: "D"
     });
 
-    // sign and apply the signature on the transaction // md-comment
+    // sign and apply the signature on the transaction // md-as-comment
     transaction.signature = await account.sign(hash);
 
-    // instantiating a public key // md-comment
+    // instantiating a public key // md-as-comment
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
     const publicKey = new UserPublicKey(alice.getPublicKey());
 
-    // serialize the transaction for verification // md-comment
+    // serialize the transaction for verification // md-as-comment
     const transactionComputer = new TransactionComputer();
     const serializedTransaction = transactionComputer.computeBytesForVerifying(transaction);
 
-    // verify the signatureg // md-comment
+    // verify the signatureg // md-as-comment
     const isSignedByAlice = publicKey.verify(serializedTransaction, transaction.signature);
     console.log("Transaction is signed by Alice: ", isSignedByAlice);
 }
@@ -121,7 +121,7 @@ import { UserPublicKey } from "@multiversx/sdk-core";
         address: account.address
     });
 
-    // sign and apply the signature on the message // md-comment
+    // sign and apply the signature on the message // md-as-comment
     message.signature = await account.sign(hash);
 
     const messageComputer = new MessageComputer();
@@ -139,10 +139,10 @@ import { UserPublicKey } from "@multiversx/sdk-core";
 
     const messageComputer = new MessageComputer();
 
-    // restore message // md-comment
+    // restore message // md-as-comment
     const message = messageComputer.unpackMessage(packedMessage);
 
-    // verify the signature // md-comment
+    // verify the signature // md-as-comment
     const publicKey = new UserPublicKey(alice.getPublicKey());
     const isSignedByAlice = publicKey.verify(messageComputer.computeBytesForVerifying(message), message.signature);
 

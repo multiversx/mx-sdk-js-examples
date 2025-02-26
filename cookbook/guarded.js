@@ -10,8 +10,8 @@
 // Let’s issue a token using a guarded account:
 
 // **Creating guarded transactions using controllers**
-//We can create relayed transactions using any of the available controllers. 
-// Each controller includes a relayer argument, which must be set if we want to create a relayed transaction.
+//We can create guarded transactions using any of the available controllers. 
+// Each controller includes a guarded argument, which must be set if we want to create a guarded transaction.
 // Let’s issue a fungible token using a relayed transaction:
 
 // ```js
@@ -22,11 +22,11 @@ import path from 'path';
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token // md-as-comment
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our guardian // md-comment
+  // carol will be our guardian // md-as-comment
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   // fetch the nonce of the network // md-as-comment
@@ -35,7 +35,6 @@ import path from 'path';
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
     alice.getNonceThenIncrement(),
-    carol.address,
     {
       tokenName: "NEWFNG",
       tokenTicker: "FNG",
@@ -47,11 +46,12 @@ import path from 'path';
       canChangeOwner: true,
       canUpgrade: true,
       canAddSpecialRoles: false,
+      guardian: carol.address,
     },
   );
 
   // guardian also signs the transaction // md-as-comment
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.guardianSignature = carol.signTransaction(transaction);
 
   // broadcast the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -60,7 +60,7 @@ import path from 'path';
 
 // **Creating guarded transactions using factories**
 // Unlike controllers, `transaction factories` do not have a `guardian` argument. Instead, the **guardian must be set after creating the transaction**.
-// This approach is beneficial because the **transaction is not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
+// This approach is beneficial because the transaction is *not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
 
 // Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
@@ -68,13 +68,13 @@ import path from 'path';
 { // md-ignore
   // create the entrypoint and the token management factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.creatTokenManagementController();
+  const factory = entrypoint.createTokenManagementController();
 
-  // create the issuer of the token // md-comment
+  // create the issuer of the token // md-as-comment
   const walletsPath = path.join("src", "testdata", "testwallets");
   const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
-  // carol will be our guardian // md-comment
+  // carol will be our guardian // md-as-comment
   const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   const transaction = await factory.createTransactionForIssuingFungible(

@@ -55,7 +55,7 @@ import path from 'path';
   // we can use a trusted service that provides a guardian, or simply set another address we own or trust // md-as-comment
   const guardian = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  const transaction = await factory.createTransactionForIssuingFungible(
+  const transaction = await factory.createTransactionForSettingGuardian(
     alice,
     {
       guardianAddress: guardian,
@@ -65,7 +65,7 @@ import path from 'path';
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  // set the nonce // md-comment
+  // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
