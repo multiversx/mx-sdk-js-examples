@@ -5,16 +5,20 @@ from typing import Dict, List
 current_dir = Path(__file__).parent.absolute()
 
 input_files = [
-    current_dir / "basic.js",
-    current_dir / "broadcasting_transactions.js",
-    current_dir / "transfers.js",
-    current_dir / "handling_amounts.js",
-    current_dir / "contracts_abi.js",
-    current_dir / "contracts_deployments.js",
-    current_dir / "contracts_interactions.js",
-    current_dir / "contracts_queries.js",
-    current_dir / "codec.js",
-    current_dir / "signing.js"
+    current_dir / "entrypoints.js",
+    current_dir / "account.js",
+    current_dir / "networkProviders.js",
+    current_dir / "transactions.js",
+    current_dir / "smartContracts.js",
+    current_dir / "tokens.js",
+    current_dir / "accountManagement.js",
+    current_dir / "delegation.js",
+    current_dir / "relayed.js",
+    current_dir / "guarded.js",
+    current_dir / "addresses.js",
+    current_dir / "wallets.js",
+    current_dir / "signingObjects.js",
+    current_dir / "verifySignatures.js"
 ]
 
 MARKER_INSERT = "md-insert:"
@@ -40,7 +44,7 @@ In real-world dApps, transactions are signed by end-users using their wallet, th
 """,
 
     "mixedTypedValuesAndNativeValues": """:::tip
-When creating transactions using `class:SmartContractTransactionsFactory`, even if the ABI is available and provided,
+When creating transactions using `class:SmartContractController` or `class:SmartContractTransactionsFactory`, even if the ABI is available and provided,
 you can still use `class:TypedValue` objects as arguments for deployments and interactions.
 
 Even further, you can use a mix of `class:TypedValue` objects and plain JavaScript values and objects. For example:

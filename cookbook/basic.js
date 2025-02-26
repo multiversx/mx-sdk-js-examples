@@ -2,9 +2,9 @@ import { addressOfAlice, getNotYetSignedTx } from "./framework.js"; // md-ignore
 
 const notYetSignedTx = getNotYetSignedTx(); // md-ignore
 
-// ## Creating network providers
+// ## Overview
 
-// Creating an API provider:
+// This guide walks you through handling common tasks using the MultiversX Javascript SDK (v1, latest stable version).
 
 // ```js
 import { ApiNetworkProvider } from "@multiversx/sdk-core";
