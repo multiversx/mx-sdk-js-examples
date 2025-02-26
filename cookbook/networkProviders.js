@@ -64,7 +64,7 @@ const api = new ApiNetworkProvider("https://devnet-api.multiversx.com", config);
 // Fetching the network config
 
 // ```js
-
+import { DevnetEntrypoint } from "multiversx-sdk";
 {
   const entrypoint = new DevnetEntrypoint();
   const networkProvider = entrypoint.createNetworkProvider();
@@ -76,6 +76,7 @@ const api = new ApiNetworkProvider("https://devnet-api.multiversx.com", config);
 // Fetching the network status
 
 // ```js
+import { DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const networkProvider = entrypoint.createNetworkProvider();
@@ -92,6 +93,7 @@ const api = new ApiNetworkProvider("https://devnet-api.multiversx.com", config);
 
 // Fetching a block using the **API**
 // ```js
+import { ApiNetworkProvider } from "multiversx-sdk";
 { // md-ignore
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
   const blockHash = "1147e111ce8dd860ae43a0f0d403da193a940bfd30b7d7f600701dd5e02f347a";
@@ -102,6 +104,7 @@ const api = new ApiNetworkProvider("https://devnet-api.multiversx.com", config);
 // Additionally, we can fetch the latest block from the network:
 
 // ```js
+import { ApiNetworkProvider } from "multiversx-sdk";
 { // md-ignore
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
   const latestBlock = await api.getLatestBlock();
@@ -124,7 +127,7 @@ import { ProxyNetworkProvider } from "multiversx-sdk";
 // By default, the shard will be the metachain, but we can specify a different shard if needed.
 
 // ```js
-
+import { ProxyNetworkProvider } from "multiversx-sdk";
 const proxy = new ProxyNetworkProvider("https://devnet-api.multiversx.com");
 const latestBlock = proxy.getLatestBlock();
 // ```
@@ -133,7 +136,7 @@ const latestBlock = proxy.getLatestBlock();
 // To fetch an account, we need its address. Once we have the address, we create an `Address` object and pass it as an argument to the method.
 
 // ```js
-import { Address } from "multiversx-sdk";
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -146,6 +149,7 @@ import { Address } from "multiversx-sdk";
 // We can also fetch an account's storage, allowing us to retrieve all key-value pairs saved for that account.
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -157,6 +161,7 @@ import { Address } from "multiversx-sdk";
 // If we only want to fetch a specific key, we can do so as follows:
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -174,6 +179,7 @@ import { Address } from "multiversx-sdk";
 // Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -192,7 +198,7 @@ import { Address } from "multiversx-sdk";
 // Sending a Transaction
 
 // ```js
-import { Transaction } from "multiversx-sdk";
+import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -214,6 +220,7 @@ import { Transaction } from "multiversx-sdk";
 
 // Sending multiple transactions
 // ```js
+import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -255,6 +262,7 @@ import { Transaction } from "multiversx-sdk";
 // A transaction can be simulated before being sent for processing by the network. This is primarily used for smart contract calls, allowing you to preview the results produced by the smart contract.
 
 // ```js
+import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -278,6 +286,7 @@ import { Transaction } from "multiversx-sdk";
 // Before sending a transaction to the network for processing, you can retrieve the estimated gas limit required for the transaction to be executed.
 
 // ```js
+import { Address, DevnetEntrypoint, Transaction } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -304,6 +313,7 @@ import { Transaction } from "multiversx-sdk";
 // After sending a transaction, you may want to wait until it is processed before proceeding with another action. Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 // ```js
+import {  DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -317,6 +327,7 @@ import { Transaction } from "multiversx-sdk";
 // Similar to accounts, we can wait until a transaction meets a specific condition.
 
 // ```js
+import {  DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -332,6 +343,7 @@ import { Transaction } from "multiversx-sdk";
 // After sending a transaction, you may want to wait until it is processed before proceeding with another action. Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 // ```js
+import {  DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -345,6 +357,7 @@ import { Transaction } from "multiversx-sdk";
 // After sending a transaction, we can fetch it from the network using the transaction hash, which we receive after broadcasting the transaction.
 
 // ```js
+import {  DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -360,7 +373,7 @@ import { Transaction } from "multiversx-sdk";
 // We can fetch a specific token (ESDT, MetaESDT, SFT, NFT) from an account by providing the account's address and the token identifier.
 
 // ```js
-import { Token } from "multiversx-sdk";
+import { Address, DevnetEntrypoint, Token } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -379,6 +392,7 @@ import { Token } from "multiversx-sdk";
 // Fetches all fungible tokens held by an account. Note that this method does not handle pagination, but it can be achieved using `doGetGeneric`.
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -392,6 +406,7 @@ import { Token } from "multiversx-sdk";
 // Fetches all non-fungible tokens held by an account. Note that this method does not handle pagination, but it can be achieved using `doGetGeneric`.
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -405,6 +420,7 @@ import { Token } from "multiversx-sdk";
 // If we want to fetch the metadata of a token (e.g., owner, decimals, etc.), we can use the following methods:
 
 // ```js
+import { DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -421,6 +437,7 @@ import { Token } from "multiversx-sdk";
 // Smart contract queries, or view functions, are endpoints that only read data from the contract. To send a query to the observer nodes, we can proceed as follows:
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
@@ -439,6 +456,7 @@ import { Token } from "multiversx-sdk";
 // Let’s assume we want to retrieve all the transactions sent by Alice and call the `testFunction` function.
 
 // ```js
+import { Address, DevnetEntrypoint } from "multiversx-sdk";
 { // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();

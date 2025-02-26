@@ -5,7 +5,7 @@
 // First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 // ## Signing a Transaction using an Account
-// We are going to assume we have an account at this point. If you don't fell free to check out the [creating an account section](TODO).
+// We are going to assume we have an account at this point. If you don't, fell free to check out the [creating an account section](TODO).
 
 // ```js
 import { Account, Address, Transaction } from "@multiversx/sdk-core";
@@ -31,7 +31,8 @@ import path from 'path';
 // Signing a Transaction using a SecretKey
 
 // ```js
-import { TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
+import { Account, Address, Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
+import path from 'path';
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     const secretKey = UserSecretKey.fromString(secretKeyHex);
@@ -60,6 +61,8 @@ import { TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
 // Signing a Transaction by hash
 
 // ```js
+import { Account, Address, Transaction } from "@multiversx/sdk-core";
+import path from 'path';
 {
     // create the issuer ot the token // md-as-comment
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -92,7 +95,8 @@ import { TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
 // Signing a Message using an Account:
 
 // ```js
-import { Message } from "@multiversx/sdk-core";
+import { Account, Address, Message } from "@multiversx/sdk-core";
+import path from 'path';
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const alice = await Account.newFromPem(filePath);
@@ -109,16 +113,18 @@ import { Message } from "@multiversx/sdk-core";
 // Signing a Message using an SecretKey:
 
 // ```js
-import { MessageComputer } from "@multiversx/sdk-core";
+
+import { Account, Address, Message, MessageComputer } from "@multiversx/sdk-core";
+import path from 'path';
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     const secretKey = UserSecretKey.fromString(secretKeyHex);
-    const publickKey = secretKey.generatePublicKey();
+    const publicKey = secretKey.generatePublicKey();
 
     const messageComputer = new MessageComputer();
     const message = new Message({
         data: new Uint8Array(Buffer.from("hello")),
-        address: publickKey.toAddress()
+        address: publicKey.toAddress()
     });
     // serialized the message
     const serialized = messageComputer.computeBytesForSigning(message);

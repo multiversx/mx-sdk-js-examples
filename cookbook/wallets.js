@@ -1,6 +1,6 @@
 // ### Wallets
 
-// **Generationg a mnemonic**
+// **Generating a mnemonic**
 // Mnemonic generation is based on [bip39](https://www.npmjs.com/package/bip39) and can be achieved as follows:
 
 // ``` js
@@ -37,10 +37,10 @@ import path from 'path';
     const mnemonic = Mnemonic.generate();
 
     const secretKey = mnemonic.deriveKey(0);
-    const publickKey = secretKey.generatePublicKey();
+    const publicKey = secretKey.generatePublicKey();
 
     console.log("Secret key: ", secretKey.hex());
-    console.log("Public key: ", publickKey.hex());
+    console.log("Public key: ", publicKey.hex());
 } // md-ignore
 // ```
 
@@ -50,18 +50,17 @@ import path from 'path';
 // ``` js
 { // md-ignore
     const mnemonic = Mnemonic.generate();
-
     const secretKey = mnemonic.deriveKey();
 
     // saves the mnemonic to a keystore file with kind=mnemonic // md-as-comment
-    const wallet = UserWallet.fromSecretKey({ secretKey: aliceSecretKey, password: password });
+    const wallet = UserWallet.fromSecretKey({ secretKey: secretKey, password: "password" });
 
     const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
     wallet.save(filePath)
 } // md-ignore
 // ```
 
-// **Saving a secrey key to a PEM file**
+// **Saving a secret key to a PEM file**
 // We can save a secret key to a pem file. *This is not recommended as it is not secure, but it's very convenient for testing purposes.*
 
 // ``` js
@@ -120,20 +119,6 @@ import { KeyPair } from "@multiversx/sdk-core";
 } // md-ignore
 // ```
 
-// **Generating a KeyPair**
-// A `KeyPair` is a wrapper over a secret key and a public key. We can create a keypair and use it for signing or verifying.
-
-// ``` js
-
-{ // md-ignore
-    const keypair = KeyPair.generate();
-
-    // by default, derives using the index = 0 // md-as-comment
-    const secretKey = keypair.getSecretKey();
-    const publicKey = keypair.getPublicKey();
-} // md-ignore
-// ```
-
 // **Loading a wallet from a keystore secret key file**
 
 // ``` js
@@ -141,7 +126,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 {// md-ignore
     const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
 
-    let secretKey = UserWallet.loadSecretKey(path, "password");
+    let secretKey = UserWallet.loadSecretKey(filePath, "password");
     let address = secretKey.generatePublicKey().toAddress('erd');
 
     console.log("Secret key: ", secretKey.hex());
@@ -155,7 +140,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 { // md-ignore
     const filePath = path.join("src", "testdata", "testwallets", "wallet.pem");
 
-    let pem = UserPem.fromFile(path);
+    let pem = UserPem.fromFile(filePath);
 
     console.log("Secret key: ", pem.secretKey.hex());
     console.log("Public key: ", pem.publicKey.hex());

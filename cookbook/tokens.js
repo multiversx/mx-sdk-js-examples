@@ -2,7 +2,8 @@
 
 // In this section, we're going to create transactions to issue fungible tokens, issue semi-fungible tokens, create NFTs, set token roles, but also parse these transactions to extract their outcome (e.g. get the token identifier of the newly issued token).
 
-// These methods are available through the `TokenManagementController` and the `TokenManagementTransactionsFactory`. The controller also provides built-in methods for awaiting transaction completion and parsing transaction outcomes. 
+// These methods are available through the `TokenManagementController` and the `TokenManagementTransactionsFactory`. 
+// The controller also includes built-in methods for awaiting the completion of transactions and parsing their outcomes.
 // For the factory, the same functionality can be achieved using the `TokenManagementTransactionsOutcomeParser`.
 
 // For scripts or quick network interactions, we recommend using the controller. However, for a more granular approach (e.g., DApps), the factory is the better choice.
@@ -16,9 +17,9 @@ import path from 'path';
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const controller = entrypoint.creatTokenManagementController();
+  const controller = entrypoint.createTokenManagementController();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -56,12 +57,13 @@ import path from 'path';
 // **Issuing fungible tokens using the factory** 
 // ```js
 import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
+
 { // md-ignore
   // create the entrypoint and the token management transactions factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTokenManagementTransactionsFactory();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -110,9 +112,9 @@ import { Address } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const controller = entrypoint.creatTokenManagementController();
+  const controller = entrypoint.createTokenManagementController();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -152,7 +154,7 @@ import { Address } from "@multiversx/sdk-core";
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTokenManagementTransactionsFactory();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
@@ -198,9 +200,9 @@ import { Address } from "@multiversx/sdk-core";
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const controller = entrypoint.creatTokenManagementController();
+  const controller = entrypoint.createTokenManagementController();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -241,7 +243,7 @@ import { Address } from "@multiversx/sdk-core";
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTokenManagementTransactionsFactory();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -290,7 +292,7 @@ import { Address } from "@multiversx/sdk-core";
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -343,7 +345,7 @@ import { Address } from "@multiversx/sdk-core";
 
   const identifier = outcome[0].tokenIdentifier;
   const nonce = outcome[0].nonce;
-  const initalQuantity = outcome[0].initalQuantity;
+  const initialQuantity = outcome[0].initialQuantity;
 
 } // md-ignore
 // ```
@@ -351,13 +353,12 @@ import { Address } from "@multiversx/sdk-core";
 // **Issuing NFT collection & creating NFTs using the factory**
 // ```js
 
-
 { // md-ignore
   // create the entrypoint and the token management transdactions factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTokenManagementTransactionsFactory();
 
-  // create the issuer ot the token // md-as-comment
+  // create the issuer of the token // md-as-comment
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
@@ -423,7 +424,7 @@ import { Address } from "@multiversx/sdk-core";
 
   const identifier = outcome[0].tokenIdentifier;
   const nonce = outcome[0].nonce;
-  const initalQuantity = outcome[0].initalQuantity;
+  const initialQuantity = outcome[0].initialQuantity;
 
 } // md-ignore
 // ```

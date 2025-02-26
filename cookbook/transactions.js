@@ -3,7 +3,7 @@
 // In this section, we’ll explore how to create different types of transactions. To create transactions, we can use either controllers or factories. 
 // Controllers are ideal for quick scripts or network interactions, while factories provide a more granular and lower-level approach, typically required for DApps.
 
-// Controllers often use the same parameters as factories, but with the addition of an Account and the sender’s nonce as arguments. 
+// Controllers typically use the same parameters as factories, but they also require an Account object and the sender’s nonce.
 // Controllers also include extra functionality, such as waiting for transaction completion and parsing transactions. 
 // The same functionality can be achieved for transactions built using factories, and we’ll see how in the sections below. In the next section, we’ll learn how to create transactions using both methods.
 
@@ -63,7 +63,8 @@ import { Account } from '@multiversx/sdk-core';
 // If you know you’ll only be sending native tokens, you can create the transaction using the `createTransactionForNativeTokenTransfer` method.
 
 // ## Native Token Transfers Using the Factory
-// When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
+// When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. 
+// You will need to handle these aspects after the transaction is created.
 
 // ```js
 import path from 'path';
@@ -76,7 +77,7 @@ import path from 'path';
   const alice = await Account.newFromPem(filePath);
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(sender.address)
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
 
   const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
@@ -110,7 +111,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
   const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(sender.address)
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
 
   const esdt = new Token({ identifier: "TEST-123456" });
   const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
@@ -133,7 +134,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
 
 // If you know you'll only send ESDT tokens, the same transaction can be created using createTransactionForEsdtTokenTransfer.
 
-// ## Custom token transafers using the factory
+// ## Custom token transfers using the factory
 // When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 // ```js
@@ -147,7 +148,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
   const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(sender.address)
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
 
   const esdt = new Token({ identifier: "TEST-123456" }); // fungible tokens don't have a nonce
   const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n }); // we set the desired amount we want to send
@@ -189,7 +190,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
   const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(sender.address)
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
 
   const esdt = new Token({ identifier: "TEST-123456" });
   const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
@@ -202,7 +203,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
+    tokenTransfers: [firstTransfer, secondTransfer],
   });
 
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -224,7 +225,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
   const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(sender.address)
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
 
   const esdt = new Token({ identifier: "TEST-123456" });
   const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
@@ -237,7 +238,7 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
+    tokenTransfers: [firstTransfer, secondTransfer],
   });
 
   const txHash = await entrypoint.sendTransaction(transaction);

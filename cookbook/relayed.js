@@ -53,6 +53,8 @@ import path from 'path';
 // Let’s issue a fungible token using a relayed transaction:
 
 // ```js
+import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
+import path from 'path';
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
   const entrypoint = new DevnetEntrypoint();
@@ -101,6 +103,8 @@ import path from 'path';
 // Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 // ```js
+import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
+import path from 'path';
 { // md-ignore
   // create the entrypoint and the token management factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
