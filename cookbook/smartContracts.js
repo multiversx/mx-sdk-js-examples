@@ -20,6 +20,7 @@ let abi = AbiRegistry.create(abiObj)
 // Loading the ABI from an URL
 
 // ```js
+import { AbiRegistry } from "@multiversx/sdk-core";
 import axios from "axios";
 { // md-ignore
 const response = await axios.get("https://github.com/multiversx/mx-sdk-js-core/raw/main/src/testdata/adder.abi.json");

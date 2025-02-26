@@ -43,7 +43,8 @@ import path from 'path';
 // **Verifying Message signature using a UserVerifier**:
 
 // ```js
-import { Message, MessageComputer } from "@multiversx/sdk-core";
+import { Account, Address, Message, MessageComputer, UserVerifier } from "@multiversx/sdk-core";
+import path from 'path';
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const account = await Account.newFromPem(filePath);
@@ -74,7 +75,8 @@ import { Message, MessageComputer } from "@multiversx/sdk-core";
 // **Verifying a signature using a public key**:
 
 // ```js
-import { UserPublicKey } from "@multiversx/sdk-core";
+import { Account, Address, UserPublicKey, Transaction, TransactionComputer, UserVerifier } from "@multiversx/sdk-core";
+import path from 'path';
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const account = await Account.newFromPem(filePath);
@@ -112,6 +114,8 @@ import { UserPublicKey } from "@multiversx/sdk-core";
 // To prepare a message for transmission, you can use the `MessageComputer.packMessage()` utility method.
 
 // ```js
+import { Account, Address, Message, MessageComputer } from "@multiversx/sdk-core";
+import path from 'path';
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
     const account = await Account.newFromPem(filePath);
@@ -134,6 +138,7 @@ import { UserPublicKey } from "@multiversx/sdk-core";
 // Then, on the receiving side, you can use `func:MessageComputer.unpackMessage()` to reconstruct the message, prior verification:
 
 // ```js
+import { Account, Address, MessageComputer, UserVerifier } from "@multiversx/sdk-core";
 {
     const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
 

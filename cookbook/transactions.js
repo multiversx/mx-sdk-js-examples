@@ -14,6 +14,7 @@
 
 // ```js
 import { DevnetEntrypoint, TransactionsFactoryConfig, TransfersController, TransferTransactionsFactory } from '@multiversx/sdk-core';
+import path from 'path';
 {
   const entrypoint = new DevnetEntrypoint();
 
@@ -35,7 +36,8 @@ import { DevnetEntrypoint, TransactionsFactoryConfig, TransfersController, Trans
 // When using the controller, the transaction will be signed because we’ll be working with an Account.
 
 // ```js
-import { Account } from '@multiversx/sdk-core';
+import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
+import path from 'path';
 {
   const entrypoint = new DevnetEntrypoint();
 
@@ -67,6 +69,7 @@ import { Account } from '@multiversx/sdk-core';
 // You will need to handle these aspects after the transaction is created.
 
 // ```js
+import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
 import path from 'path';
 
 {
@@ -101,7 +104,8 @@ import path from 'path';
 // ## Custom token transfers using the controller
 
 // ```js
-import { Token, TokenTransfer } from '@multiversx/sdk-core';
+import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
+import path from 'path';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -138,6 +142,8 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
 // When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 // ```js
+import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
+import path from 'path';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -181,6 +187,8 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
 // We can send both types of tokens using either the `controller` or the `factory`, but for simplicity, we’ll use the controller in this example.
 
 // ```js
+import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
+import path from 'path';
 
 {
   const entrypoint = new DevnetEntrypoint();
@@ -213,34 +221,3 @@ import { Token, TokenTransfer } from '@multiversx/sdk-core';
 // ## Decoding transaction data
 // For example, when sending multiple ESDT and NFT tokens, the receiver field of the transaction is the same as the sender field, and the value is set to 0 because all the information is encoded in the transaction’s data field.
 // To decode the data field, we use a tool called the `TransactionDecoder`. First, we fetch the transaction from the network, then use the decoder to extract the relevant details.
-//TODO check how to decode data in js
-
-// ```js
-
-{
-  const entrypoint = new DevnetEntrypoint();
-
-  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const alice = await Account.newFromPem(filePath);
-  const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
-
-  // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
-
-  const esdt = new Token({ identifier: "TEST-123456" });
-  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
-
-  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
-  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n });
-
-
-  const transfersController = entrypoint.createTransfersController()
-  const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
-    receiver: bob,
-    nativeAmount: 1000000000000000000n,
-    tokenTransfers: [firstTransfer, secondTransfer],
-  });
-
-  const txHash = await entrypoint.sendTransaction(transaction);
-}
-// ```

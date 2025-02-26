@@ -56,7 +56,8 @@ import path from 'path';
 
 // **Issuing fungible tokens using the factory** 
 // ```js
-import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
+import { Account, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management transactions factory // md-as-comment
@@ -107,7 +108,8 @@ import { TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core";
 //  Setting special roles for fungible tokens using the controller
 
 // ```js
-import { Address } from "@multiversx/sdk-core";
+import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
@@ -148,6 +150,8 @@ import { Address } from "@multiversx/sdk-core";
 
 // **Setting special roles for fungible tokens using the factory**
 // ```js
+import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
@@ -196,6 +200,8 @@ import { Address } from "@multiversx/sdk-core";
 // **Issuing semi-fungible tokens using the controller**
 
 // ```js
+import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
@@ -237,6 +243,8 @@ import { Address } from "@multiversx/sdk-core";
 
 // **Issuing semi-fungible tokens using the factory**
 // ```js
+import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
@@ -286,6 +294,8 @@ import { Address } from "@multiversx/sdk-core";
 // **Issuing NFT collection & creating NFTs using the controller**
 
 // ```js
+import { Account, DevnetEntrypoint } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management controller // md-as-comment
@@ -352,6 +362,8 @@ import { Address } from "@multiversx/sdk-core";
 
 // **Issuing NFT collection & creating NFTs using the factory**
 // ```js
+import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
   // create the entrypoint and the token management transdactions factory // md-as-comment

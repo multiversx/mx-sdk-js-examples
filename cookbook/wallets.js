@@ -15,7 +15,7 @@ console.log({ words });
 // The mnemonic can be saved to a keystore file:
 
 // ``` js
-import { UserWallet } from "@multiversx/sdk-core";
+import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
 import path from 'path';
 
 { // md-ignore
@@ -33,6 +33,7 @@ import path from 'path';
 // Given a mnemonic, we can derive keypairs:
 
 // ``` js
+import { Mnemonic } from "@multiversx/sdk-core";
 { // md-ignore
     const mnemonic = Mnemonic.generate();
 
@@ -48,6 +49,7 @@ import path from 'path';
 // The secret key can also be saved to a keystore file:
 
 // ``` js
+import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
 { // md-ignore
     const mnemonic = Mnemonic.generate();
     const secretKey = mnemonic.deriveKey();
@@ -64,7 +66,7 @@ import path from 'path';
 // We can save a secret key to a pem file. *This is not recommended as it is not secure, but it's very convenient for testing purposes.*
 
 // ``` js
-import { UserPem } from "@multiversx/sdk-core";
+import { Mnemonic, UserPem } from "@multiversx/sdk-core";
 { // md-ignore
     const mnemonic = Mnemonic.generate();
 
@@ -99,12 +101,14 @@ import { KeyPair } from "@multiversx/sdk-core";
 // Load a keystore that holds an encrypted mnemonic (and perform wallet derivation at the same time):
 
 // ``` js
+import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
+import path from 'path';
 
 { // md-ignore
     const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
 
     // loads the mnemonic and derives the a secret key; default index = 0 // md-as-comment
-    let secretKey = UserWallet.loadSecretKey(path, "password");
+    let secretKey = UserWallet.loadSecretKey(filePath, "password");
     let address = secretKey.generatePublicKey().toAddress('erd')
 
     console.log("Secret key: ", secretKey.hex())
@@ -122,6 +126,8 @@ import { KeyPair } from "@multiversx/sdk-core";
 // **Loading a wallet from a keystore secret key file**
 
 // ``` js
+import { Mnemonic, UserWallet } from "@multiversx/sdk-core";
+import path from 'path';
 
 {// md-ignore
     const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
@@ -135,6 +141,8 @@ import { KeyPair } from "@multiversx/sdk-core";
 // ```
 
 // **Loading a wallet from a PEM file**
+import { Mnemonic, UserPem } from "@multiversx/sdk-core";
+import path from 'path';
 
 // ``` js
 { // md-ignore

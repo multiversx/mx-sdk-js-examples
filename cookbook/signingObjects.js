@@ -1,11 +1,11 @@
 
 // ## Signing objects
 
-// Signing is done using an account’s secret key. To simplify this process, we provide wrappers like [Account](TODO), which streamline signing operations. 
+// Signing is done using an account’s secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations. 
 // First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 // ## Signing a Transaction using an Account
-// We are going to assume we have an account at this point. If you don't, fell free to check out the [creating an account section](TODO).
+// We are going to assume we have an account at this point. If you don't, fell free to check out the [creating an account section](#creating-accounts).
 
 // ```js
 import { Account, Address, Transaction } from "@multiversx/sdk-core";
