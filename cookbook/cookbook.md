@@ -63,15 +63,17 @@ For example, to create a Devnet entrypoint:
 
 ```js
 
-const pemPath = path.resolve( "../multiversx-sdk/testutils/testwallets/alice.pem" );
-const accountFromPem = Account.newFromPem( pemPath );
+{
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const accountFromPem = Account.newFromPem( filePath );
+}
 ```
 
 3. From a Keystore File
 
 ```js
 {
-  const keystorePath = path.resolve( "../multiversx-sdk/testutils/testwallets/alice.json" );
+  const keystorePath = path.join( "src", "testdata", "testwallets", "alice.json" );
   const accountFromKeystore = Account.newFromKeystore( {
     filePath: keystorePath,
     password: "password"
@@ -124,7 +126,7 @@ For more details, see the [Creating Transactions](#creating-transactions) sectio
 ## Saving the Account to a File
 
 Accounts can be saved to either a PEM file or a keystore file.
-While PEM wallets are less secure for storing cryptocurrencies, they are convenient for testing purposes.
+While PEM wallets are less secure for storing secret keys, they are convenient for testing purposes.
 Keystore files offer a higher level of security.
 
 Saving the Account to a PEM File
@@ -164,23 +166,17 @@ The Ledger device also stores the nonce.
 
 Note: The multiversx-sdk package does not include Ledger support by default. To enable it, install the package with Ledger dependencies:
 ```bash
-npm install @multiversx/sdk-ledger
+npm install @multiversx/sdk-hw-provider
 ```
 
 ## Creating a Ledger Account
-When instantiating a LedgerAccount, you can specify the index of the address to use. By default, index 0 is used.
-
-```js
-{
-  const account = new LedgerAccount();  // Defaults to index 0
-}
-```
+This can be done using the dedicated library. You can find more information [here](/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-hardware-wallet-provider)
 
 When signing transactions or messages, the Ledger device will prompt you to confirm the details before proceeding.
 
 ## Compatibility with IAccount Interface
 
-Both Account and LedgerAccount implement the IAccount interface, making them compatible with transaction controllers and any other component that expects this interface.
+The `Account` implements the `IAccount` interface, making it compatible with transaction controllers and any other component that expects this interface.
 
 ## Calling the Faucet
 
@@ -677,7 +673,7 @@ When using the controller, the transaction will be signed because we’ll be wor
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
     sender,
-    BigInt( sender.getNonceThenIncrement().valueOf() ),
+    BigInt( sender.getNonceThenIncrement() ),
     {
       receiver: sender.address,
       nativeAmount: BigInt( 1 ),
@@ -833,10 +829,6 @@ We can send both types of tokens using either the `controller` or the `factory`,
 }
 ```
 
-## Decoding transaction data
-For example, when sending multiple ESDT and NFT tokens, the receiver field of the transaction is the same as the sender field, and the value is set to 0 because all the information is encoded in the transaction’s data field.
-To decode the data field, we use a tool called the `TransactionDecoder`. First, we fetch the transaction from the network, then use the decoder to extract the relevant details.
-
 import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, Code, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core";
 import axios from "axios";
 import { promises } from "fs";
@@ -914,7 +906,7 @@ If an ABI file isn’t available, but you know the contract’s endpoints and da
 ## Smart Contract deployments
 For creating smart contract deployment transactions, we have two options: a controller and a factory. Both function similarly to the ones used for token transfers.
 When creating transactions that interact with smart contracts, it's recommended to provide the ABI file to the controller or factory if possible.
-This allows arguments to be passed as native values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
+This allows arguments to be passed as native Javascript values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
 
 # Deploying a Smart Contract Using the Controller
 
@@ -1239,7 +1231,7 @@ Let's create the same smart contract call transaction, but using the `factory`.
 ```
 
 **Parsing transaction outcome**
-As said before, the add endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
+As said before, the `add` endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
 
 ```js
 {
@@ -1694,7 +1686,7 @@ These are just a few examples of what you can do using the token management cont
 
 The account management controller and factory allow us to create transactions for managing accounts, such as:
 - Guarding and unguarding accounts
-- Saving key-value pairs
+- Saving key-value pairs in the account storage, on blockchain.
 
 To learn more about Guardians, refer to the [official documentation](/developers/built-in-functions/#setguardian).
 A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
@@ -1883,6 +1875,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 ```
 
 **Saving a key-value pair to an account using the controller**
+You can find more information [here](/developers/account-storage) regarding the account storage
 
 ```js
 {
@@ -1948,7 +1941,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 
 ## Delegation management
 
-To learn more about staking providers and delegation, refer to the official documentation.
+To learn more about staking providers and delegation, refer to the official [documentation](/validators/delegation-manager/#introducing-staking-providers).
 In this section, we'll cover how to:
 - Create a new delegation contract
 - Retrieve the contract address
@@ -2064,6 +2057,7 @@ We can send funds to a delegation contract to earn rewards.
 ```
 
 **Delegating funds to the contract using the factory**
+
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2379,6 +2373,7 @@ Let’s see how to create a relayed transaction:
 **Creating relayed transactions using controllers**
 We can create relayed transactions using any of the available controllers.
 Each controller includes a relayer argument, which must be set if we want to create a relayed transaction.
+
 Let’s issue a fungible token using a relayed transaction:
 
 ```js
@@ -2391,7 +2386,7 @@ Let’s issue a fungible token using a relayed transaction:
   const walletsPath = path.join( "src", "testdata", "testwallets" );
   const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
 
-  // carol will be our relayer, that means she is paying the gas for the transaction
+  // Carol will be our relayer, that means she is paying the gas for the transaction
   const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   // fetch the nonce of the network
@@ -2489,7 +2484,8 @@ Let’s issue a token using a guarded account:
 
 **Creating guarded transactions using controllers**
 We can create guarded transactions using any of the available controllers.
-Each controller includes a guarded argument, which must be set if we want to create a guarded transaction.
+
+Each controller method includes a guardian argument, which must be set if we want to create a guarded transaction.
 Let’s issue a fungible token using a relayed transaction:
 
 ```js
@@ -2589,7 +2585,7 @@ Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 We can create guarded relayed transactions just like we did before. However, keep in mind:
 
-🔹 Only the sender can be guarded—the relayer cannot be guarded.
+Only the sender can be guarded—the relayer cannot be guarded.
 
 Flow for Creating Guarded Relayed Transactions:
 - Using Controllers:
@@ -2642,7 +2638,7 @@ Create an address from a raw public key
 ```
 
 **Using an AddressFactory to create addresses**
-AddressFactory allows creating multiple addresses with a custom HRP, ensuring consistency across your application.
+AddressFactory allows creating addresses with a custom HRP, ensuring consistency across your application.
 
 ``` js
 {
@@ -2669,7 +2665,7 @@ const contractAddress = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgquzmh78klkqwt
 console.log( "Is contract address:", contractAddress.isSmartContract() );
 ```
 
-**Checking if an address is a smart contract**
+**Changing the default hrp**
 The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default.
 You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 ``` js
@@ -2833,7 +2829,7 @@ import { Account, Address, Message, MessageComputer, Transaction, TransactionCom
 import path from 'path';
 ## Signing objects
 
-Signing is done using an account’s secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations.
+Signing is done using an account's secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations.
 First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 ## Signing a Transaction using an Account
