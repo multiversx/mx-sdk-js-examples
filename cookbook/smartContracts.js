@@ -1,3 +1,7 @@
+import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, Code, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core";
+import axios from "axios";
+import { promises } from "fs";
+import path from 'path';
 // ## Smart Contracts
 
 // Contract ABIs
@@ -8,24 +12,20 @@
 // Loading the ABI from a file
 
 // ```js
-import { AbiRegistry } from "@multiversx/sdk-core";
-import { promises } from "fs";
-{ // md-ignore
-let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
-let abiObj = JSON.parse(abiJson);
-let abi = AbiRegistry.create(abiObj)
-} // md-ignore
+{
+  let abiJson = await promises.readFile( "../contracts/adder.abi.json", { encoding: "utf8" } );
+  let abiObj = JSON.parse( abiJson );
+  let abi = AbiRegistry.create( abiObj );
+}
 // ```
 
 // Loading the ABI from an URL
 
 // ```js
-import { AbiRegistry } from "@multiversx/sdk-core";
-import axios from "axios";
-{ // md-ignore
-const response = await axios.get("https://github.com/multiversx/mx-sdk-js-core/raw/main/src/testdata/adder.abi.json");
-abi = AbiRegistry.create(response.data);
-} // md-ignore
+{
+  const response = await axios.get( "https://github.com/multiversx/mx-sdk-js-core/raw/main/src/testdata/adder.abi.json" );
+  abi = AbiRegistry.create( response.data );
+}
 // ```
 
 // Manually construct the ABI
@@ -33,43 +33,43 @@ abi = AbiRegistry.create(response.data);
 // If an ABI file isn’t available, but you know the contract’s endpoints and data types, you can manually construct the ABI.
 
 // ```js
-{ // md-ignore
-abi = AbiRegistry.create({
-  "endpoints": [{
+{
+  abi = AbiRegistry.create( {
+    "endpoints": [ {
       "name": "add",
       "inputs": [],
       "outputs": []
-  }]
-});
-} // md-ignore
+    } ]
+  } );
+}
 // ```
 
 // ```js
-{ // md-ignore
-abi = AbiRegistry.create({
-  "endpoints": [
+{
+  abi = AbiRegistry.create( {
+    "endpoints": [
       {
-          "name": "foo",
-          "inputs": [
-              { "type": "BigUint" },
-              { "type": "u32" },
-              { "type": "Address" }
-          ],
-          "outputs": [
-              { "type": "u32" }
-          ]
+        "name": "foo",
+        "inputs": [
+          { "type": "BigUint" },
+          { "type": "u32" },
+          { "type": "Address" }
+        ],
+        "outputs": [
+          { "type": "u32" }
+        ]
       },
       {
-          "name": "bar",
-          "inputs": [
-              { "type": "counted-variadic<utf-8 string>" },
-              { "type": "variadic<u64>" }
-          ],
-          "outputs": []
+        "name": "bar",
+        "inputs": [
+          { "type": "counted-variadic<utf-8 string>" },
+          { "type": "variadic<u64>" }
+        ],
+        "outputs": []
       }
-  ]
-});
-} // md-ignore
+    ]
+  } );
+}
 // ```
 
 // ## Smart Contract deployments
@@ -80,43 +80,40 @@ abi = AbiRegistry.create({
 // # Deploying a Smart Contract Using the Controller
 
 // ```js
-import { Account, Code, DevnetEntrypoint, U32Value } from '@multiversx/sdk-core';
-import path from 'path';
+{
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const sender = await Account.newFromPem( filePath );
 
-{ // md-ignore
-const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-const sender = await Account.newFromPem(filePath);
+  // the developer is responsible for managing the nonce
+  sender.nonce = await entrypoint.recallAccountNonce( sender.address );
 
-// the developer is responsible for managing the nonce
-sender.nonce  = await entrypoint.recallAccountNonce(sender.address)
+  // load the contract bytecode
+  const codeBuffer = await promises.readFile( "../contracts/adder.wasm" );
+  const code = Code.fromBuffer( codeBuffer );
+  // load the abi file
+  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
 
-// load the contract bytecode
-const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-const code = Code.fromBuffer(codeBuffer);
-// load the abi file
-abi = await loadAbiRegistry("src/testdata/adder.abi.json")
+  const entrypoint = new DevnetEntrypoint();
+  const controller = entrypoint.createSmartContractController( abi );
 
-const entrypoint = new DevnetEntrypoint();
-const controller = entrypoint.createSmartContractController(abi);
+  // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
+  let args = [ new U32Value( 42 ) ];
+  // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
+  args = [ 42 ];
 
-// For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-let args = [new U32Value(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-args = [42];
+  const deployTransaction = await controller.createTransactionForDeploy(
+    sender,
+    sender.getNonceThenIncrement(),
+    {
+      bytecode: code.valueOf(),
+      gasLimit: 6000000n,
+      arguments: args,
+    },
+  );
 
-const deployTransaction = await controller.createTransactionForDeploy(
-  sender,
-  sender.getNonceThenIncrement(),
-  {
-    bytecode: code.valueOf(),
-    gasLimit: 6000000n,
-    arguments: args,
-  },
-);
-
-// broadcasting the transaction
-const txHash = await entrypoint.sendTransaction(deployTransaction);
-} // md-ignore
+  // broadcasting the transaction
+  const txHash = await entrypoint.sendTransaction( deployTransaction );
+}
 // ```
 
 // md-insert:mixedTypedValuesAndNativeValues
@@ -124,24 +121,24 @@ const txHash = await entrypoint.sendTransaction(deployTransaction);
 // # Parsing contract deployment transactions
 
 // ```js
-{ // md-ignore
-// We use the transaction hash we got when broadcasting the transaction
-const outcome = await controller.awaitCompletedDeploy(txHash); // waits for transaction completion and parses the result
-const contractAddress = Address.newFromBech32(outcome.contracts[0].address);
-} // md-ignore
+{
+  // We use the transaction hash we got when broadcasting the transaction
+  const outcome = await controller.awaitCompletedDeploy( txHash ); // waits for transaction completion and parses the result
+  const contractAddress = Address.newFromBech32( outcome.contracts[ 0 ].address );
+}
 // ```
 
 // If we want to wait for transaction completion and parse the result in two different steps, we can do as follows:
 
 // ```js
-{ // md-ignore
-// We use the transaction hash we got when broadcasting the transaction
-// If we want to wait for transaction completion and parse the result in two different steps, we can do as follows:
-const transactionOnNetwork = await controller.awaitTransactionCompleted(txHash); 
+{
+  // We use the transaction hash we got when broadcasting the transaction
+  // If we want to wait for transaction completion and parse the result in two different steps, we can do as follows:
+  const transactionOnNetwork = await controller.awaitTransactionCompleted( txHash );
 
-// parsing the transaction
-const outcome = await controller.parseDeploy(transactionOnNetwork);
-} // md-ignore
+  // parsing the transaction
+  const outcome = await controller.parseDeploy( transactionOnNetwork );
+}
 // ```
 
 // ### Computing the contract address
@@ -149,74 +146,72 @@ const outcome = await controller.parseDeploy(transactionOnNetwork);
 // Even before broadcasting, at the moment you know the sender's address and the nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the smart contract:
 
 // ```js
-import { Address, AddressComputer } from "@multiversx/sdk-core";
-{ // md-ignore
-const addressComputer = new AddressComputer();
-const contractAddress = addressComputer.computeContractAddress(
-    Address.fromBech32(deployTransaction.sender),
+{
+  const addressComputer = new AddressComputer();
+  const contractAddress = addressComputer.computeContractAddress(
+    Address.fromBech32( deployTransaction.sender ),
     deployTransaction.nonce
-);
+  );
 
-console.log("Contract address:", contractAddress.bech32());
-} // md-ignore
+  console.log( "Contract address:", contractAddress.bech32() );
+}
 // ```
 
 // ## Deploying a smart contract using the factory
 // After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 // ```js
-import { BigUIntValue, SmartContractTransactionsOutcomeParser } from '@multiversx/sdk-core';
-{ // md-ignore
-const abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
-const abiObj = JSON.parse(abiJson);
-const abi = AbiRegistry.create(abiObj)
+{
+  const abiJson = await promises.readFile( "../contracts/adder.abi.json", { encoding: "utf8" } );
+  const abiObj = JSON.parse( abiJson );
+  const abi = AbiRegistry.create( abiObj );
 
-const entrypoint = new DevnetEntrypoint();
-const factory = entrypoint.createTransfersTransactionsFactory()
+  const entrypoint = new DevnetEntrypoint();
+  const factory = entrypoint.createTransfersTransactionsFactory();
 
-// load the contract bytecode
-const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-const code = Code.fromBuffer(codeBuffer);
+  // load the contract bytecode
+  const codeBuffer = await promises.readFile( "../contracts/adder.wasm" );
+  const code = Code.fromBuffer( codeBuffer );
 
-// For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-let args = [new BigUIntValue(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-args = [42];
+  // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
+  let args = [ new BigUIntValue( 42 ) ];
+  // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
+  args = [ 42 ];
 
-const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-const alice = await Account.newFromPem(filePath);
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const alice = await Account.newFromPem( filePath );
 
-const deployTransaction = await factory.createTransactionForDeploy(
-  sender,
-  {
-    bytecode: code.valueOf(),
-    gasLimit: 6000000n,
-    arguments: args,
-  },
-);
+  const deployTransaction = await factory.createTransactionForDeploy(
+    sender,
+    {
+      bytecode: code.valueOf(),
+      gasLimit: 6000000n,
+      arguments: args,
+    },
+  );
 
-// the developer is responsible for managing the nonce
-alice.nonce  = await entrypoint.recallAccountNonce(sender.address)
+  // the developer is responsible for managing the nonce
+  alice.nonce = await entrypoint.recallAccountNonce( sender.address );
 
-// set the nonce
-deployTransaction.nonce = alice.nonce
+  // set the nonce
+  deployTransaction.nonce = alice.nonce;
 
-// sign the transaction
-deployTransaction.signature = alice.signTransaction(transaction)
+  // sign the transaction
+  deployTransaction.signature = alice.signTransaction( transaction );
 
-// broadcasting the transaction
-const txHash = await entrypoint.sendTransaction(deployTransaction);
+  // broadcasting the transaction
+  const txHash = await entrypoint.sendTransaction( deployTransaction );
 
-// waiting for transaction to complete 
-const transactionOnNetwork = await entrypoint.awaitTransactionCompleted(txHash);
+  // waiting for transaction to complete 
+  const transactionOnNetwork = await entrypoint.awaitTransactionCompleted( txHash );
 
-// parsing transaction
-const parser = new SmartContractTransactionsOutcomeParser();
-const parsedOutcome = parser.parseDeploy(transactionOnNetwork);
-const contractAddress = parsedOutcome.contracts[0].address
+  // parsing transaction
+  const parser = new SmartContractTransactionsOutcomeParser();
+  const parsedOutcome = parser.parseDeploy( transactionOnNetwork );
+  const contractAddress = parsedOutcome.contracts[ 0 ].address;
 
-console.log(contractAddress);
-} // md-ignore
+  console.log( contractAddress );
+}
 // ```
 
 // ### Smart Contract calls
@@ -226,46 +221,45 @@ console.log(contractAddress);
 // **Calling a smart contract using the controller**
 
 // ```js
-{ // md-ignore
+{
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const sender = await Account.newFromPem( filePath );
 
-const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-const sender = await Account.newFromPem(filePath);
+  // the developer is responsible for managing the nonce
+  sender.nonce = await entrypoint.recallAccountNonce( sender.address );
 
-// the developer is responsible for managing the nonce
-sender.nonce  = await entrypoint.recallAccountNonce(sender.address)
+  // load the contract bytecode
+  const codeBuffer = await promises.readFile( "../contracts/adder.wasm" );
+  const code = Code.fromBuffer( codeBuffer );
+  // load the abi file
+  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
 
-// load the contract bytecode
-const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-const code = Code.fromBuffer(codeBuffer);
-// load the abi file
-abi = await loadAbiRegistry("src/testdata/adder.abi.json")
+  const entrypoint = new DevnetEntrypoint();
+  const controller = entrypoint.createSmartContractController( abi );
 
-const entrypoint = new DevnetEntrypoint();
-const controller = entrypoint.createSmartContractController(abi);
+  const contractAddress = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug" );
 
-const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
+  // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
+  let args = [ new U32Value( 42 ) ];
+  // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
+  args = [ 42 ];
 
-// For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-let args = [new U32Value(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-args = [42];
+  const transaction = await controller.createTransactionForExecute(
+    sender,
+    sender.getNonceThenIncrement(),
+    {
+      contract: contractAddress,
+      gasLimit: 5000000n,
+      function: "add",
+      arguments: args,
+    },
+  );
 
-const transaction = await controller.createTransactionForExecute(
-  sender,
-  sender.getNonceThenIncrement(),
-  {
-    contract: contractAddress,
-    gasLimit: 5000000n,
-    function: "add",
-    arguments: args,
-  },
-);
+  // broadcasting the transaction
+  const txHash = await entrypoint.sendTransaction( transaction );
 
-// broadcasting the transaction
-const txHash = await entrypoint.sendTransaction(transaction);
-
-console.log(txHash);
-} // md-ignore
+  console.log( txHash );
+}
 // ```
 
 // **Parsing smart contract call transactions**
@@ -274,8 +268,10 @@ console.log(txHash);
 // ```js
 // waits for transaction completion and parses the result
 // we use the transaction hash we got when broadcasting the transaction
-const parsedOutcome = controller.awaitCompletedExecute(transactionOnNetwork);
-const values = parsedOutcome.contracts.values
+{
+  const parsedOutcome = controller.awaitCompletedExecute( transactionOnNetwork );
+  const values = parsedOutcome.contracts.values;
+}
 // ```
 
 // ## **Calling a smart contract and sending tokens (transfer & execute)**
@@ -283,128 +279,127 @@ const values = parsedOutcome.contracts.values
 // Both EGLD and ESDT tokens or a combination of both can be sent. This functionality is supported by both the controller and the factory.
 
 // ```js
-{ // md-ignore
-const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-const sender = await Account.newFromPem(filePath);
+{
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const sender = await Account.newFromPem( filePath );
 
-// the developer is responsible for managing the nonce
-sender.nonce  = await entrypoint.recallAccountNonce(sender.address)
+  // the developer is responsible for managing the nonce
+  sender.nonce = await entrypoint.recallAccountNonce( sender.address );
 
-// load the contract bytecode
-const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-const code = Code.fromBuffer(codeBuffer);
+  // load the contract bytecode
+  const codeBuffer = await promises.readFile( "../contracts/adder.wasm" );
+  const code = Code.fromBuffer( codeBuffer );
 
-// load the abi file
-abi = await loadAbiRegistry("src/testdata/adder.abi.json")
+  // load the abi file
+  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
 
-// get the smart contracts controller
-const entrypoint = new DevnetEntrypoint();
-const controller = entrypoint.createSmartContractController(abi);
+  // get the smart contracts controller
+  const entrypoint = new DevnetEntrypoint();
+  const controller = entrypoint.createSmartContractController( abi );
 
-const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
+  const contractAddress = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug" );
 
-// For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-let args = [new U32Value(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-args = [42];
+  // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
+  let args = [ new U32Value( 42 ) ];
+  // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
+  args = [ 42 ];
 
-// creating the transfers
-const firstToken = new Token({ identifier: "TEST-38f249", nonce: 10 });
-const firstTransfer = new TokenTransfer({ token: firstToken, amount: 1n });
+  // creating the transfers
+  const firstToken = new Token( { identifier: "TEST-38f249", nonce: 10 } );
+  const firstTransfer = new TokenTransfer( { token: firstToken, amount: 1n } );
 
-const secondToken = new Token({ identifier: "BAR-c80d29" });
-const secondTransfer = new TokenTransfer({ token: secondToken, amount: 10000000000000000000n });
+  const secondToken = new Token( { identifier: "BAR-c80d29" } );
+  const secondTransfer = new TokenTransfer( { token: secondToken, amount: 10000000000000000000n } );
 
-const transaction = await controller.createTransactionForExecute(
-  sender,
-  sender.getNonceThenIncrement(),
-  {
-    contract: contractAddress,
-    gasLimit: 5000000n,
-    function: "add",
-    arguments: args,
-    nativeTransferAmount: 1000000000000000000n,
-    tokenTransfers: [firstTransfer, secondTransfer]
-  },
-);
+  const transaction = await controller.createTransactionForExecute(
+    sender,
+    sender.getNonceThenIncrement(),
+    {
+      contract: contractAddress,
+      gasLimit: 5000000n,
+      function: "add",
+      arguments: args,
+      nativeTransferAmount: 1000000000000000000n,
+      tokenTransfers: [ firstTransfer, secondTransfer ]
+    },
+  );
 
-// broadcasting the transaction
-const txHash = await entrypoint.sendTransaction(transaction);
+  // broadcasting the transaction
+  const txHash = await entrypoint.sendTransaction( transaction );
 
-console.log(txHash);
-} // md-ignore
+  console.log( txHash );
+}
 // ```
 
 // ## **Calling a smart contract using the factory**
 // Let's create the same smart contract call transaction, but using the `factory`.
 
 // ```js
-{ // md-ignore
-const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-const sender = await Account.newFromPem(filePath);
+{
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const sender = await Account.newFromPem( filePath );
 
-// the developer is responsible for managing the nonce
-sender.nonce  = await entrypoint.recallAccountNonce(sender.address)
+  // the developer is responsible for managing the nonce
+  sender.nonce = await entrypoint.recallAccountNonce( sender.address );
 
-// load the contract bytecode
-const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-const code = Code.fromBuffer(codeBuffer);
+  // load the contract bytecode
+  const codeBuffer = await promises.readFile( "../contracts/adder.wasm" );
+  const code = Code.fromBuffer( codeBuffer );
 
-// load the abi file
-abi = await loadAbiRegistry("src/testdata/adder.abi.json")
+  // load the abi file
+  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
 
-// get the smart contracts controller
-const entrypoint = new DevnetEntrypoint();
-const controller = entrypoint.createSmartContractTransactionsFactory(abi);
+  // get the smart contracts controller
+  const entrypoint = new DevnetEntrypoint();
+  const controller = entrypoint.createSmartContractTransactionsFactory( abi );
 
-const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
+  const contractAddress = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug" );
 
-// For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-let args = [new U32Value(42)];
-// Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-args = [42];
+  // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
+  let args = [ new U32Value( 42 ) ];
+  // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
+  args = [ 42 ];
 
-// creating the transfers
-const firstToken = new Token({ identifier: "TEST-38f249", nonce: 10 });
-const firstTransfer = new TokenTransfer({ token: firstToken, amount: 1n });
+  // creating the transfers
+  const firstToken = new Token( { identifier: "TEST-38f249", nonce: 10 } );
+  const firstTransfer = new TokenTransfer( { token: firstToken, amount: 1n } );
 
-const secondToken = new Token({ identifier: "BAR-c80d29" });
-const secondTransfer = new TokenTransfer({ token: secondToken, amount: 10000000000000000000n });
+  const secondToken = new Token( { identifier: "BAR-c80d29" } );
+  const secondTransfer = new TokenTransfer( { token: secondToken, amount: 10000000000000000000n } );
 
-const transaction = await controller.createTransactionForExecute(
-  sender,
-  {
-    contract: contractAddress,
-    gasLimit: 5000000n,
-    function: "add",
-    arguments: args,
-    nativeTransferAmount: 1000000000000000000n,
-    tokenTransfers: [firstTransfer, secondTransfer]
-  },
-);
+  const transaction = await controller.createTransactionForExecute(
+    sender,
+    {
+      contract: contractAddress,
+      gasLimit: 5000000n,
+      function: "add",
+      arguments: args,
+      nativeTransferAmount: 1000000000000000000n,
+      tokenTransfers: [ firstTransfer, secondTransfer ]
+    },
+  );
 
-transaction.nonce = sender.getNonceThenIncrement();
-transaction.signature = sender.signTransaction(transaction);
+  transaction.nonce = sender.getNonceThenIncrement();
+  transaction.signature = sender.signTransaction( transaction );
 
-// broadcasting the transaction
-const txHash = await entrypoint.sendTransaction(transaction);
+  // broadcasting the transaction
+  const txHash = await entrypoint.sendTransaction( transaction );
 
-console.log(txHash);
-} // md-ignore
+  console.log( txHash );
+}
 // ```
 
 // **Parsing transaction outcome**
 // As said before, the add endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
 
 // ```js
-
-{ // md-ignore
-// load the abi file
-abi = await loadAbiRegistry("src/testdata/adder.abi.json")
-const parser = SmartContractTransactionsOutcomeParser({transactionOnNetwork, function: 'add'})
-const transactionOnNetwork = entrypoint.getTransaction(txHash);
-const outcome = parser.parseExecute()
-} // md-ignore
+{
+  // load the abi file
+  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
+  const parser = SmartContractTransactionsOutcomeParser( { transactionOnNetwork, function: 'add' } );
+  const transactionOnNetwork = entrypoint.getTransaction( txHash );
+  const outcome = parser.parseExecute();
+}
 // ```
 
 // **Decoding transaction events**
@@ -415,12 +410,11 @@ const outcome = parser.parseExecute()
 // First, we load the abi file, then we fetch the transaction, we extract the event from the transaction and then we parse it.
 
 // ```js
-
-{ // md-ignore
-// load the abi file
-abi = await loadAbiRegistry("src/testdata/adder.abi.json")
-const parser = SmartContractTransactionsOutcomeParser({transactionOnNetwork, function: 'add'})
-const transactionOnNetwork = entrypoint.getTransaction(txHash);
-const outcome = parser.parseExecute()
-} // md-ignore
+{
+  // load the abi file
+  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
+  const parser = SmartContractTransactionsOutcomeParser( { transactionOnNetwork, function: 'add' } );
+  const transactionOnNetwork = entrypoint.getTransaction( txHash );
+  const outcome = parser.parseExecute();
+}
 // ```

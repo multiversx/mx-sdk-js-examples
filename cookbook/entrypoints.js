@@ -1,3 +1,4 @@
+import { DevnetEntrypoint } from "@multiversx/sdk-core"; // md-ignore
 // ## Overview
 
 // This guide walks you through handling common tasks using the MultiversX Javascript SDK (v1, latest stable version).
@@ -10,8 +11,6 @@
 // For example, to create a Devnet entrypoint:
 
 // ```js
-import { DevnetEntrypoint } from 'multiversx_sdk';
-
 const entrypoint = new DevnetEntrypoint();
 // ```
 
@@ -19,7 +18,6 @@ const entrypoint = new DevnetEntrypoint();
 // If you'd like to connect to a third-party API, you can specify the url parameter:
 
 // ```js
-import { DevnetEntrypoint } from 'multiversx_sdk';
 const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-devnet-api.com' } ); s;
 // ```
 
@@ -29,8 +27,6 @@ const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-de
 
 
 // ```js
-import { DevnetEntrypoint } from 'multiversx_sdk';
-
 const customEntrypoint = new DevnetEntrypoint( {
   url: 'https://devnet-gateway.multiversx.com',
   kind: 'proxy'

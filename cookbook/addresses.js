@@ -1,18 +1,18 @@
+import { Address, AddressFactory, LibraryConfig } from "@multiversx/sdk-core"; // md-ignore
+
 // ### Addresses
 
 // Create an `Address` object from a bech32-encoded string:
 
 // ``` js
-import { Address } from "@multiversx/sdk-core";
-
-{ // md-ignore
+{
     // Create an Address object from a bech32-encoded string // md-as-comment
-    const address = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+    const address = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
 
-    console.log("Address (bech32-encoded):", address.toBech32());
-    console.log("Public key (hex-encoded):", address.toHex());
-    console.log("Public key (hex-encoded):", Buffer.from(address.getPublicKey()).toString("hex"));
-} // md-ignore
+    console.log( "Address (bech32-encoded):", address.toBech32() );
+    console.log( "Public key (hex-encoded):", address.toHex() );
+    console.log( "Public key (hex-encoded):", Buffer.from( address.getPublicKey() ).toString( "hex" ) );
+}
 
 // ```
 
@@ -20,33 +20,35 @@ import { Address } from "@multiversx/sdk-core";
 // If the HRP (human-readable part) is not provided, the SDK will use the default one ("erd"). 
 
 // ``` js
-{ // md-ignore
+{
     // Create an address from a hex-encoded string with a specified HRP // md-as-comment
-    const address = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "erd");
+    const address = Address.newFromHex( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "erd" );
 
-    console.log("Address (bech32-encoded):", address.toBech32());
-    console.log("Public key (hex-encoded):", address.toHex());
-} // md-ignore
+    console.log( "Address (bech32-encoded):", address.toBech32() );
+    console.log( "Public key (hex-encoded):", address.toHex() );
+}
 // ```
 
 // Create an address from a raw public key
 
 // ``` js
-
-const pubkey = Buffer.from("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "hex");
-const addressFromPubkey = new Address(pubkey, "erd");
+{
+    const pubkey = Buffer.from( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "hex" );
+    const addressFromPubkey = new Address( pubkey, "erd" );
+}
 // ```
 
 // **Using an AddressFactory to create addresses**
 // AddressFactory allows creating multiple addresses with a custom HRP, ensuring consistency across your application.
 
 // ``` js
-import { AddressFactory } from "@multiversx/sdk-core";
-const factory = new AddressFactory("erd");
+{
+    const factory = new AddressFactory( "erd" );
 
-const address1 = factory.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
-const address2 = factory.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
-const address3 = factory.fromPublicKey(Buffer.from("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "hex"));
+    const address1 = factory.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
+    const address2 = factory.newFromHex( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1" );
+    const address3 = factory.fromPublicKey( Buffer.from( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "hex" ) );
+}
 // ```
 
 // Getting the shard of an address
@@ -54,29 +56,28 @@ const address3 = factory.fromPublicKey(Buffer.from("0139472eff6886771a982f3083da
 import { AddressComputer } from "@multiversx/sdk-core";
 
 const addressComputer = new AddressComputer();
-console.log("Shard:", addressComputer.getShardOfAddress(address));
+console.log( "Shard:", addressComputer.getShardOfAddress( address ) );
 // ```
 
 // Checking if an address is a smart contract
 // ``` js
 
-const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0p4rjys0qtp3la07gz4d396qn50nnm");
-console.log("Is contract address:", contractAddress.isSmartContract());
+const contractAddress = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgquzmh78klkqwt0p4rjys0qtp3la07gz4d396qn50nnm" );
+console.log( "Is contract address:", contractAddress.isSmartContract() );
 // ```
 
 // **Checking if an address is a smart contract**
 // The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default. 
 // You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 // ``` js
-import { LibraryConfig } from "@multiversx/sdk-core";
 
-console.log(LibraryConfig.defaultAddressHrp);
-const defaultAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
-console.log(defaultAddress.toBech32());
+console.log( LibraryConfig.defaultAddressHrp );
+const defaultAddress = Address.newFromHex( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1" );
+console.log( defaultAddress.toBech32() );
 
 LibraryConfig.defaultAddressHrp = "test";
-const testAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
-console.log(testAddress.toBech32());
+const testAddress = Address.newFromHex( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1" );
+console.log( testAddress.toBech32() );
 
 // Reset HRP back to "erd" to avoid affecting other parts of the application. //md-as-comment
 LibraryConfig.defaultAddressHrp = "erd";

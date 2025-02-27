@@ -1,3 +1,6 @@
+
+import { Account, DevnetEntrypoint, Token, TokenTransfer, TransactionsFactoryConfig, TransfersController, TransferTransactionsFactory } from '@multiversx/sdk-core'; // md-ignore
+import path from 'path'; // md-ignore
 // ## Creating transactions
 
 // In this section, we’ll explore how to create different types of transactions. To create transactions, we can use either controllers or factories. 
@@ -13,8 +16,6 @@
 // 2. Manually instantiate them.
 
 // ```js
-import { DevnetEntrypoint, TransactionsFactoryConfig, TransfersController, TransferTransactionsFactory } from '@multiversx/sdk-core';
-import path from 'path';
 {
   const entrypoint = new DevnetEntrypoint();
 
@@ -23,10 +24,10 @@ import path from 'path';
   const transfersFactory = entrypoint.createTransfersTransactionsFactory();
 
   // manually instantiating the controller and the factory
-  const controller = new TransfersController({ chainID: this.chainId });
+  const controller = new TransfersController( { chainID: this.chainId } );
 
-  const config = new TransactionsFactoryConfig({ chainID: 'D' })
-  const factory = new TransferTransactionsFactory({ config });
+  const config = new TransactionsFactoryConfig( { chainID: 'D' } );
+  const factory = new TransferTransactionsFactory( { config } );
 }
 // ```
 
@@ -36,29 +37,27 @@ import path from 'path';
 // When using the controller, the transaction will be signed because we’ll be working with an Account.
 
 // ```js
-import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
-import path from 'path';
 {
   const entrypoint = new DevnetEntrypoint();
 
-  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const sender = await Account.newFromPem(filePath);
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const sender = await Account.newFromPem( filePath );
 
   // the developer is responsible for managing the nonce
-  sender.nonce = await entrypoint.recallAccountNonce(sender.address)
+  sender.nonce = await entrypoint.recallAccountNonce( sender.address );
 
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
     sender,
-    BigInt(sender.getNonceThenIncrement().valueOf()),
+    BigInt( sender.getNonceThenIncrement().valueOf() ),
     {
       receiver: sender.address,
-      nativeAmount: BigInt(1),
+      nativeAmount: BigInt( 1 ),
     },
   );
 
   // manually instantiating the controller and the factory
-  const txHash = await entrypoint.sendTransaction(transaction);
+  const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
 
@@ -69,33 +68,30 @@ import path from 'path';
 // You will need to handle these aspects after the transaction is created.
 
 // ```js
-import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
-import path from 'path';
-
 {
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTransfersTransactionsFactory();
 
-  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const alice = await Account.newFromPem(filePath);
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const alice = await Account.newFromPem( filePath );
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
-  const transaction = factory.createTransactionForTransfer(alice, {
+  const transaction = factory.createTransactionForTransfer( alice, {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-  });
+  } );
 
   // set the sender's nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction using the sender's account
-  transaction.signature = await alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction( transaction );
 
-  const txHash = await entrypoint.sendTransaction(transaction);
+  const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
 
@@ -104,35 +100,32 @@ import path from 'path';
 // ## Custom token transfers using the controller
 
 // ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
-
 {
   const entrypoint = new DevnetEntrypoint();
 
-  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const alice = await Account.newFromPem(filePath);
-  const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const alice = await Account.newFromPem( filePath );
+  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const esdt = new Token({ identifier: "TEST-123456" });
-  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
+  const esdt = new Token( { identifier: "TEST-123456" } );
+  const firstTransfer = new TokenTransfer( { token: esdt, amount: 1000000000n } );
 
-  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
-  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n });
+  const nft = new Token( { identifier: "NFT-987654", nonce: 10n } );
+  const secondTransfer = new TokenTransfer( { token: nft, amount: 1n } );
 
-  const sft = new Token({ identifier: "SFT-987654", nonce: 10n });
-  const thirdTransfer = new TokenTransfer({ token: sft, amount: 7n });
+  const sft = new Token( { identifier: "SFT-987654", nonce: 10n } );
+  const thirdTransfer = new TokenTransfer( { token: sft, amount: 7n } );
 
-  const transfersController = entrypoint.createTransfersController()
-  const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
+  const transfersController = entrypoint.createTransfersController();
+  const transaction = transfersController.createTransactionForTransfer( alice, alice.getNonceThenIncrement(), {
     receiver: bob,
-    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
-  });
+    tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
+  } );
 
-  const txHash = await entrypoint.sendTransaction(transaction);
+  const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
 
@@ -142,41 +135,38 @@ import path from 'path';
 // When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 // ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
-
 {
   const entrypoint = new DevnetEntrypoint();
-  const factory = entrypoint.createTransfersTransactionsFactory()
+  const factory = entrypoint.createTransfersTransactionsFactory();
 
-  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const alice = await Account.newFromPem(filePath);
-  const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const alice = await Account.newFromPem( filePath );
+  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const esdt = new Token({ identifier: "TEST-123456" }); // fungible tokens don't have a nonce
-  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n }); // we set the desired amount we want to send
+  const esdt = new Token( { identifier: "TEST-123456" } ); // fungible tokens don't have a nonce
+  const firstTransfer = new TokenTransfer( { token: esdt, amount: 1000000000n } ); // we set the desired amount we want to send
 
-  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
-  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n }); // for NFTs we set the amount to `1`
+  const nft = new Token( { identifier: "NFT-987654", nonce: 10n } );
+  const secondTransfer = new TokenTransfer( { token: nft, amount: 1n } ); // for NFTs we set the amount to `1`
 
-  const sft = new Token({ identifier: "SFT-987654", nonce: 10n });
-  const thirdTransfer = new TokenTransfer({ token: sft, amount: 7n }); // for SFTs we set the desired amount we want to send
+  const sft = new Token( { identifier: "SFT-987654", nonce: 10n } );
+  const thirdTransfer = new TokenTransfer( { token: sft, amount: 7n } ); // for SFTs we set the desired amount we want to send
 
-  const transaction = factory.createTransactionForTransfer(alice, {
+  const transaction = factory.createTransactionForTransfer( alice, {
     receiver: bob,
-    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
-  });
+    tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
+  } );
 
   // set the sender's nonce
-  transaction.nonce = alice.getNonceThenIncrement()
+  transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction using the sender's account
-  transaction.signature = await alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction( transaction );
 
-  const txHash = await entrypoint.sendTransaction(transaction);
+  const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
 
@@ -187,34 +177,31 @@ import path from 'path';
 // We can send both types of tokens using either the `controller` or the `factory`, but for simplicity, we’ll use the controller in this example.
 
 // ```js
-import { Account, DevnetEntrypoint, Token, TokenTransfer } from '@multiversx/sdk-core';
-import path from 'path';
-
 {
   const entrypoint = new DevnetEntrypoint();
 
-  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const alice = await Account.newFromPem(filePath);
-  const bob = Account.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const alice = await Account.newFromPem( filePath );
+  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address)
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const esdt = new Token({ identifier: "TEST-123456" });
-  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
+  const esdt = new Token( { identifier: "TEST-123456" } );
+  const firstTransfer = new TokenTransfer( { token: esdt, amount: 1000000000n } );
 
-  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
-  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n });
+  const nft = new Token( { identifier: "NFT-987654", nonce: 10n } );
+  const secondTransfer = new TokenTransfer( { token: nft, amount: 1n } );
 
 
-  const transfersController = entrypoint.createTransfersController()
-  const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
+  const transfersController = entrypoint.createTransfersController();
+  const transaction = transfersController.createTransactionForTransfer( alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-    tokenTransfers: [firstTransfer, secondTransfer],
-  });
+    tokenTransfers: [ firstTransfer, secondTransfer ],
+  } );
 
-  const txHash = await entrypoint.sendTransaction(transaction);
+  const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
 

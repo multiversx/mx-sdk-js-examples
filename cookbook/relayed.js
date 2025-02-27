@@ -1,3 +1,5 @@
+import { Account, Address, DevnetEntrypoint, Transaction } from "@multiversx/sdk-core"; // md-ignore
+import path from 'path'; // md-ignore
 // ## Relayed transactions
 // We are currently on the `third iteration (V3)` of relayed transactions. V1 and V2 will soon be deactivated, so we will focus on V3.
 
@@ -14,37 +16,35 @@
 // Let’s see how to create a relayed transaction:
 
 // ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
-import path from 'path';
-{ // md-ignore
-  const walletsPath = path.join("src", "testdata", "testwallets");
-  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
-  const bob = await Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
-  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
+{
+  const walletsPath = path.join( "src", "testdata", "testwallets" );
+  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
+  const bob = await Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const transaction = new Transaction({
+  const transaction = new Transaction( {
     chainID: "D",
     sender: alice.address,
     receiver: bob,
     relayer: carol.address,
     gasLimit: 110_000n,
-    data: Buffer.from("hello"),
+    data: Buffer.from( "hello" ),
     nonce: alice.getNonceThenIncrement()
-  });
+  } );
 
   // sender signs the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = alice.signTransaction( transaction );
 
   // relayer signs the transaction // md-as-comment
-  transaction.RelayerSignature = carol.signTransaction(transaction);
+  transaction.RelayerSignature = carol.signTransaction( transaction );
 
   // broadcast the transaction // md-as-comment
   const entrypoint = new DevnetEntrypoint();
-  const txHash = await entrypoint.sendTransaction(transaction);
-} // md-ignore
+  const txHash = await entrypoint.sendTransaction( transaction );
+}
 // ```
 
 // **Creating relayed transactions using controllers**
@@ -53,22 +53,20 @@ import path from 'path';
 // Let’s issue a fungible token using a relayed transaction:
 
 // ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
-import path from 'path';
-{ // md-ignore
+{
   // create the entrypoint and the token management controller // md-as-comment
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
   // create the issuer of the token // md-as-comment
-  const walletsPath = path.join("src", "testdata", "testwallets");
-  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
+  const walletsPath = path.join( "src", "testdata", "testwallets" );
+  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
 
   // carol will be our relayer, that means she is paying the gas for the transaction // md-as-comment
-  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
+  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
@@ -89,11 +87,11 @@ import path from 'path';
   );
 
   // relayer also signs the transaction // md-as-comment
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.relayerSignature = carol.signTransaction( transaction );
 
   // broadcast the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction(transaction);
-} // md-ignore
+  const txHash = await entrypoint.sendTransaction( transaction );
+}
 // ```
 
 // **Creating relayed transactions using factories**
@@ -103,19 +101,17 @@ import path from 'path';
 // Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 // ```js
-import { Account, Address, DevnetEntrypoint, Transaction } from '@multiversx/sdk-core';
-import path from 'path';
-{ // md-ignore
+{
   // create the entrypoint and the token management factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.creatTokenManagementController();
 
   // create the issuer of the token // md-as-comment
-  const walletsPath = path.join("src", "testdata", "testwallets");
-  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
+  const walletsPath = path.join( "src", "testdata", "testwallets" );
+  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
 
   // carol will be our relayer, that means she is paying the gas for the transaction // md-as-comment
-  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
+  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   const transaction = await factory.createTransactionForIssuingFungible(
     alice.address,
@@ -134,19 +130,19 @@ import path from 'path';
   );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
   transaction.nonce = alice.getNonceThenIncrement();
 
   // fetch the relayer // md-as-comment
   transaction.relayer = carol.address;
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = alice.signTransaction( transaction );
 
   // relayer also signs the transaction // md-as-comment
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.relayerSignature = carol.signTransaction( transaction );
 
   // broadcast the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction(transaction);
-} // md-ignore
+  const txHash = await entrypoint.sendTransaction( transaction );
+}
 // ```

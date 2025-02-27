@@ -1,3 +1,5 @@
+import { Account, DevnetEntrypoint } from "@multiversx/sdk-core"; // md-ignore
+import path from 'path'; // md-ignore
 // ## Guarded transactions
 // Similar to relayers, transactions also have two additional fields:
 
@@ -15,22 +17,20 @@
 // Let’s issue a fungible token using a relayed transaction:
 
 // ```js
-import { Account, DevnetEntrypoint } from '@multiversx/sdk-core';
-import path from 'path';
-{ // md-ignore
+{
   // create the entrypoint and the token management controller // md-as-comment
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.creatTokenManagementController();
 
   // create the issuer of the token // md-as-comment
-  const walletsPath = path.join("src", "testdata", "testwallets");
-  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
+  const walletsPath = path.join( "src", "testdata", "testwallets" );
+  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
 
   // carol will be our guardian // md-as-comment
-  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
+  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
@@ -51,11 +51,11 @@ import path from 'path';
   );
 
   // guardian also signs the transaction // md-as-comment
-  transaction.guardianSignature = carol.signTransaction(transaction);
+  transaction.guardianSignature = carol.signTransaction( transaction );
 
   // broadcast the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction(transaction);
-} // md-ignore
+  const txHash = await entrypoint.sendTransaction( transaction );
+}
 // ```
 
 // **Creating guarded transactions using factories**
@@ -65,17 +65,17 @@ import path from 'path';
 // Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 // ```js
-{ // md-ignore
+{
   // create the entrypoint and the token management factory // md-as-comment
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTokenManagementController();
 
   // create the issuer of the token // md-as-comment
-  const walletsPath = path.join("src", "testdata", "testwallets");
-  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
+  const walletsPath = path.join( "src", "testdata", "testwallets" );
+  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
 
   // carol will be our guardian // md-as-comment
-  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
+  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   const transaction = await factory.createTransactionForIssuingFungible(
     alice.address,
@@ -94,21 +94,21 @@ import path from 'path';
   );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
+  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
   transaction.nonce = alice.getNonceThenIncrement();
 
   // set the guardian // md-as-comment
   transaction.guardian = carol.address;
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = alice.signTransaction( transaction );
 
   // guardian also signs the transaction // md-as-comment
-  transaction.guardianSignature = carol.signTransaction(transaction);
+  transaction.guardianSignature = carol.signTransaction( transaction );
 
   // broadcast the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction(transaction);
-} // md-ignore
+  const txHash = await entrypoint.sendTransaction( transaction );
+}
 // ```
 
 // We can create guarded relayed transactions just like we did before. However, keep in mind:
