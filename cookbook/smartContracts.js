@@ -75,7 +75,7 @@ import path from 'path';
 // ## Smart Contract deployments
 // For creating smart contract deployment transactions, we have two options: a controller and a factory. Both function similarly to the ones used for token transfers.
 // When creating transactions that interact with smart contracts, it's recommended to provide the ABI file to the controller or factory if possible. 
-// This allows arguments to be passed as native values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
+// This allows arguments to be passed as native Javascript values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
 
 // # Deploying a Smart Contract Using the Controller
 
@@ -390,7 +390,7 @@ import path from 'path';
 // ```
 
 // **Parsing transaction outcome**
-// As said before, the add endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
+// As said before, the `add` endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
 
 // ```js
 {

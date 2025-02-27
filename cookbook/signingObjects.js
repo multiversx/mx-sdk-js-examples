@@ -3,7 +3,7 @@ import { Account, Address, Message, MessageComputer, Transaction, TransactionCom
 import path from 'path';
 // ## Signing objects
 
-// Signing is done using an account’s secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations. 
+// Signing is done using an account's secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations. 
 // First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 // ## Signing a Transaction using an Account

@@ -12,8 +12,9 @@ import path from 'path'; // md-ignore
 // Let’s issue a token using a guarded account:
 
 // **Creating guarded transactions using controllers**
-//We can create guarded transactions using any of the available controllers. 
-// Each controller includes a guarded argument, which must be set if we want to create a guarded transaction.
+// We can create guarded transactions using any of the available controllers. 
+
+// Each controller method includes a guardian argument, which must be set if we want to create a guarded transaction.
 // Let’s issue a fungible token using a relayed transaction:
 
 // ```js
@@ -113,7 +114,7 @@ import path from 'path'; // md-ignore
 
 // We can create guarded relayed transactions just like we did before. However, keep in mind:
 
-// 🔹 Only the sender can be guarded—the relayer cannot be guarded.
+// Only the sender can be guarded—the relayer cannot be guarded.
 
 // Flow for Creating Guarded Relayed Transactions:
 // - Using Controllers:

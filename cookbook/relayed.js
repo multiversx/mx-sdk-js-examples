@@ -48,8 +48,9 @@ import path from 'path'; // md-ignore
 // ```
 
 // **Creating relayed transactions using controllers**
-//We can create relayed transactions using any of the available controllers. 
+// We can create relayed transactions using any of the available controllers. 
 // Each controller includes a relayer argument, which must be set if we want to create a relayed transaction.
+
 // Let’s issue a fungible token using a relayed transaction:
 
 // ```js
@@ -62,7 +63,7 @@ import path from 'path'; // md-ignore
   const walletsPath = path.join( "src", "testdata", "testwallets" );
   const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
 
-  // carol will be our relayer, that means she is paying the gas for the transaction // md-as-comment
+  // Carol will be our relayer, that means she is paying the gas for the transaction // md-as-comment
   const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
 
   // fetch the nonce of the network // md-as-comment

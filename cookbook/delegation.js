@@ -2,7 +2,7 @@ import { Account, Address, DevnetEntrypoint, TokenManagementTransactionsOutcomeP
 import path from 'path'; // md-ignore
 // ## Delegation management
 
-// To learn more about staking providers and delegation, refer to the official documentation.
+// To learn more about staking providers and delegation, refer to the official [documentation](https://docs.multiversx.com/validators/delegation-manager/#introducing-staking-providers).
 // In this section, we'll cover how to:
 // - Create a new delegation contract
 // - Retrieve the contract address
@@ -118,6 +118,7 @@ import path from 'path'; // md-ignore
 // ```
 
 // **Delegating funds to the contract using the factory** 
+
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment

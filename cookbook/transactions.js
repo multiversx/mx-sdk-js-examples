@@ -49,7 +49,7 @@ import path from 'path'; // md-ignore
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
     sender,
-    BigInt( sender.getNonceThenIncrement().valueOf() ),
+    BigInt( sender.getNonceThenIncrement() ),
     {
       receiver: sender.address,
       nativeAmount: BigInt( 1 ),
@@ -204,7 +204,3 @@ import path from 'path'; // md-ignore
   const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
-
-// ## Decoding transaction data
-// For example, when sending multiple ESDT and NFT tokens, the receiver field of the transaction is the same as the sender field, and the value is set to 0 because all the information is encoded in the transaction’s data field.
-// To decode the data field, we use a tool called the `TransactionDecoder`. First, we fetch the transaction from the network, then use the decoder to extract the relevant details.

@@ -39,7 +39,7 @@ import { Address, AddressFactory, LibraryConfig } from "@multiversx/sdk-core"; /
 // ```
 
 // **Using an AddressFactory to create addresses**
-// AddressFactory allows creating multiple addresses with a custom HRP, ensuring consistency across your application.
+// AddressFactory allows creating addresses with a custom HRP, ensuring consistency across your application.
 
 // ``` js
 {
@@ -66,7 +66,7 @@ const contractAddress = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgquzmh78klkqwt
 console.log( "Is contract address:", contractAddress.isSmartContract() );
 // ```
 
-// **Checking if an address is a smart contract**
+// **Changing the default hrp**
 // The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default. 
 // You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 // ``` js

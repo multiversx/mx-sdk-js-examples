@@ -6,7 +6,7 @@ import path from 'path'; // md-ignore
 
 // The account management controller and factory allow us to create transactions for managing accounts, such as:
 // - Guarding and unguarding accounts
-// - Saving key-value pairs
+// - Saving key-value pairs in the account storage, on blockchain.
 
 // To learn more about Guardians, refer to the [official documentation](https://docs.multiversx.com/developers/built-in-functions/#setguardian).
 // A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](https://docs.multiversx.com/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
@@ -195,6 +195,7 @@ import path from 'path'; // md-ignore
 // ```
 
 // **Saving a key-value pair to an account using the controller** 
+// You can find more information [here](https://docs.multiversx.com/developers/account-storage) regarding the account storage
 
 // ```js
 {

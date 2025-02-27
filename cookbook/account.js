@@ -1,10 +1,10 @@
-import { Account, DevnetEntrypoint, KeyPair, LedgerAccount, Mnemonic, UserSecretKey } from '@multiversx/sdk-core'; // md-ignore
+import { Account, DevnetEntrypoint, KeyPair, Mnemonic, UserSecretKey } from '@multiversx/sdk-core'; // md-ignore
 import path from 'path'; // md-ignore
 
 // ## Creating Accounts
 
 // You can create an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
-// Accounts are used for signing transactions and managing the account's nonce. They can also be saved to a PEM or keystore file for future use.
+// Accounts are used for signing transactions and managing the account's nonce. They can also be saved to a PEM or keystore file for future use. 
 
 // For example, to create a Devnet entrypoint:
 
@@ -32,15 +32,17 @@ import path from 'path'; // md-ignore
 
 // ```js
 
-const pemPath = path.resolve( "../multiversx-sdk/testutils/testwallets/alice.pem" );
-const accountFromPem = Account.newFromPem( pemPath );
+{
+  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
+  const accountFromPem = Account.newFromPem( filePath );
+}
 // ```
 
 // 3. From a Keystore File
 
 // ```js
 {
-  const keystorePath = path.resolve( "../multiversx-sdk/testutils/testwallets/alice.json" );
+  const keystorePath = path.join( "src", "testdata", "testwallets", "alice.json" );
   const accountFromKeystore = Account.newFromKeystore( {
     filePath: keystorePath,
     password: "password"
@@ -88,12 +90,12 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 }
 // ```
 
-// For more details, see the Creating Transactions section.
+// For more details, see the [Creating Transactions](#creating-transactions) section.
 
 // ## Saving the Account to a File
 
 // Accounts can be saved to either a PEM file or a keystore file. 
-// While PEM wallets are less secure for storing cryptocurrencies, they are convenient for testing purposes. 
+// While PEM wallets are less secure for storing secret keys, they are convenient for testing purposes. 
 // Keystore files offer a higher level of security.
 
 // Saving the Account to a PEM File
@@ -134,22 +136,15 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 // Note: The multiversx-sdk package does not include Ledger support by default. To enable it, install the package with Ledger dependencies:
 /* // md-ignore
 // ```bash
-npm install @multiversx/sdk-ledger
+npm install @multiversx/sdk-hw-provider
 // ```
 */ // md-ignore
 
 // ## Creating a Ledger Account
-// When instantiating a LedgerAccount, you can specify the index of the address to use. By default, index 0 is used.
-
-// ```js
-{
-  const account = new LedgerAccount();  // Defaults to index 0
-}
-// ```
+// This can be done using the dedicated library. You can find more information [here](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-hardware-wallet-provider)
 
 // When signing transactions or messages, the Ledger device will prompt you to confirm the details before proceeding.
 
 // ## Compatibility with IAccount Interface
 
-// Both Account and LedgerAccount implement the IAccount interface, making them compatible with transaction controllers and any other component that expects this interface.
-
+// The `Account` implements the `IAccount` interface, making it compatible with transaction controllers and any other component that expects this interface.

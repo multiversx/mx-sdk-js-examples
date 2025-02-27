@@ -54,11 +54,6 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 ```
 
 :::""",
-
-    "customNetworkProviders": """Use the classes from `@multiversx/sdk-core/out/networkProviders` **only as a starting point**.
-As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements
-(whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway).
-"""
 }
 
 
