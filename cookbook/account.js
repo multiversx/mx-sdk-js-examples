@@ -20,28 +20,28 @@ import path from 'path'; // md-ignore
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
-  const secretKey = new UserSecretKey( Buffer.from( secretKeyHex, 'hex' ) );
+  const secretKey = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
 
-  const accountFromSecretKey = new Account( secretKey );
+  const accountFromSecretKey = new Account(secretKey);
 }
 // ```
 
 // 2. Using a PEM file
 // ```js
 {
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const accountFromPem = Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const accountFromPem = Account.newFromPem(filePath);
 }
 // ```
 
 // 3. From a Keystore File
 // ```js
 {
-  const keystorePath = path.join( "src", "testdata", "testwallets", "alice.json" );
-  const accountFromKeystore = Account.newFromKeystore( {
+  const keystorePath = path.join("src", "testdata", "testwallets", "alice.json");
+  const accountFromKeystore = Account.newFromKeystore({
     filePath: keystorePath,
     password: "password"
-  } );
+  });
 }
 // ```
 
@@ -49,7 +49,7 @@ import path from 'path'; // md-ignore
 // ```js
 
 const mnemonic = Mnemonic.generate();
-const accountFromMnemonic = Account.newFromMnemonic( mnemonic.getText() );
+const accountFromMnemonic = Account.newFromMnemonic(mnemonic.getText());
 // ```
 
 // 5. From a KeyPair
@@ -57,7 +57,7 @@ const accountFromMnemonic = Account.newFromMnemonic( mnemonic.getText() );
 // ```js
 
 const keypair = KeyPair.generate();
-const accountFromKeyPairs = Account.newFromKeypair( keypair );
+const accountFromKeyPairs = Account.newFromKeypair(keypair);
 // ```
 
 // ## Managing the Account Nonce
@@ -69,13 +69,13 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
-  const key = new UserSecretKey( Buffer.from( secretKeyHex, 'hex' ) );
+  const key = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
 
-  const accountWithNonce = new Account( key );
+  const accountWithNonce = new Account(key);
   const entrypoint = new DevnetEntrypoint();
 
   // Fetch the current nonce from the network // md-as-comment
-  accountWithNonce.nonce = await entrypoint.recallAccountNonce( accountWithNonce.address );
+  accountWithNonce.nonce = await entrypoint.recallAccountNonce(accountWithNonce.address);
 
   // Create and send a transaction here...
 
@@ -96,10 +96,10 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
-  const secretKey = new UserSecretKey( Buffer.from( secretKeyHex, 'hex' ) );
+  const secretKey = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
 
-  const account = new Account( secretKey );
-  account.saveToPem( { path: path.resolve( "wallet.pem" ) } );
+  const account = new Account(secretKey);
+  account.saveToPem({ path: path.resolve("wallet.pem") });
 }
 // ```
 
@@ -107,13 +107,13 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
-  const secretKey = new UserSecretKey( Buffer.from( secretKeyHex, 'hex' ) );
+  const secretKey = new UserSecretKey(Buffer.from(secretKeyHex, 'hex'));
 
-  const account = new Account( secretKey );
-  account.saveToKeystore( {
-    path: path.resolve( "keystoreWallet.json" ),
+  const account = new Account(secretKey);
+  account.saveToKeystore({
+    path: path.resolve("keystoreWallet.json"),
     password: "password"
-  } );
+  });
 }
 
 // ```
@@ -121,7 +121,6 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 // ## Using a Ledger Device
 
 // You can manage your account with a Ledger device, allowing you to sign both transactions and messages while keeping your keys secure. 
-// The Ledger device also stores the nonce.
 
 // Note: The multiversx-sdk package does not include Ledger support by default. To enable it, install the package with Ledger dependencies:
 /* // md-ignore

@@ -48,7 +48,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   };
 
   // Instantiate the network provider with the config
-  const api = new ApiNetworkProvider( "https://devnet-api.multiversx.com", config );
+  const api = new ApiNetworkProvider("https://devnet-api.multiversx.com", config);
 }
 // ```
 
@@ -80,7 +80,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const networkProvider = entrypoint.createNetworkProvider();
 
   const metaNetworkStatus = entrypoint.getNetworkStatus(); // fetches status from metachain // md-as-comment
-  const networkStatus = entrypoint.getNetworkStatus( 1 ); // fetches status from shard one // md-as-comment
+  const networkStatus = entrypoint.getNetworkStatus(1); // fetches status from shard one // md-as-comment
 }
 // ```
 
@@ -92,9 +92,9 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // Fetching a block using the **API**
 // ```js
 {
-  const api = new ApiNetworkProvider( "https://devnet-api.multiversx.com" );
+  const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
   const blockHash = "1147e111ce8dd860ae43a0f0d403da193a940bfd30b7d7f600701dd5e02f347a";
-  const block = await api.getBlock( blockHash );
+  const block = await api.getBlock(blockHash);
 }
 // ```
 
@@ -102,7 +102,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 
 // ```js
 {
-  const api = new ApiNetworkProvider( "https://devnet-api.multiversx.com" );
+  const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
   const latestBlock = await api.getLatestBlock();
 }
 // ```
@@ -112,9 +112,9 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // When using the proxy, we have to provide the shard, as well.
 // ```js
 {
-  const proxy = new ProxyNetworkProvider( "https://devnet-api.multiversx.com" );
+  const proxy = new ProxyNetworkProvider("https://devnet-api.multiversx.com");
   const blockHash = "1147e111ce8dd860ae43a0f0d403da193a940bfd30b7d7f600701dd5e02f347a";
-  const block = proxy.getBlock( { blockHash, shard: 1 } );
+  const block = proxy.getBlock({ blockHash, shard: 1 });
 }
 // ```
 
@@ -123,7 +123,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 
 // ```js
 {
-  const proxy = new ProxyNetworkProvider( "https://devnet-api.multiversx.com" );
+  const proxy = new ProxyNetworkProvider("https://devnet-api.multiversx.com");
   const latestBlock = proxy.getLatestBlock();
 }
 // ```
@@ -135,8 +135,8 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 {
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const account = await api.getAccount( alice );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const account = await api.getAccount(alice);
 }
 // ```
 
@@ -147,8 +147,8 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 {
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const account = await api.getAccountStorage( alice );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const account = await api.getAccountStorage(alice);
 }
 // ```
 
@@ -158,8 +158,8 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 {
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const account = await api.getAccountStorageEntry( alice, "testKey" );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const account = await api.getAccountStorageEntry(alice, "testKey");
 }
 // ```
 
@@ -176,11 +176,11 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const condition = ( account ) => {
+  const condition = (account) => {
     return account.balance >= 7000000000000000000; // 7 EGLD // md-as-comment
   };
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const account = await api.awaitAccountOnCondition( alice, condition );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const account = await api.awaitAccountOnCondition(alice, condition);
 }
 // ```
 
@@ -194,18 +194,18 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // this transaction is not signed // md-as-comment
-  const transaction = new Transaction( {
+  const transaction = new Transaction({
     sender: alice,
     receiver: bob,
     gasLimit: 50000n,
     chainID: "D",
-  } );
+  });
 
-  const transactionHash = await api.sendTransaction( transaction );
+  const transactionHash = await api.sendTransaction(transaction);
 }
 // ```
 
@@ -215,36 +215,36 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // this transaction is not signed // md-as-comment
-  const firstTransaction = new Transaction( {
+  const firstTransaction = new Transaction({
     sender: alice,
     receiver: bob,
     gasLimit: 50000n,
     chainID: "D",
     nonce: 2
-  } );
+  });
 
-  const secondTransaction = new Transaction( {
+  const secondTransaction = new Transaction({
     sender: bob,
     receiver: alice,
     gasLimit: 50000n,
     chainID: "D",
     nonce: 1,
-  } );
+  });
 
-  const thirdTransaction = new Transaction( {
+  const thirdTransaction = new Transaction({
     sender: alice,
     receiver: alice,
     gasLimit: 60000n,
     chainID: "D",
     nonce: 3,
-    data: new Uint8Array( Buffer.from( "hello" ) )
-  } );
+    data: new Uint8Array(Buffer.from("hello"))
+  });
 
-  const [ numOfSentTxs, hashes ] = await api.sendTransactions( [ firstTransaction, secondTransaction, thirdTransaction ] );
+  const [ numOfSentTxs, hashes ] = await api.sendTransactions([ firstTransaction, secondTransaction, thirdTransaction ]);
 }
 // ```
 
@@ -256,18 +256,18 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const contract = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgqccmyzj9sade2495w78h42erfrw7qmqxpd8sss6gmgn" );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqpgqccmyzj9sade2495w78h42erfrw7qmqxpd8sss6gmgn");
 
-  const transaction = new Transaction( {
+  const transaction = new Transaction({
     sender: alice,
     receiver: contract,
     gasLimit: 5000000n,
     chainID: "D",
-    data: new Uint8Array( Buffer.from( "add@07" ) )
-  } );
+    data: new Uint8Array(Buffer.from("add@07"))
+  });
 
-  const transactionOnNetwork = await api.simulateTransaction( transaction );
+  const transactionOnNetwork = await api.simulateTransaction(transaction);
 }
 // ```
 
@@ -279,21 +279,21 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const contract = Address.newFromBech32( "erd1qqqqqqqqqqqqqpgqccmyzj9sade2495w78h42erfrw7qmqxpd8sss6gmgn" );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqpgqccmyzj9sade2495w78h42erfrw7qmqxpd8sss6gmgn");
 
-  const nonce = await entrypoint.recallAccountNonce( alice );
+  const nonce = await entrypoint.recallAccountNonce(alice);
 
-  const transaction = new Transaction( {
+  const transaction = new Transaction({
     sender: alice,
     receiver: contract,
     gasLimit: 5000000,
     chainID: "D",
-    data: new Uint8Array( Buffer.from( "add@07" ) ),
+    data: new Uint8Array(Buffer.from("add@07")),
     nonce: nonce
-  } );
+  });
 
-  const transactionCostResponse = await api.estimateTransactionCost( transaction );
+  const transactionCostResponse = await api.estimateTransactionCost(transaction);
 }
 // ```
 
@@ -306,7 +306,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const api = entrypoint.createNetworkProvider();
 
   const txHash = "exampletransactionhash";
-  const transactionOnNetwork = await api.awaitTransactionCompleted( txHash );
+  const transactionOnNetwork = await api.awaitTransactionCompleted(txHash);
 }
 // ```
 
@@ -318,10 +318,10 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const condition = ( txOnNetwork ) => !txOnNetwork.status.isSuccessful();
+  const condition = (txOnNetwork) => !txOnNetwork.status.isSuccessful();
 
   const txHash = "exampletransactionhash";
-  const transactionOnNetwork = await api.awaitTransactionOnCondition( txHash, condition );
+  const transactionOnNetwork = await api.awaitTransactionOnCondition(txHash, condition);
 }
 // ```
 
@@ -334,7 +334,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const api = entrypoint.createNetworkProvider();
 
   const txHash = "exampletransactionhash";
-  const transactionOnNetwork = await api.awaitTransactionCompleted( txHash );
+  const transactionOnNetwork = await api.awaitTransactionCompleted(txHash);
 }
 // ```
 
@@ -346,10 +346,10 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const condition = ( txOnNetwork ) => !txOnNetwork.status.isSuccessful();
+  const condition = (txOnNetwork) => !txOnNetwork.status.isSuccessful();
 
   const txHash = "exampletransactionhash";
-  const transactionOnNetwork = await api.getTransaction( txHash );
+  const transactionOnNetwork = await api.getTransaction(txHash);
 }
 // ```
 
@@ -361,13 +361,13 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  let token = new Token( { identifier: "TEST-ff155e" } ); // ESDT // md-as-comment
-  let tokenOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  let token = new Token({ identifier: "TEST-ff155e" }); // ESDT // md-as-comment
+  let tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 
 
-  token = new Token( { identifier: "NFT-987654" } ); // NFT // md-as-comment
-  tokenOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
+  token = new Token({ identifier: "NFT-987654" }); // NFT // md-as-comment
+  tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 }
 // ```
 
@@ -379,8 +379,8 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const fungibleTokens = await apiProvider.getFungibleTokensOfAccount( alice );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const fungibleTokens = await apiProvider.getFungibleTokensOfAccount(alice);
 }
 // ```
 
@@ -392,8 +392,8 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const nfts = await apiProvider.getNonFungibleTokensOfAccount( alice );
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const nfts = await apiProvider.getNonFungibleTokensOfAccount(alice);
 }
 // ```
 
@@ -406,10 +406,10 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const api = entrypoint.createNetworkProvider();
 
   // used for ESDT // md-as-comment
-  const fungibleTokenDefinition = await apiProvider.getDefinitionOfFungibleToken( "TEST-ff155e" );
+  const fungibleTokenDefinition = await apiProvider.getDefinitionOfFungibleToken("TEST-ff155e");
 
   // used for METAESDT, SFT, NFT // md-as-comment
-  const nonFungibleTokenDefinition = await apiProvider.getDefinitionOfTokenCollection( "NFTEST-ec88b8" );
+  const nonFungibleTokenDefinition = await apiProvider.getDefinitionOfTokenCollection("NFTEST-ec88b8");
 }
 // ```
 
@@ -421,12 +421,12 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const query = new SmartContractQuery( {
-    contract: Address.newFromBech32( "erd1qqqqqqqqqqqqqpgqqy34h7he2ya6qcagqre7ur7cc65vt0mxrc8qnudkr4" ),
+  const query = new SmartContractQuery({
+    contract: Address.newFromBech32("erd1qqqqqqqqqqqqqpgqqy34h7he2ya6qcagqre7ur7cc65vt0mxrc8qnudkr4"),
     function: "getSum",
     arguments: [],
-  } );
-  const response = await api.queryContract( query );
+  });
+  const response = await api.queryContract(query);
 }
 // ```
 
@@ -439,9 +439,9 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const url = `transactions/${ alice.toBech32() }?function=testFunction`;
+  const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+  const url = `transactions/${alice.toBech32()}?function=testFunction`;
 
-  const response = await api.doGetGeneric( url );
+  const response = await api.doGetGeneric(url);
 }
 // ```

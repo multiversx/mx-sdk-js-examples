@@ -23,11 +23,11 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForNewDelegationContract(
     alice.address,
@@ -36,13 +36,13 @@ import path from 'path'; // md-ignore
       totalDelegationCap: 0,
       serviceFee: 10n,
       amount: 1250000000000000000000n,
-    } );
+    });
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 
   // wait for transaction completion, extract delegation contract's address // md-as-comment
-  const outcome = await controller.awaitCompletedCreateNewDelegationContract( txHash );
+  const outcome = await controller.awaitCompletedCreateNewDelegationContract(txHash);
 
   const contractAddress = outcome[ 0 ].contractAddress;
 }
@@ -55,34 +55,34 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createDelegationTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
 
-  const transaction = await factory.createTransactionForNewDelegationContract( alice.address,
+  const transaction = await factory.createTransactionForNewDelegationContract(alice.address,
     {
       totalDelegationCap: 0,
       serviceFee: 10n,
       amount: 1250000000000000000000n,
-    } );
+    });
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 
   // waits until the transaction is processed and fetches it from the network // md-as-comment
-  const transactionOnNetwork = await entrypoint.awaitCompletedTransaction( txHash );
+  const transactionOnNetwork = await entrypoint.awaitCompletedTransaction(txHash);
 
   // extract the contract address // md-as-comment
   const parser = new TokenManagementTransactionsOutcomeParser();
-  const outcome = parser.parseIssueFungible( transactionOnNetwork );
+  const outcome = parser.parseIssueFungible(transactionOnNetwork);
   const contractAddress = outcome[ 0 ].contractAddress;
 }
 // ```
@@ -96,13 +96,13 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const contract = Address.newFromBech32( "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva" );
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await controller.createTransactionForDelegating(
     alice.address,
@@ -110,10 +110,10 @@ import path from 'path'; // md-ignore
     {
       delegationContract: contract,
       amount: 5000000000000000000000n,
-    } );
+    });
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -125,27 +125,27 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createDelegationTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
 
-  const transaction = await factory.createTransactionForDelegating( alice.address,
+  const transaction = await factory.createTransactionForDelegating(alice.address,
     {
       delegationContract: contract,
       amount: 5000000000000000000000n,
-    } );
+    });
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -158,22 +158,22 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForRedelegatingRewards(
     alice.address,
     alice.getNonceThenIncrement(),
     {
       delegationContract: contract,
-    } );
+    });
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -184,26 +184,26 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createDelegationTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
 
-  const transaction = await factory.createTransactionForRedelegatingRewards( alice.address,
+  const transaction = await factory.createTransactionForRedelegatingRewards(alice.address,
     {
       delegationContract: contract,
-    } );
+    });
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -216,22 +216,22 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForClaimingRewards(
     alice.address,
     alice.getNonceThenIncrement(),
     {
       delegationContract: contract,
-    } );
+    });
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -242,26 +242,26 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createDelegationTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
 
-  const transaction = await factory.createTransactionForClaimingRewards( alice.address,
+  const transaction = await factory.createTransactionForClaimingRewards(alice.address,
     {
       delegationContract: contract,
-    } );
+    });
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -274,12 +274,12 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForUndelegating(
     alice.address,
@@ -287,10 +287,10 @@ import path from 'path'; // md-ignore
     {
       delegationContract: contract,
       amount: 1000000000000000000000n // 1000 EGLD // md-as-comment
-    } );
+    });
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -301,27 +301,27 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createDelegationTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
 
-  const transaction = await factory.createTransactionForUndelegating( alice.address,
+  const transaction = await factory.createTransactionForUndelegating(alice.address,
     {
       delegationContract: contract,
       amount: 1000000000000000000000n // 1000 EGLD // md-as-comment
-    } );
+    });
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -334,23 +334,23 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createDelegationController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForWithdrawing(
     alice.address,
     alice.getNonceThenIncrement(),
     {
       delegationContract: contract,
-    } );
+    });
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -361,25 +361,25 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createDelegationTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32( erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva );
+  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
 
-  const transaction = await factory.createTransactionForWithdrawing( alice.address,
+  const transaction = await factory.createTransactionForWithdrawing(alice.address,
     {
       delegationContract: contract,
-    } );
+    });
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```

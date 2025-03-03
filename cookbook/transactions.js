@@ -24,10 +24,10 @@ import path from 'path'; // md-ignore
   const transfersFactory = entrypoint.createTransfersTransactionsFactory();
 
   // manually instantiating the controller and the factory
-  const controller = new TransfersController( { chainID: 'D' } );
+  const controller = new TransfersController({ chainID: 'D' });
 
-  const config = new TransactionsFactoryConfig( { chainID: 'D' } );
-  const factory = new TransferTransactionsFactory( { config } );
+  const config = new TransactionsFactoryConfig({ chainID: 'D' });
+  const factory = new TransferTransactionsFactory({ config });
 }
 // ```
 
@@ -40,11 +40,11 @@ import path from 'path'; // md-ignore
 {
   const entrypoint = new DevnetEntrypoint();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const sender = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const sender = await Account.newFromPem(filePath);
 
   // the developer is responsible for managing the nonce
-  sender.nonce = await entrypoint.recallAccountNonce( sender.address );
+  sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
@@ -56,7 +56,7 @@ import path from 'path'; // md-ignore
     },
   );
 
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -71,26 +71,26 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTransfersTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  const transaction = factory.createTransactionForTransfer( alice, {
+  const transaction = factory.createTransactionForTransfer(alice, {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-  } );
+  });
 
   // set the sender's nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction using the sender's account
-  transaction.signature = await alice.signTransaction( transaction );
+  transaction.signature = await alice.signTransaction(transaction);
 
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -102,29 +102,29 @@ import path from 'path'; // md-ignore
 {
   const entrypoint = new DevnetEntrypoint();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
-  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const esdt = new Token( { identifier: "TEST-123456" } );
-  const firstTransfer = new TokenTransfer( { token: esdt, amount: 1000000000n } );
+  const esdt = new Token({ identifier: "TEST-123456" });
+  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
 
-  const nft = new Token( { identifier: "NFT-987654", nonce: 10n } );
-  const secondTransfer = new TokenTransfer( { token: nft, amount: 1n } );
+  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
+  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n });
 
-  const sft = new Token( { identifier: "SFT-987654", nonce: 10n } );
-  const thirdTransfer = new TokenTransfer( { token: sft, amount: 7n } );
+  const sft = new Token({ identifier: "SFT-987654", nonce: 10n });
+  const thirdTransfer = new TokenTransfer({ token: sft, amount: 7n });
 
   const transfersController = entrypoint.createTransfersController();
-  const transaction = transfersController.createTransactionForTransfer( alice, alice.getNonceThenIncrement(), {
+  const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
-  } );
+  });
 
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -138,34 +138,34 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTransfersTransactionsFactory();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
-  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const esdt = new Token( { identifier: "TEST-123456" } ); // fungible tokens don't have a nonce
-  const firstTransfer = new TokenTransfer( { token: esdt, amount: 1000000000n } ); // we set the desired amount we want to send
+  const esdt = new Token({ identifier: "TEST-123456" }); // fungible tokens don't have a nonce
+  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n }); // we set the desired amount we want to send
 
-  const nft = new Token( { identifier: "NFT-987654", nonce: 10n } );
-  const secondTransfer = new TokenTransfer( { token: nft, amount: 1n } ); // for NFTs we set the amount to `1`
+  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
+  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n }); // for NFTs we set the amount to `1`
 
-  const sft = new Token( { identifier: "SFT-987654", nonce: 10n } );
-  const thirdTransfer = new TokenTransfer( { token: sft, amount: 7n } ); // for SFTs we set the desired amount we want to send
+  const sft = new Token({ identifier: "SFT-987654", nonce: 10n });
+  const thirdTransfer = new TokenTransfer({ token: sft, amount: 7n }); // for SFTs we set the desired amount we want to send
 
-  const transaction = factory.createTransactionForTransfer( alice, {
+  const transaction = factory.createTransactionForTransfer(alice, {
     receiver: bob,
     tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
-  } );
+  });
 
   // set the sender's nonce
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction using the sender's account
-  transaction.signature = await alice.signTransaction( transaction );
+  transaction.signature = await alice.signTransaction(transaction);
 
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -179,27 +179,27 @@ import path from 'path'; // md-ignore
 {
   const entrypoint = new DevnetEntrypoint();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
-  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const esdt = new Token( { identifier: "TEST-123456" } );
-  const firstTransfer = new TokenTransfer( { token: esdt, amount: 1000000000n } );
+  const esdt = new Token({ identifier: "TEST-123456" });
+  const firstTransfer = new TokenTransfer({ token: esdt, amount: 1000000000n });
 
-  const nft = new Token( { identifier: "NFT-987654", nonce: 10n } );
-  const secondTransfer = new TokenTransfer( { token: nft, amount: 1n } );
+  const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
+  const secondTransfer = new TokenTransfer({ token: nft, amount: 1n });
 
 
   const transfersController = entrypoint.createTransfersController();
-  const transaction = transfersController.createTransactionForTransfer( alice, alice.getNonceThenIncrement(), {
+  const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
     tokenTransfers: [ firstTransfer, secondTransfer ],
-  } );
+  });
 
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```

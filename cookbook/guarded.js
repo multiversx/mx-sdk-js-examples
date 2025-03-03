@@ -24,14 +24,14 @@ import path from 'path'; // md-ignore
   const controller = entrypoint.creatTokenManagementController();
 
   // create the issuer of the token // md-as-comment
-  const walletsPath = path.join( "src", "testdata", "testwallets" );
-  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
+  const walletsPath = path.join("src", "testdata", "testwallets");
+  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
   // carol will be our guardian // md-as-comment
-  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
+  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
@@ -52,10 +52,10 @@ import path from 'path'; // md-ignore
   );
 
   // guardian also signs the transaction // md-as-comment
-  transaction.guardianSignature = carol.signTransaction( transaction );
+  transaction.guardianSignature = carol.signTransaction(transaction);
 
   // broadcast the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -72,11 +72,11 @@ import path from 'path'; // md-ignore
   const factory = entrypoint.createTokenManagementController();
 
   // create the issuer of the token // md-as-comment
-  const walletsPath = path.join( "src", "testdata", "testwallets" );
-  const alice = await Account.newFromPem( path.join( walletsPath, "alice.pem" ) );
+  const walletsPath = path.join("src", "testdata", "testwallets");
+  const alice = await Account.newFromPem(path.join(walletsPath, "alice.pem"));
 
   // carol will be our guardian // md-as-comment
-  const carol = await Account.newFromPem( path.join( walletsPath, "carol.pem" ) );
+  const carol = await Account.newFromPem(path.join(walletsPath, "carol.pem"));
 
   const transaction = await factory.createTransactionForIssuingFungible(
     alice.address,
@@ -95,20 +95,20 @@ import path from 'path'; // md-ignore
   );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
   transaction.nonce = alice.getNonceThenIncrement();
 
   // set the guardian // md-as-comment
   transaction.guardian = carol.address;
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // guardian also signs the transaction // md-as-comment
-  transaction.guardianSignature = carol.signTransaction( transaction );
+  transaction.guardianSignature = carol.signTransaction(transaction);
 
   // broadcast the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 

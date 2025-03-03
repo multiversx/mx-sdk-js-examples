@@ -20,14 +20,14 @@ import path from 'path'; // md-ignore
   const controller = entrypoint.createAccountController();
 
   // create the account to guard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // we can use a trusted service that provides a guardian, or simply set another address we own or trust // md-as-comment
-  const guardian = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const guardian = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   const transaction = await controller.createTransactionForSettingGuardian(
     alice,
@@ -39,7 +39,7 @@ import path from 'path'; // md-ignore
   );
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -51,11 +51,11 @@ import path from 'path'; // md-ignore
   const factory = entrypoint.createAccountTransactionsFactory();
 
   // create the account to guard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // we can use a trusted service that provides a guardian, or simply set another address we own or trust // md-as-comment
-  const guardian = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const guardian = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   const transaction = await factory.createTransactionForSettingGuardian(
     alice,
@@ -65,16 +65,16 @@ import path from 'path'; // md-ignore
     },
   );
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -88,11 +88,11 @@ import path from 'path'; // md-ignore
   const controller = entrypoint.createAccountController();
 
   // create the account to guard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForGuardingAccount(
     alice,
@@ -100,7 +100,7 @@ import path from 'path'; // md-ignore
   );
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -112,24 +112,24 @@ import path from 'path'; // md-ignore
   const factory = entrypoint.createAccountTransactionsFactory();
 
   // create the account to guard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   const transaction = await factory.createTransactionForGuardingAccount(
     alice.address,
   );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -142,13 +142,13 @@ import path from 'path'; // md-ignore
   const controller = entrypoint.createAccountController();
 
   // create the account to unguard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
-  const guardian = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const guardian = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   const transaction = await controller.createTransactionForUnguardingAccount(
     alice,
@@ -159,7 +159,7 @@ import path from 'path'; // md-ignore
   );
 
   // the transaction should also be signed by the guardian before being sent otherwise it won't be executed // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -171,9 +171,9 @@ import path from 'path'; // md-ignore
   const factory = entrypoint.createAccountTransactionsFactory();
 
   // create the account to guard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
-  const guardian = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
+  const guardian = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   const transaction = await factory.createTransactionForUnguardingAccount(
     alice.address,
@@ -181,16 +181,16 @@ import path from 'path'; // md-ignore
   );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -203,14 +203,14 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createAccountController();
 
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // creating the key-value pairs we want to save // md-as-comment
-  const keyValuePairs = new Map( [ [ Buffer.from( "key0" ), Buffer.from( "value0" ) ] ] );
+  const keyValuePairs = new Map([ [ Buffer.from("key0"), Buffer.from("value0") ] ]);
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
 
   const transaction = await controller.createTransactionForSavingKeyValue(
@@ -222,7 +222,7 @@ import path from 'path'; // md-ignore
   );
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
 
@@ -234,11 +234,11 @@ import path from 'path'; // md-ignore
   const factory = entrypoint.createAccountTransactionsFactory();
 
   // create the account to guard // md-as-comment
-  const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
-  const alice = await Account.newFromPem( filePath );
+  const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
+  const alice = await Account.newFromPem(filePath);
 
   // creating the key-value pairs we want to save // md-as-comment
-  const keyValuePairs = new Map( [ [ Buffer.from( "key0" ), Buffer.from( "value0" ) ] ] );
+  const keyValuePairs = new Map([ [ Buffer.from("key0"), Buffer.from("value0") ] ]);
 
   const transaction = await factory.createTransactionForSavingKeyValue(
     alice.address,
@@ -246,15 +246,15 @@ import path from 'path'; // md-ignore
   );
 
   // fetch the nonce of the network // md-as-comment
-  alice.nonce = await entrypoint.recallAccountNonce( alice.address );
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // set the nonce // md-as-comment
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction( transaction );
+  transaction.signature = alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
-  const txHash = await entrypoint.sendTransaction( transaction );
+  const txHash = await entrypoint.sendTransaction(transaction);
 }
 // ```
