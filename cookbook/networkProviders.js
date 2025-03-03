@@ -52,7 +52,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// A full list of available methods for `ApiNetworkProvider` can be found [here](https://multiversx.github.io/mx-sdk-js-core/v13/classes/ApiNetworkProvider.html).
+// A full list of available methods for `ApiNetworkProvider` can be found [here](https://multiversx.github.io/mx-sdk-js-core/v14/classes/ApiNetworkProvider.html).
 
 // Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interface, which can be found [here](TO DO). This allows them to be used interchangeably.
 
@@ -80,7 +80,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const networkProvider = entrypoint.createNetworkProvider();
 
   const metaNetworkStatus = entrypoint.getNetworkStatus(); // fetches status from metachain // md-as-comment
-  const networkStatus = entrypoint.getNetworkStatus( 1 ); // fetches status from metachain // md-as-comment
+  const networkStatus = entrypoint.getNetworkStatus( 1 ); // fetches status from shard one // md-as-comment
 }
 // ```
 
@@ -363,11 +363,11 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 
   const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
   let token = new Token( { identifier: "TEST-ff155e" } ); // ESDT // md-as-comment
-  let tokeOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
+  let tokenOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
 
 
   token = new Token( { identifier: "NFT-987654" } ); // NFT // md-as-comment
-  tokeOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
+  tokenOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
 }
 // ```
 
@@ -432,7 +432,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 
 // ## Custom Api/Proxy calls
 // The methods exposed by the `ApiNetworkProvider` or `ProxyNetworkProvider` are the most common and widely used. However, there may be times when custom API calls are needed. For these cases, we’ve created generic methods for both GET and POST requests.
-// Let’s assume we want to retrieve all the transactions sent by Alice and call the `testFunction` function.
+// Let’s assume we want to retrieve all the transactions sent by Alice in which the `testFunction` function was called.
 
 // ```js
 {
@@ -440,7 +440,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const url = `transactions/${ alice.toBech32() }/testFunction`;
+  const url = `transactions/${ alice.toBech32() }?function=testFunction`;
 
   const response = await api.doGetGeneric( url );
 }

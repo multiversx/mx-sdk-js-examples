@@ -3,11 +3,10 @@ import path from 'path'; // md-ignore
 
 // ## Creating Accounts
 
-// You can create an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
-// Accounts are used for signing transactions and managing the account's nonce. They can also be saved to a PEM or keystore file for future use. 
+// You can initialize an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
+// Accounts are used for signing transactions and messages and managing the account's nonce. They can also be saved to a PEM or keystore file for future use. 
 
 // For example, to create a Devnet entrypoint:
-
 // ```js
 {
   const entrypoint = new DevnetEntrypoint();
@@ -18,7 +17,6 @@ import path from 'path'; // md-ignore
 // ## Other Ways to Instantiate an Account
 
 // 1. Using a Secret Key
-
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -29,9 +27,7 @@ import path from 'path'; // md-ignore
 // ```
 
 // 2. Using a PEM file
-
 // ```js
-
 {
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const accountFromPem = Account.newFromPem( filePath );
@@ -39,7 +35,6 @@ import path from 'path'; // md-ignore
 // ```
 
 // 3. From a Keystore File
-
 // ```js
 {
   const keystorePath = path.join( "src", "testdata", "testwallets", "alice.json" );
@@ -51,7 +46,6 @@ import path from 'path'; // md-ignore
 // ```
 
 // 4. From a Mnemonic
-
 // ```js
 
 const mnemonic = Mnemonic.generate();
@@ -68,25 +62,25 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 
 // ## Managing the Account Nonce
 
-// An account has a `nonce` property that the user is responsible for maintaining. 
+// An account has a `nonce` property that the user is responsible for managing. 
 // You can fetch the nonce from the network and increment it after each transaction. 
-// Each transaction must have the correct nonce, or it will fail to execute.
+// Each transaction must have the correct nonce, otherwise it will fail to execute.
 
 // ```js
 {
-  const keyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
+  const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
   const key = new UserSecretKey( Buffer.from( secretKeyHex, 'hex' ) );
 
-  const accountWithNonce = new Account( secretKey );
-  const devnetEntrypoint = new DevnetEntrypoint();
+  const accountWithNonce = new Account( key );
+  const entrypoint = new DevnetEntrypoint();
 
   // Fetch the current nonce from the network // md-as-comment
-  account.nonce = await entrypoint.recallAccountNonce( account.address );
+  accountWithNonce.nonce = await entrypoint.recallAccountNonce( accountWithNonce.address );
 
   // Create and send a transaction here...
 
   // Increment nonce after each transaction // md-as-comment
-  const nonce = account.getNonceThenIncrement();
+  const nonce = accountWithNonce.getNonceThenIncrement();
 }
 // ```
 
@@ -98,8 +92,7 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 // While PEM wallets are less secure for storing secret keys, they are convenient for testing purposes. 
 // Keystore files offer a higher level of security.
 
-// Saving the Account to a PEM File
-
+// ### Saving the Account to a PEM File
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -110,10 +103,7 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 }
 // ```
 
-// ```
-
-// Saving the Account to a Keystore File
-
+// ### Saving the Account to a Keystore File
 // ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";

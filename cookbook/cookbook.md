@@ -1,13 +1,13 @@
 ## Overview
 
-This guide walks you through handling common tasks using the MultiversX Javascript SDK (v1, latest stable version).
+This guide walks you through handling common tasks using the MultiversX Javascript SDK (v14, latest stable version).
 
 ## Creating an Entrypoint
 
 An Entrypoint represents a network client that simplifies access to the most common operations.
 There is a dedicated entrypoint for each network: `MainnetEntrypoint`,  `DevnetEntrypoint`, `TestnetEntrypoint`, `LocalnetEntrypoint`.
 
-For example, to create a Devnet entrypoint:
+For example, to create a Devnet entrypoint you have the following command:
 
 ```js
 const entrypoint = new DevnetEntrypoint();
@@ -17,7 +17,7 @@ const entrypoint = new DevnetEntrypoint();
 If you'd like to connect to a third-party API, you can specify the url parameter:
 
 ```js
-const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-devnet-api.com' } ); s;
+const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-devnet-api.com' } );
 ```
 
 ## Using a Proxy
@@ -34,11 +34,10 @@ const customEntrypoint = new DevnetEntrypoint( {
 
 ## Creating Accounts
 
-You can create an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
-Accounts are used for signing transactions and managing the account's nonce. They can also be saved to a PEM or keystore file for future use.
+You can initialize an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
+Accounts are used for signing transactions and messages and managing the account's nonce. They can also be saved to a PEM or keystore file for future use.
 
 For example, to create a Devnet entrypoint:
-
 ```js
 {
   const entrypoint = new DevnetEntrypoint();
@@ -49,7 +48,6 @@ For example, to create a Devnet entrypoint:
 ## Other Ways to Instantiate an Account
 
 1. Using a Secret Key
-
 ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -60,9 +58,7 @@ For example, to create a Devnet entrypoint:
 ```
 
 2. Using a PEM file
-
 ```js
-
 {
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const accountFromPem = Account.newFromPem( filePath );
@@ -70,7 +66,6 @@ For example, to create a Devnet entrypoint:
 ```
 
 3. From a Keystore File
-
 ```js
 {
   const keystorePath = path.join( "src", "testdata", "testwallets", "alice.json" );
@@ -82,7 +77,6 @@ For example, to create a Devnet entrypoint:
 ```
 
 4. From a Mnemonic
-
 ```js
 
 const mnemonic = Mnemonic.generate();
@@ -99,25 +93,25 @@ const accountFromKeyPairs = Account.newFromKeypair( keypair );
 
 ## Managing the Account Nonce
 
-An account has a `nonce` property that the user is responsible for maintaining.
+An account has a `nonce` property that the user is responsible for managing.
 You can fetch the nonce from the network and increment it after each transaction.
-Each transaction must have the correct nonce, or it will fail to execute.
+Each transaction must have the correct nonce, otherwise it will fail to execute.
 
 ```js
 {
-  const keyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
+  const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
   const key = new UserSecretKey( Buffer.from( secretKeyHex, 'hex' ) );
 
-  const accountWithNonce = new Account( secretKey );
-  const devnetEntrypoint = new DevnetEntrypoint();
+  const accountWithNonce = new Account( key );
+  const entrypoint = new DevnetEntrypoint();
 
   // Fetch the current nonce from the network
-  account.nonce = await entrypoint.recallAccountNonce( account.address );
+  accountWithNonce.nonce = await entrypoint.recallAccountNonce( accountWithNonce.address );
 
   // Create and send a transaction here...
 
   // Increment nonce after each transaction
-  const nonce = account.getNonceThenIncrement();
+  const nonce = accountWithNonce.getNonceThenIncrement();
 }
 ```
 
@@ -129,8 +123,7 @@ Accounts can be saved to either a PEM file or a keystore file.
 While PEM wallets are less secure for storing secret keys, they are convenient for testing purposes.
 Keystore files offer a higher level of security.
 
-Saving the Account to a PEM File
-
+### Saving the Account to a PEM File
 ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -141,10 +134,7 @@ Saving the Account to a PEM File
 }
 ```
 
-```
-
-Saving the Account to a Keystore File
-
+### Saving the Account to a Keystore File
 ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -231,7 +221,7 @@ When manually instantiating a network provider, you can provide a configuration 
 }
 ```
 
-A full list of available methods for `ApiNetworkProvider` can be found [here](https://multiversx.github.io/mx-sdk-js-core/v13/classes/ApiNetworkProvider.html).
+A full list of available methods for `ApiNetworkProvider` can be found [here](https://multiversx.github.io/mx-sdk-js-core/v14/classes/ApiNetworkProvider.html).
 
 Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interface, which can be found [here](TO DO). This allows them to be used interchangeably.
 
@@ -259,7 +249,7 @@ Fetching the network status
   const networkProvider = entrypoint.createNetworkProvider();
 
   const metaNetworkStatus = entrypoint.getNetworkStatus(); // fetches status from metachain
-  const networkStatus = entrypoint.getNetworkStatus( 1 ); // fetches status from metachain
+  const networkStatus = entrypoint.getNetworkStatus( 1 ); // fetches status from shard one
 }
 ```
 
@@ -542,11 +532,11 @@ We can fetch a specific token (ESDT, MetaESDT, SFT, NFT) from an account by prov
 
   const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
   let token = new Token( { identifier: "TEST-ff155e" } ); // ESDT
-  let tokeOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
+  let tokenOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
 
 
   token = new Token( { identifier: "NFT-987654" } ); // NFT
-  tokeOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
+  tokenOnNetwork = await apiProvider.getTokenOfAccount( alice, token );
 }
 ```
 
@@ -611,7 +601,7 @@ Smart contract queries, or view functions, are endpoints that only read data fro
 
 ## Custom Api/Proxy calls
 The methods exposed by the `ApiNetworkProvider` or `ProxyNetworkProvider` are the most common and widely used. However, there may be times when custom API calls are needed. For these cases, we’ve created generic methods for both GET and POST requests.
-Let’s assume we want to retrieve all the transactions sent by Alice and call the `testFunction` function.
+Let’s assume we want to retrieve all the transactions sent by Alice in which the `testFunction` function was called.
 
 ```js
 {
@@ -619,7 +609,7 @@ Let’s assume we want to retrieve all the transactions sent by Alice and call t
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32( "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" );
-  const url = `transactions/${ alice.toBech32() }/testFunction`;
+  const url = `transactions/${ alice.toBech32() }?function=testFunction`;
 
   const response = await api.doGetGeneric( url );
 }
@@ -648,7 +638,7 @@ There are two ways to create controllers and factories:
   const transfersFactory = entrypoint.createTransfersTransactionsFactory();
 
   // manually instantiating the controller and the factory
-  const controller = new TransfersController( { chainID: this.chainId } );
+  const controller = new TransfersController( { chainID: 'D' } );
 
   const config = new TransactionsFactoryConfig( { chainID: 'D' } );
   const factory = new TransferTransactionsFactory( { config } );
@@ -673,14 +663,13 @@ When using the controller, the transaction will be signed because we’ll be wor
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
     sender,
-    BigInt( sender.getNonceThenIncrement() ),
+    sender.getNonceThenIncrement(),
     {
       receiver: sender.address,
-      nativeAmount: BigInt( 1 ),
+      nativeAmount: 1n,
     },
   );
 
-  // manually instantiating the controller and the factory
   const txHash = await entrypoint.sendTransaction( transaction );
 }
 ```
@@ -702,7 +691,7 @@ You will need to handle these aspects after the transaction is created.
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   const transaction = factory.createTransactionForTransfer( alice, {
     receiver: bob,
@@ -729,7 +718,7 @@ If you know you’ll only be sending native tokens, you can create the transacti
 
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const alice = await Account.newFromPem( filePath );
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
@@ -765,7 +754,7 @@ When using the factory, only the sender's address is required. As a result, the 
 
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const alice = await Account.newFromPem( filePath );
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
@@ -806,7 +795,7 @@ We can send both types of tokens using either the `controller` or the `factory`,
 
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const alice = await Account.newFromPem( filePath );
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
@@ -841,7 +830,6 @@ A contract's ABI (Application Binary Interface) describes the endpoints, data st
 While interactions with the contract are possible without the ABI, they are much easier to implement when the definitions are available.
 
 Loading the ABI from a file
-
 ```js
 {
   let abiJson = await promises.readFile( "../contracts/adder.abi.json", { encoding: "utf8" } );
@@ -914,6 +902,7 @@ This allows arguments to be passed as native Javascript values. If the ABI is no
 {
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const sender = await Account.newFromPem( filePath );
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce( sender.address );
@@ -924,7 +913,6 @@ This allows arguments to be passed as native Javascript values. If the ABI is no
   // load the abi file
   abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
 
-  const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractController( abi );
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
@@ -965,7 +953,7 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 {
   // We use the transaction hash we got when broadcasting the transaction
   const outcome = await controller.awaitCompletedDeploy( txHash ); // waits for transaction completion and parses the result
-  const contractAddress = Address.newFromBech32( outcome.contracts[ 0 ].address );
+  const contractAddress = outcome.contracts[ 0 ].address;
 }
 ```
 
@@ -990,11 +978,11 @@ Even before broadcasting, at the moment you know the sender's address and the no
 {
   const addressComputer = new AddressComputer();
   const contractAddress = addressComputer.computeContractAddress(
-    Address.fromBech32( deployTransaction.sender ),
+    deployTransaction.sender,
     deployTransaction.nonce
   );
 
-  console.log( "Contract address:", contractAddress.bech32() );
+  console.log( "Contract address:", contractAddress.toBech32() );
 }
 ```
 
@@ -1108,7 +1096,6 @@ In our case, calling the add endpoint does not return anything, but similar to t
 
 ```js
 waits for transaction completion and parses the result
-we use the transaction hash we got when broadcasting the transaction
 {
   const parsedOutcome = controller.awaitCompletedExecute( transactionOnNetwork );
   const values = parsedOutcome.contracts.values;
@@ -1237,7 +1224,7 @@ As said before, the `add` endpoint we called does not return anything, but we co
 {
   // load the abi file
   abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
-  const parser = SmartContractTransactionsOutcomeParser( { transactionOnNetwork, function: 'add' } );
+  const parser = SmartContractTransactionsOutcomeParser( { abi } );
   const transactionOnNetwork = entrypoint.getTransaction( txHash );
   const outcome = parser.parseExecute();
 }
@@ -1252,11 +1239,14 @@ First, we load the abi file, then we fetch the transaction, we extract the event
 
 ```js
 {
-  // load the abi file
-  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
-  const parser = SmartContractTransactionsOutcomeParser( { transactionOnNetwork, function: 'add' } );
-  const transactionOnNetwork = entrypoint.getTransaction( txHash );
-  const outcome = parser.parseExecute();
+  {
+    // load the abi files
+    abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
+    const parser = new TransactionEventsParser( { abi } );
+    const transactionOnNetwork = entrypoint.getTransaction( txHash );
+    const events = gatherAllEvents( transactionOnNetwork );
+    const outcome = parser.parseEvents( { events } );
+  }
 }
 ```
 
@@ -1271,7 +1261,6 @@ For the factory, the same functionality can be achieved using the `TokenManageme
 For scripts or quick network interactions, we recommend using the controller. However, for a more granular approach (e.g., DApps), the factory is the better choice.
 
 Loading the ABI from a file
-
 ```js
 {
   // create the entrypoint and the token management controller
@@ -1437,13 +1426,11 @@ Setting special roles for fungible tokens using the controller
   // if we know that the transaction is completed, we can simply call `entrypoint.get_transaction(tx_hash)`
   const transactionOnNetwork = await entrypoint.awaitCompletedTransaction( txHash );
 
-  // extract the token identifier
   const parser = new TokenManagementTransactionsOutcomeParser();
   const outcome = parser.parseSetSpecialRole( transactionOnNetwork );
 
   const roles = outcome[ 0 ].roles;
   const user = outcome[ 0 ].userAddress;
-
 }
 ```
 
@@ -1668,7 +1655,6 @@ Setting special roles for fungible tokens using the controller
   // ## wait for transaction to execute, extract the token identifier
   transactionOnNetwork = await entrypoint.awaitCompletedTransaction( txHash );
 
-  // extract the token identifier
   outcome = parser.parseIssueNonFungible( transactionOnNetwork );
 
   const identifier = outcome[ 0 ].tokenIdentifier;
@@ -1679,14 +1665,14 @@ Setting special roles for fungible tokens using the controller
 
 These are just a few examples of what you can do using the token management controller or factory. For a complete list of supported methods, refer to the autogenerated documentation:
 
-- [TokenManagementController](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TokenManagementController.html)
-- [TokenManagementTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v13/classes/TokenManagementTransactionsFactory.html)
+- [TokenManagementController](https://multiversx.github.io/mx-sdk-js-core/v14/classes/TokenManagementController.html)
+- [TokenManagementTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v14/classes/TokenManagementTransactionsFactory.html)
 
 ## Account management
 
 The account management controller and factory allow us to create transactions for managing accounts, such as:
 - Guarding and unguarding accounts
-- Saving key-value pairs in the account storage, on blockchain.
+- Saving key-value pairs in the account storage, on the blockchain.
 
 To learn more about Guardians, refer to the [official documentation](/developers/built-in-functions/#setguardian).
 A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
@@ -1838,7 +1824,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
     }
   );
 
-  // sending the transaction
+  // the transaction should also be signed by the guardian before being sent otherwise it won't be executed
   const txHash = await entrypoint.sendTransaction( transaction );
 }
 ```
@@ -1951,8 +1937,8 @@ In this section, we'll cover how to:
 - Undelegate and withdraw funds
 
 These operations can be performed using both the controller and the **factory**. For a complete list of supported methods, refer to the autogenerated documentation:
-- [DelegationController](https://multiversx.github.io/mx-sdk-js-core/v13/classes/DelegationController.html)
-- [DelegationTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v13/classes/DelegationTransactionsFactory.html)
+- [DelegationController](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationController.html)
+- [DelegationTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationTransactionsFactory.html)
 
 **Creating a New Delegation Contract Using the Controller**
 
@@ -2395,7 +2381,6 @@ Let’s issue a fungible token using a relayed transaction:
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
     alice.getNonceThenIncrement(),
-    carol.address,
     {
       tokenName: "NEWFNG",
       tokenTicker: "FNG",
@@ -2407,6 +2392,7 @@ Let’s issue a fungible token using a relayed transaction:
       canChangeOwner: true,
       canUpgrade: true,
       canAddSpecialRoles: false,
+      guardian: carol.address,
     },
   );
 
@@ -2678,7 +2664,7 @@ LibraryConfig.defaultAddressHrp = "test";
 const testAddress = Address.newFromHex( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1" );
 console.log( testAddress.toBech32() );
 
-Reset HRP back to "erd" to avoid affecting other parts of the application. //md-as-comment
+Reset HRP back to "erd" to avoid affecting other parts of the application.
 LibraryConfig.defaultAddressHrp = "erd";
 ```
 
@@ -2732,7 +2718,6 @@ The secret key can also be saved to a keystore file:
     const mnemonic = Mnemonic.generate();
     const secretKey = mnemonic.deriveKey();
 
-    // saves the mnemonic to a keystore file with kind=mnemonic
     const wallet = UserWallet.fromSecretKey( { secretKey: secretKey, password: "password" } );
 
     const filePath = path.join( "src", "testdata", "testwallets", "walletWithSecretKey.json" );
@@ -2774,7 +2759,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 }
 ```
 
-**Loading a wallets from keystore mnemonic file**
+**Loading a wallet from keystore mnemonic file**
 Load a keystore that holds an encrypted mnemonic (and perform wallet derivation at the same time):
 
 ``` js
@@ -2825,19 +2810,15 @@ Load a keystore that holds an encrypted mnemonic (and perform wallet derivation 
 }
 ```
 
-import { Account, Address, Message, MessageComputer, Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
-import path from 'path';
 ## Signing objects
 
 Signing is done using an account's secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations.
 First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 ## Signing a Transaction using an Account
-We are going to assume we have an account at this point. If you don't, fell free to check out the [creating an account section](#creating-accounts).
-
+We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account section](#creating-accounts).
 ```js
 {
-    // create the issuer ot the token
     const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
     const alice = await Account.newFromPem( filePath );
 
@@ -2855,7 +2836,6 @@ We are going to assume we have an account at this point. If you don't, fell free
 ```
 
 Signing a Transaction using a SecretKey
-
 ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -2883,10 +2863,8 @@ Signing a Transaction using a SecretKey
 ```
 
 Signing a Transaction by hash
-
 ```js
 {
-    // create the issuer ot the token
     const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
     const alice = await Account.newFromPem( filePath );
 
@@ -2915,7 +2893,6 @@ Signing a Transaction by hash
 ```
 
 Signing a Message using an Account:
-
 ```js
 {
     const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
@@ -2931,7 +2908,6 @@ Signing a Message using an Account:
 ```
 
 Signing a Message using an SecretKey:
-
 ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";

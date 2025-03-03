@@ -1,14 +1,14 @@
 import { DevnetEntrypoint } from "@multiversx/sdk-core"; // md-ignore
 // ## Overview
 
-// This guide walks you through handling common tasks using the MultiversX Javascript SDK (v1, latest stable version).
+// This guide walks you through handling common tasks using the MultiversX Javascript SDK (v14, latest stable version).
 
 // ## Creating an Entrypoint
 
 // An Entrypoint represents a network client that simplifies access to the most common operations. 
 // There is a dedicated entrypoint for each network: `MainnetEntrypoint`,  `DevnetEntrypoint`, `TestnetEntrypoint`, `LocalnetEntrypoint`.
 
-// For example, to create a Devnet entrypoint:
+// For example, to create a Devnet entrypoint you have the following command:
 
 // ```js
 const entrypoint = new DevnetEntrypoint();
@@ -18,7 +18,7 @@ const entrypoint = new DevnetEntrypoint();
 // If you'd like to connect to a third-party API, you can specify the url parameter:
 
 // ```js
-const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-devnet-api.com' } ); s;
+const apiEntrypoint = new DevnetEntrypoint( { url: 'https://custom-multiversx-devnet-api.com' } );
 // ```
 
 // ## Using a Proxy

@@ -79,7 +79,7 @@ LibraryConfig.defaultAddressHrp = "test";
 const testAddress = Address.newFromHex( "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1" );
 console.log( testAddress.toBech32() );
 
-// Reset HRP back to "erd" to avoid affecting other parts of the application. //md-as-comment
+// Reset HRP back to "erd" to avoid affecting other parts of the application.
 LibraryConfig.defaultAddressHrp = "erd";
 // ```
 

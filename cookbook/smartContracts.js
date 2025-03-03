@@ -10,7 +10,6 @@ import path from 'path';
 // While interactions with the contract are possible without the ABI, they are much easier to implement when the definitions are available.
 
 // Loading the ABI from a file
-
 // ```js
 {
   let abiJson = await promises.readFile( "../contracts/adder.abi.json", { encoding: "utf8" } );
@@ -83,6 +82,7 @@ import path from 'path';
 {
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const sender = await Account.newFromPem( filePath );
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce( sender.address );
@@ -93,7 +93,6 @@ import path from 'path';
   // load the abi file
   abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
 
-  const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractController( abi );
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
@@ -124,7 +123,7 @@ import path from 'path';
 {
   // We use the transaction hash we got when broadcasting the transaction
   const outcome = await controller.awaitCompletedDeploy( txHash ); // waits for transaction completion and parses the result
-  const contractAddress = Address.newFromBech32( outcome.contracts[ 0 ].address );
+  const contractAddress = outcome.contracts[ 0 ].address;
 }
 // ```
 
@@ -149,11 +148,11 @@ import path from 'path';
 {
   const addressComputer = new AddressComputer();
   const contractAddress = addressComputer.computeContractAddress(
-    Address.fromBech32( deployTransaction.sender ),
+    deployTransaction.sender,
     deployTransaction.nonce
   );
 
-  console.log( "Contract address:", contractAddress.bech32() );
+  console.log( "Contract address:", contractAddress.toBech32() );
 }
 // ```
 
@@ -267,7 +266,6 @@ import path from 'path';
 
 // ```js
 // waits for transaction completion and parses the result
-// we use the transaction hash we got when broadcasting the transaction
 {
   const parsedOutcome = controller.awaitCompletedExecute( transactionOnNetwork );
   const values = parsedOutcome.contracts.values;
@@ -396,7 +394,7 @@ import path from 'path';
 {
   // load the abi file
   abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
-  const parser = SmartContractTransactionsOutcomeParser( { transactionOnNetwork, function: 'add' } );
+  const parser = SmartContractTransactionsOutcomeParser( { abi } );
   const transactionOnNetwork = entrypoint.getTransaction( txHash );
   const outcome = parser.parseExecute();
 }
@@ -411,10 +409,13 @@ import path from 'path';
 
 // ```js
 {
-  // load the abi file
-  abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
-  const parser = SmartContractTransactionsOutcomeParser( { transactionOnNetwork, function: 'add' } );
-  const transactionOnNetwork = entrypoint.getTransaction( txHash );
-  const outcome = parser.parseExecute();
+  {
+    // load the abi files
+    abi = await loadAbiRegistry( "src/testdata/adder.abi.json" );
+    const parser = new TransactionEventsParser( { abi } );
+    const transactionOnNetwork = entrypoint.getTransaction( txHash );
+    const events = gatherAllEvents( transactionOnNetwork );
+    const outcome = parser.parseEvents( { events } );
+  }
 }
 // ```

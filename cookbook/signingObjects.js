@@ -1,17 +1,15 @@
 
-import { Account, Address, Message, MessageComputer, Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core";
-import path from 'path';
+import { Account, Address, Message, MessageComputer, Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core"; // md-ignore
+import path from 'path'; // md-ignore
 // ## Signing objects
 
 // Signing is done using an account's secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations. 
 // First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 // ## Signing a Transaction using an Account
-// We are going to assume we have an account at this point. If you don't, fell free to check out the [creating an account section](#creating-accounts).
-
+// We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account section](#creating-accounts).
 // ```js
 {
-    // create the issuer ot the token // md-as-comment
     const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
     const alice = await Account.newFromPem( filePath );
 
@@ -29,7 +27,6 @@ import path from 'path';
 // ```
 
 // Signing a Transaction using a SecretKey
-
 // ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -57,10 +54,8 @@ import path from 'path';
 // ```
 
 // Signing a Transaction by hash
-
 // ```js
 {
-    // create the issuer ot the token // md-as-comment
     const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
     const alice = await Account.newFromPem( filePath );
 
@@ -89,7 +84,6 @@ import path from 'path';
 // ```
 
 // Signing a Message using an Account:
-
 // ```js
 {
     const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
@@ -105,7 +99,6 @@ import path from 'path';
 // ```
 
 // Signing a Message using an SecretKey:
-
 // ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";

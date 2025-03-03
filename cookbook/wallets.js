@@ -51,7 +51,6 @@ console.log( { words } );
     const mnemonic = Mnemonic.generate();
     const secretKey = mnemonic.deriveKey();
 
-    // saves the mnemonic to a keystore file with kind=mnemonic // md-as-comment
     const wallet = UserWallet.fromSecretKey( { secretKey: secretKey, password: "password" } );
 
     const filePath = path.join( "src", "testdata", "testwallets", "walletWithSecretKey.json" );
@@ -93,7 +92,7 @@ import { KeyPair } from "@multiversx/sdk-core";
 }
 // ```
 
-// **Loading a wallets from keystore mnemonic file**
+// **Loading a wallet from keystore mnemonic file**
 // Load a keystore that holds an encrypted mnemonic (and perform wallet derivation at the same time):
 
 // ``` js

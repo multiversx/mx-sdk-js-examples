@@ -72,7 +72,6 @@ import path from 'path'; // md-ignore
   const transaction = await controller.createTransactionForIssuingFungible(
     alice,
     alice.getNonceThenIncrement(),
-    carol.address,
     {
       tokenName: "NEWFNG",
       tokenTicker: "FNG",
@@ -84,6 +83,7 @@ import path from 'path'; // md-ignore
       canChangeOwner: true,
       canUpgrade: true,
       canAddSpecialRoles: false,
+      guardian: carol.address,
     },
   );
 

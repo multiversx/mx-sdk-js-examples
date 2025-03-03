@@ -24,7 +24,7 @@ import path from 'path'; // md-ignore
   const transfersFactory = entrypoint.createTransfersTransactionsFactory();
 
   // manually instantiating the controller and the factory
-  const controller = new TransfersController( { chainID: this.chainId } );
+  const controller = new TransfersController( { chainID: 'D' } );
 
   const config = new TransactionsFactoryConfig( { chainID: 'D' } );
   const factory = new TransferTransactionsFactory( { config } );
@@ -49,14 +49,13 @@ import path from 'path'; // md-ignore
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
     sender,
-    BigInt( sender.getNonceThenIncrement() ),
+    sender.getNonceThenIncrement(),
     {
       receiver: sender.address,
-      nativeAmount: BigInt( 1 ),
+      nativeAmount: 1n,
     },
   );
 
-  // manually instantiating the controller and the factory
   const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
@@ -78,7 +77,7 @@ import path from 'path'; // md-ignore
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
 
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   const transaction = factory.createTransactionForTransfer( alice, {
     receiver: bob,
@@ -105,7 +104,7 @@ import path from 'path'; // md-ignore
 
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const alice = await Account.newFromPem( filePath );
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
@@ -141,7 +140,7 @@ import path from 'path'; // md-ignore
 
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const alice = await Account.newFromPem( filePath );
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );
@@ -182,7 +181,7 @@ import path from 'path'; // md-ignore
 
   const filePath = path.join( "src", "testdata", "testwallets", "alice.pem" );
   const alice = await Account.newFromPem( filePath );
-  const bob = Account.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
+  const bob = Address.newFromBech32( "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" );
 
   // the developer is responsible for managing the nonce
   alice.nonce = await entrypoint.recallAccountNonce( alice.address );

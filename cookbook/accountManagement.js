@@ -6,7 +6,7 @@ import path from 'path'; // md-ignore
 
 // The account management controller and factory allow us to create transactions for managing accounts, such as:
 // - Guarding and unguarding accounts
-// - Saving key-value pairs in the account storage, on blockchain.
+// - Saving key-value pairs in the account storage, on the blockchain.
 
 // To learn more about Guardians, refer to the [official documentation](https://docs.multiversx.com/developers/built-in-functions/#setguardian).
 // A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](https://docs.multiversx.com/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
@@ -158,7 +158,7 @@ import path from 'path'; // md-ignore
     }
   );
 
-  // sending the transaction // md-as-comment
+  // the transaction should also be signed by the guardian before being sent otherwise it won't be executed // md-as-comment
   const txHash = await entrypoint.sendTransaction( transaction );
 }
 // ```
