@@ -1224,6 +1224,136 @@ First, we load the abi file, then we fetch the transaction, we extract the event
 }
 ```
 
+### Decoding transaction events
+Whenever needed, the contract ABI can be used for manually encoding or decoding custom types.
+
+Let's encode a struct called EsdtTokenPayment (of [multisig](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract) into binary data.
+```js
+{
+  const abi = await loadAbiRegistry("src/testdata/multisig-full.abi.json");
+  const paymentType = abi.getStruct("EsdtTokenPayment");
+
+  const paymentStruct = new Struct(paymentType, [
+    new Field(new TokenIdentifierValue("TEST-8b028f"), "token_identifier"),
+    new Field(new U64Value(0n), "token_nonce"),
+    new Field(new BigUIntValue(10000n), "amount")
+  ]);
+
+  const encoded = codec.encodeNested(paymentStruct);
+
+  console.log(encoded.toString("hex"));
+}
+```
+
+Now let's decode a struct using the ABI.
+```js
+{
+  const abi = await loadAbiRegistry("src/testdata/multisig-full.abi.json");
+  const actionStructType = abi.getEnum("Action");
+  const data = Buffer.from("0500000000000000000500d006f73c4221216fa679bc559005584c4f1160e569e1000000012a0000000003616464000000010000000107", "hex");
+
+  const [decoded] = codec.decodeNested(data, actionStructType);
+  const decodedValue = decoded.valueOf();
+  console.log(JSON.stringify(decodedValue, null, 4));
+}
+```
+
+## Smart Contract queries
+When querying a smart contract, a **view function** is called. A view function does not modify the state of the contract, so we do not need to send a transaction.
+To perform this query, we use the **SmartContractController**. While we can use the contract's ABI file to encode the query arguments, we can also use it to parse the result.
+In this example, we will query the **adder smart contract** by calling its `getSum` endpoint.
+
+```js
+{
+  const entrypoint = new DevnetEntrypoint();
+  const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+
+  // create the controller
+  const controller = entrypoint.createSmartContractController(abi);
+
+  // creates the query, runs the query, parses the result
+  const response = await controller.query({ contract: contractAddress, function: "getSum", arguments: [] });
+}
+```
+
+If we need more granular control, we can split the process into three steps: **create the query, run the query, and parse the query response**.
+This approach achieves the same result as the previous example.
+
+```js
+{
+  const entrypoint = new DevnetEntrypoint();
+
+  // load the abi
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+
+  // the contract address we'll query
+  const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
+
+  // create the controller
+  const controller = entrypoint.createSmartContractController(abi);
+
+  // create the query
+  const query = await controller.createQuery({ contract: contractAddress, function: "getSum", arguments: [] });
+  // runs the query
+  const response = await controller.runQuery(query);
+
+  // parse the result
+  const parsedResponse = controller.parseQueryResponse(response);
+}
+```
+
+## Upgrading a smart contract
+Contract upgrade transactions are similar to deployment transactions (see above) because they also require contract bytecode.
+However, in this case, the contract address is already known. Like deploying a smart contract, we can upgrade a smart contract using either the **controller** or the **factory**.
+
+### Uprgrading a smart contract using the controller
+```js
+{
+  // prepare the account
+  const entrypoint = new DevnetEntrypoint();
+  const keystorePath = path.join("src", "testdata", "testwallets", "alice.json");
+  const account = Account.newFromKeystore({
+    filePath: keystorePath,
+    password: "password"
+  });
+  // the developer is responsible for managing the nonce
+  account.nonce = entrypoint.recall_account_nonce(account.address);
+
+  // load the abi
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+
+  // create the controller
+  const controller = entrypoint.createSmartContractController(abi);
+
+  // load the contract bytecode; this is the new contract code, the one we want to upgrade to
+  const bytecode = await promises.readFile("../contracts/adder.wasm");
+
+  // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
+  let args = [new U32Value(42)];
+  // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
+  args = [42];
+
+  const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
+
+  const upgradeTransaction = await controller.createTransactionForUpgrade(
+    sender,
+    sender.getNonceThenIncrement(),
+    {
+      contract: contractAddress,
+      bytecode: bytecode,
+      gasLimit: 6000000n,
+      arguments: args,
+    },
+  );
+
+  // broadcasting the transaction
+  const txHash = await entrypoint.sendTransaction(deployTransaction);
+
+  console.log({ txHash });
+}
+```
+
 ## Token management
 
 In this section, we're going to create transactions to issue fungible tokens, issue semi-fungible tokens, create NFTs, set token roles, but also parse these transactions to extract their outcome (e.g. get the token identifier of the newly issued token).
