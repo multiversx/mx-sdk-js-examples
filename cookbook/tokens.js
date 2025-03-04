@@ -10,7 +10,7 @@ import path from 'path'; // md-ignore
 
 // For scripts or quick network interactions, we recommend using the controller. However, for a more granular approach (e.g., DApps), the factory is the better choice.
 
-// Loading the ABI from a file
+// ### Loading the ABI from a file
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -21,7 +21,7 @@ import path from 'path'; // md-ignore
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  // fetch the nonce of the network // md-as-comment
+  // fetch the nonce of the network // md-as-commentP
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForIssuingFungible(

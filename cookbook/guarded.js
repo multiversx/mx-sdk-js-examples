@@ -5,6 +5,7 @@ import path from 'path'; // md-ignore
 
 // - guardian
 // - guardianSignature
+
 // Each controller includes an argument for the guardian. The transaction can either:
 // 1. Be sent to a service that signs it using the guardian’s account, or
 // 2. Be signed by another account acting as a guardian.
@@ -114,7 +115,7 @@ import path from 'path'; // md-ignore
 
 // We can create guarded relayed transactions just like we did before. However, keep in mind:
 
-// Only the sender can be guarded—the relayer cannot be guarded.
+// Only the sender can be guarded, the relayer cannot be guarded.
 
 // Flow for Creating Guarded Relayed Transactions:
 // - Using Controllers:

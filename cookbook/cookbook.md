@@ -1253,7 +1253,7 @@ For the factory, the same functionality can be achieved using the `TokenManageme
 
 For scripts or quick network interactions, we recommend using the controller. However, for a more granular approach (e.g., DApps), the factory is the better choice.
 
-Loading the ABI from a file
+### Loading the ABI from a file
 ```js
 {
   // create the entrypoint and the token management controller
@@ -2558,7 +2558,7 @@ Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
 We can create guarded relayed transactions just like we did before. However, keep in mind:
 
-Only the sender can be guarded—the relayer cannot be guarded.
+Only the sender can be guarded, the relayer cannot be guarded.
 
 Flow for Creating Guarded Relayed Transactions:
 - Using Controllers:
