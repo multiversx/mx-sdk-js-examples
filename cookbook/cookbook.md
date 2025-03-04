@@ -409,7 +409,7 @@ To execute transactions, we use the network providers to broadcast them to the n
     data: new Uint8Array(Buffer.from("hello"))
   });
 
-  const [ numOfSentTxs, hashes ] = await api.sendTransactions([ firstTransaction, secondTransaction, thirdTransaction ]);
+  const [numOfSentTxs, hashes] = await api.sendTransactions([firstTransaction, secondTransaction, thirdTransaction]);
 }
 ```
 
@@ -731,7 +731,7 @@ If you know you’ll only be sending native tokens, you can create the transacti
   const transfersController = entrypoint.createTransfersController();
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
-    tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
+    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
   });
 
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -766,7 +766,7 @@ When using the factory, only the sender's address is required. As a result, the 
 
   const transaction = factory.createTransactionForTransfer(alice, {
     receiver: bob,
-    tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
+    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
   });
 
   // set the sender's nonce
@@ -806,7 +806,7 @@ We can send both types of tokens using either the `controller` or the `factory`,
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-    tokenTransfers: [ firstTransfer, secondTransfer ],
+    tokenTransfers: [firstTransfer, secondTransfer],
   });
 
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -845,11 +845,11 @@ If an ABI file isn’t available, but you know the contract’s endpoints and da
 ```js
 {
   abi = AbiRegistry.create({
-    "endpoints": [ {
+    "endpoints": [{
       "name": "add",
       "inputs": [],
       "outputs": []
-    } ]
+    }]
   });
 }
 ```
@@ -899,23 +899,22 @@ This allows arguments to be passed as native Javascript values. If the ABI is no
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
   // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
+  const bytecode = await promises.readFile("../contracts/adder.wasm");
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   const controller = entrypoint.createSmartContractController(abi);
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
-  args = [ 42 ];
+  args = [42];
 
   const deployTransaction = await controller.createTransactionForDeploy(
     sender,
     sender.getNonceThenIncrement(),
     {
-      bytecode: code.valueOf(),
+      bytecode: bytecode,
       gasLimit: 6000000n,
       arguments: args,
     },
@@ -944,7 +943,7 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 {
   // We use the transaction hash we got when broadcasting the transaction
   const outcome = await controller.awaitCompletedDeploy(txHash); // waits for transaction completion and parses the result
-  const contractAddress = outcome.contracts[ 0 ].address;
+  const contractAddress = outcome.contracts[0].address;
 }
 ```
 
@@ -982,21 +981,16 @@ After the transaction is created the nonce needs to be properly set and the tran
 
 ```js
 {
-  const abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
-  const abiObj = JSON.parse(abiJson);
-  const abi = AbiRegistry.create(abiObj);
-
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTransfersTransactionsFactory();
 
   // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
+  const bytecode = await promises.readFile("../contracts/adder.wasm");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
-  let args = [ new BigUIntValue(42) ];
+  let args = [new BigUIntValue(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
-  args = [ 42 ];
+  args = [42];
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -1004,7 +998,7 @@ After the transaction is created the nonce needs to be properly set and the tran
   const deployTransaction = await factory.createTransactionForDeploy(
     sender,
     {
-      bytecode: code.valueOf(),
+      bytecode: bytecode,
       gasLimit: 6000000n,
       arguments: args,
     },
@@ -1028,7 +1022,7 @@ After the transaction is created the nonce needs to be properly set and the tran
   // parsing transaction
   const parser = new SmartContractTransactionsOutcomeParser();
   const parsedOutcome = parser.parseDeploy(transactionOnNetwork);
-  const contractAddress = parsedOutcome.contracts[ 0 ].address;
+  const contractAddress = parsedOutcome.contracts[0].address;
 
   console.log(contractAddress);
 }
@@ -1048,11 +1042,8 @@ In this section we'll see how we can call an endpoint of our previously deployed
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
-  // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractController(abi);
@@ -1060,9 +1051,9 @@ In this section we'll see how we can call an endpoint of our previously deployed
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
-  args = [ 42 ];
+  args = [42];
 
   const transaction = await controller.createTransactionForExecute(
     sender,
@@ -1105,12 +1096,8 @@ Both EGLD and ESDT tokens or a combination of both can be sent. This functionali
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
-  // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
-
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
   const entrypoint = new DevnetEntrypoint();
@@ -1119,9 +1106,9 @@ Both EGLD and ESDT tokens or a combination of both can be sent. This functionali
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
-  args = [ 42 ];
+  args = [42];
 
   // creating the transfers
   const firstToken = new Token({ identifier: "TEST-38f249", nonce: 10 });
@@ -1139,7 +1126,7 @@ Both EGLD and ESDT tokens or a combination of both can be sent. This functionali
       function: "add",
       arguments: args,
       nativeTransferAmount: 1000000000000000000n,
-      tokenTransfers: [ firstTransfer, secondTransfer ]
+      tokenTransfers: [firstTransfer, secondTransfer]
     },
   );
 
@@ -1161,12 +1148,8 @@ Let's create the same smart contract call transaction, but using the `factory`.
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
-  // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
-
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
   const entrypoint = new DevnetEntrypoint();
@@ -1175,9 +1158,9 @@ Let's create the same smart contract call transaction, but using the `factory`.
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory:
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory:
-  args = [ 42 ];
+  args = [42];
 
   // creating the transfers
   const firstToken = new Token({ identifier: "TEST-38f249", nonce: 10 });
@@ -1194,7 +1177,7 @@ Let's create the same smart contract call transaction, but using the `factory`.
       function: "add",
       arguments: args,
       nativeTransferAmount: 1000000000000000000n,
-      tokenTransfers: [ firstTransfer, secondTransfer ]
+      tokenTransfers: [firstTransfer, secondTransfer]
     },
   );
 
@@ -1214,10 +1197,11 @@ As said before, the `add` endpoint we called does not return anything, but we co
 ```js
 {
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const entrypoint = new DevnetEntrypoint();
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
   const parser = SmartContractTransactionsOutcomeParser({ abi });
   const transactionOnNetwork = entrypoint.getTransaction(txHash);
-  const outcome = parser.parseExecute();
+  const outcome = parser.parseExecute(transactionOnNetwork);
 }
 ```
 
@@ -1231,7 +1215,8 @@ First, we load the abi file, then we fetch the transaction, we extract the event
 ```js
 {
   // load the abi files
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const entrypoint = new DevnetEntrypoint();
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
   const parser = new TransactionEventsParser({ abi });
   const transactionOnNetwork = entrypoint.getTransaction(txHash);
   const events = gatherAllEvents(transactionOnNetwork);
@@ -1249,7 +1234,7 @@ For the factory, the same functionality can be achieved using the `TokenManageme
 
 For scripts or quick network interactions, we recommend using the controller. However, for a more granular approach (e.g., DApps), the factory is the better choice.
 
-### Loading the ABI from a file
+### Issuing fungible tokens using the controller
 ```js
 {
   // create the entrypoint and the token management controller
@@ -1286,7 +1271,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   // wait for transaction to execute, extract the token identifier
   const outcome = await entrypoint.awaitCompletedIssueFungible(txHash);
 
-  const tokenIdentifier = outcome[ 0 ].tokenIdentifier;
+  const tokenIdentifier = outcome[0].tokenIdentifier;
 
 }
 ```
@@ -1334,7 +1319,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   // extract the token identifier
   const parser = new TokenManagementTransactionsOutcomeParser();
   const outcome = parser.parseIssueFungible(transactionOnNetwork);
-  const tokenIdentifier = outcome[ 0 ].tokenIdentifier;
+  const tokenIdentifier = outcome[0].tokenIdentifier;
 }
 ```
 
@@ -1373,8 +1358,8 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   // wait for transaction to execute, extract the token identifier
   const outcome = await entrypoint.awaitCompletedSetSpecialRoleOnFungibleToken(transaction);
 
-  const roles = outcome[ 0 ].roles;
-  const user = outcome[ 0 ].userAddress;
+  const roles = outcome[0].roles;
+  const user = outcome[0].userAddress;
 }
 ```
 
@@ -1417,8 +1402,8 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   const parser = new TokenManagementTransactionsOutcomeParser();
   const outcome = parser.parseSetSpecialRole(transactionOnNetwork);
 
-  const roles = outcome[ 0 ].roles;
-  const user = outcome[ 0 ].userAddress;
+  const roles = outcome[0].roles;
+  const user = outcome[0].userAddress;
 }
 ```
 
@@ -1458,7 +1443,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   // wait for transaction to execute, extract the token identifier
   const outcome = await entrypoint.awaitCompletedIssueSemiFungible(txHash);
 
-  const tokenIdentifier = outcome[ 0 ].tokenIdentifier;
+  const tokenIdentifier = outcome[0].tokenIdentifier;
 }
 ```
 
@@ -1504,7 +1489,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   const parser = new TokenManagementTransactionsOutcomeParser();
   const outcome = parser.parseIssueSemiFungible(transactionOnNetwork);
 
-  const tokenIdentifier = outcome[ 0 ].tokenIdentifier;
+  const tokenIdentifier = outcome[0].tokenIdentifier;
 }
 ```
 
@@ -1545,7 +1530,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   // wait for transaction to execute, extract the token identifier
   let outcome = await entrypoint.awaitCompletedIssueNonFungible(txHash);
 
-  const collectionIdentifier = outcome[ 0 ].tokenIdentifier;
+  const collectionIdentifier = outcome[0].tokenIdentifier;
 
   // create an NFT
   transaction = controller.createTransactionForCreatingNft(alice,
@@ -1557,7 +1542,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
       royalties: 1000,
       hash: "abba",
       attributes: Buffer.from("test"),
-      uris: [ "a", "b" ],
+      uris: ["a", "b"],
     },
   );
 
@@ -1567,9 +1552,9 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   // wait for transaction to execute, extract the token identifier
   outcome = await entrypoint.awaitCompletedCreateNft(txHash);
 
-  const identifier = outcome[ 0 ].tokenIdentifier;
-  const nonce = outcome[ 0 ].nonce;
-  const initialQuantity = outcome[ 0 ].initialQuantity;
+  const identifier = outcome[0].tokenIdentifier;
+  const nonce = outcome[0].nonce;
+  const initialQuantity = outcome[0].initialQuantity;
 
 }
 ```
@@ -1616,7 +1601,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   let parser = new TokenManagementTransactionsOutcomeParser();
   let outcome = parser.parseIssueNonFungible(transactionOnNetwork);
 
-  const collectionIdentifier = outcome[ 0 ].tokenIdentifier;
+  const collectionIdentifier = outcome[0].tokenIdentifier;
 
   transaction = await factory.createTransactionForCreatingNFT(
     alice,
@@ -1627,7 +1612,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
       royalties: 1000,
       hash: "abba",
       attributes: Buffer.from("test"),
-      uris: [ "a", "b" ],
+      uris: ["a", "b"],
     },
   );
 
@@ -1644,13 +1629,13 @@ For scripts or quick network interactions, we recommend using the controller. Ho
 
   outcome = parser.parseIssueNonFungible(transactionOnNetwork);
 
-  const identifier = outcome[ 0 ].tokenIdentifier;
-  const nonce = outcome[ 0 ].nonce;
-  const initialQuantity = outcome[ 0 ].initialQuantity;
+  const identifier = outcome[0].tokenIdentifier;
+  const nonce = outcome[0].nonce;
+  const initialQuantity = outcome[0].initialQuantity;
 }
 ```
 
-These are just a few examples of what you can do using the token management controller or factory. For a complete list of supported methods, refer to the autogenerated documentation:
+These are just a few examples of what you can do using the token management controller or factory. For a complete list of supported methods, please refer to the autogenerated documentation:
 
 - [TokenManagementController](https://multiversx.github.io/mx-sdk-js-core/v14/classes/TokenManagementController.html)
 - [TokenManagementTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v14/classes/TokenManagementTransactionsFactory.html)
@@ -1661,7 +1646,7 @@ The account management controller and factory allow us to create transactions fo
 - Guarding and unguarding accounts
 - Saving key-value pairs in the account storage, on the blockchain.
 
-To learn more about Guardians, refer to the [official documentation](/developers/built-in-functions/#setguardian).
+To learn more about Guardians, please refer to the [official documentation](/developers/built-in-functions/#setguardian).
 A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
 
 ### Guarding an account using the controller
@@ -1912,7 +1897,7 @@ You can find more information [here](/developers/account-storage) regarding the 
 
 ## Delegation management
 
-To learn more about staking providers and delegation, refer to the official [documentation](/validators/delegation-manager/#introducing-staking-providers).
+To learn more about staking providers and delegation, please refer to the official [documentation](/validators/delegation-manager/#introducing-staking-providers).
 In this section, we'll cover how to:
 - Create a new delegation contract
 - Retrieve the contract address
@@ -1921,7 +1906,7 @@ In this section, we'll cover how to:
 - Claim rewards
 - Undelegate and withdraw funds
 
-These operations can be performed using both the controller and the **factory**. For a complete list of supported methods, refer to the autogenerated documentation:
+These operations can be performed using both the controller and the **factory**. For a complete list of supported methods, please refer to the autogenerated documentation:
 - [DelegationController](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationController.html)
 - [DelegationTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationTransactionsFactory.html)
 

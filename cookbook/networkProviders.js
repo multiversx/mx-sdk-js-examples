@@ -242,7 +242,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
     data: new Uint8Array(Buffer.from("hello"))
   });
 
-  const [ numOfSentTxs, hashes ] = await api.sendTransactions([ firstTransaction, secondTransaction, thirdTransaction ]);
+  const [numOfSentTxs, hashes] = await api.sendTransactions([firstTransaction, secondTransaction, thirdTransaction]);
 }
 // ```
 

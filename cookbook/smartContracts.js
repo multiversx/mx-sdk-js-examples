@@ -1,4 +1,4 @@
-import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, Code, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core"; // md-ignore
+import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core"; // md-ignore
 import axios from "axios"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import path from 'path'; // md-ignore
@@ -34,11 +34,11 @@ import path from 'path'; // md-ignore
 // ```js
 {
   abi = AbiRegistry.create({
-    "endpoints": [ {
+    "endpoints": [{
       "name": "add",
       "inputs": [],
       "outputs": []
-    } ]
+    }]
   });
 }
 // ```
@@ -88,23 +88,22 @@ import path from 'path'; // md-ignore
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
   // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
+  const bytecode = await promises.readFile("../contracts/adder.wasm");
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   const controller = entrypoint.createSmartContractController(abi);
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-  args = [ 42 ];
+  args = [42];
 
   const deployTransaction = await controller.createTransactionForDeploy(
     sender,
     sender.getNonceThenIncrement(),
     {
-      bytecode: code.valueOf(),
+      bytecode: bytecode,
       gasLimit: 6000000n,
       arguments: args,
     },
@@ -123,7 +122,7 @@ import path from 'path'; // md-ignore
 {
   // We use the transaction hash we got when broadcasting the transaction
   const outcome = await controller.awaitCompletedDeploy(txHash); // waits for transaction completion and parses the result
-  const contractAddress = outcome.contracts[ 0 ].address;
+  const contractAddress = outcome.contracts[0].address;
 }
 // ```
 
@@ -161,21 +160,16 @@ import path from 'path'; // md-ignore
 
 // ```js
 {
-  const abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
-  const abiObj = JSON.parse(abiJson);
-  const abi = AbiRegistry.create(abiObj);
-
   const entrypoint = new DevnetEntrypoint();
   const factory = entrypoint.createTransfersTransactionsFactory();
 
   // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
+  const bytecode = await promises.readFile("../contracts/adder.wasm");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-  let args = [ new BigUIntValue(42) ];
+  let args = [new BigUIntValue(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-  args = [ 42 ];
+  args = [42];
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
@@ -183,7 +177,7 @@ import path from 'path'; // md-ignore
   const deployTransaction = await factory.createTransactionForDeploy(
     sender,
     {
-      bytecode: code.valueOf(),
+      bytecode: bytecode,
       gasLimit: 6000000n,
       arguments: args,
     },
@@ -207,7 +201,7 @@ import path from 'path'; // md-ignore
   // parsing transaction
   const parser = new SmartContractTransactionsOutcomeParser();
   const parsedOutcome = parser.parseDeploy(transactionOnNetwork);
-  const contractAddress = parsedOutcome.contracts[ 0 ].address;
+  const contractAddress = parsedOutcome.contracts[0].address;
 
   console.log(contractAddress);
 }
@@ -227,11 +221,8 @@ import path from 'path'; // md-ignore
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
-  // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractController(abi);
@@ -239,9 +230,9 @@ import path from 'path'; // md-ignore
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-  args = [ 42 ];
+  args = [42];
 
   const transaction = await controller.createTransactionForExecute(
     sender,
@@ -284,12 +275,8 @@ import path from 'path'; // md-ignore
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
-  // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
-
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
   const entrypoint = new DevnetEntrypoint();
@@ -298,9 +285,9 @@ import path from 'path'; // md-ignore
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-  args = [ 42 ];
+  args = [42];
 
   // creating the transfers
   const firstToken = new Token({ identifier: "TEST-38f249", nonce: 10 });
@@ -318,7 +305,7 @@ import path from 'path'; // md-ignore
       function: "add",
       arguments: args,
       nativeTransferAmount: 1000000000000000000n,
-      tokenTransfers: [ firstTransfer, secondTransfer ]
+      tokenTransfers: [firstTransfer, secondTransfer]
     },
   );
 
@@ -340,12 +327,8 @@ import path from 'path'; // md-ignore
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
-  // load the contract bytecode
-  const codeBuffer = await promises.readFile("../contracts/adder.wasm");
-  const code = Code.fromBuffer(codeBuffer);
-
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
   const entrypoint = new DevnetEntrypoint();
@@ -354,9 +337,9 @@ import path from 'path'; // md-ignore
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
 
   // For deploy arguments, use "TypedValue" objects if you haven't provided an ABI to the factory: // md-as-comment
-  let args = [ new U32Value(42) ];
+  let args = [new U32Value(42)];
   // Or use simple, plain JavaScript values and objects if you have provided an ABI to the factory: // md-as-comment
-  args = [ 42 ];
+  args = [42];
 
   // creating the transfers
   const firstToken = new Token({ identifier: "TEST-38f249", nonce: 10 });
@@ -373,7 +356,7 @@ import path from 'path'; // md-ignore
       function: "add",
       arguments: args,
       nativeTransferAmount: 1000000000000000000n,
-      tokenTransfers: [ firstTransfer, secondTransfer ]
+      tokenTransfers: [firstTransfer, secondTransfer]
     },
   );
 
@@ -393,10 +376,11 @@ import path from 'path'; // md-ignore
 // ```js
 {
   // load the abi file
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const entrypoint = new DevnetEntrypoint();
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
   const parser = SmartContractTransactionsOutcomeParser({ abi });
   const transactionOnNetwork = entrypoint.getTransaction(txHash);
-  const outcome = parser.parseExecute();
+  const outcome = parser.parseExecute(transactionOnNetwork);
 }
 // ```
 
@@ -410,7 +394,8 @@ import path from 'path'; // md-ignore
 // ```js
 {
   // load the abi files
-  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const entrypoint = new DevnetEntrypoint();
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
   const parser = new TransactionEventsParser({ abi });
   const transactionOnNetwork = entrypoint.getTransaction(txHash);
   const events = gatherAllEvents(transactionOnNetwork);

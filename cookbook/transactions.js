@@ -121,7 +121,7 @@ import path from 'path'; // md-ignore
   const transfersController = entrypoint.createTransfersController();
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
-    tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
+    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
   });
 
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -156,7 +156,7 @@ import path from 'path'; // md-ignore
 
   const transaction = factory.createTransactionForTransfer(alice, {
     receiver: bob,
-    tokenTransfers: [ firstTransfer, secondTransfer, thirdTransfer ],
+    tokenTransfers: [firstTransfer, secondTransfer, thirdTransfer],
   });
 
   // set the sender's nonce
@@ -196,7 +196,7 @@ import path from 'path'; // md-ignore
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
     nativeAmount: 1000000000000000000n,
-    tokenTransfers: [ firstTransfer, secondTransfer ],
+    tokenTransfers: [firstTransfer, secondTransfer],
   });
 
   const txHash = await entrypoint.sendTransaction(transaction);
