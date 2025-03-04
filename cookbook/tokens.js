@@ -21,7 +21,7 @@ import path from 'path'; // md-ignore
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  // fetch the nonce of the network // md-as-commentP
+  // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transaction = await controller.createTransactionForIssuingFungible(

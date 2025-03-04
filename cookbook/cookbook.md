@@ -2449,6 +2449,7 @@ Similar to relayers, transactions also have two additional fields:
 
 - guardian
 - guardianSignature
+
 Each controller includes an argument for the guardian. The transaction can either:
 1. Be sent to a service that signs it using the guardian’s account, or
 2. Be signed by another account acting as a guardian.
