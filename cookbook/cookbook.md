@@ -813,10 +813,6 @@ We can send both types of tokens using either the `controller` or the `factory`,
 }
 ```
 
-import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, Code, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core";
-import axios from "axios";
-import { promises } from "fs";
-import path from 'path';
 ## Smart Contracts
 
 ### Contract ABIs
@@ -2626,7 +2622,6 @@ AddressFactory allows creating addresses with a custom HRP, ensuring consistency
 
 ### Getting the shard of an address
 ``` js
-import { AddressComputer } from "@multiversx/sdk-core";
 
 const addressComputer = new AddressComputer();
 console.log("Shard:", addressComputer.getShardOfAddress(address));
@@ -2736,8 +2731,6 @@ We can save a secret key to a pem file. *This is not recommended as it is not se
 A `KeyPair` is a wrapper over a secret key and a public key. We can create a keypair and use it for signing or verifying.
 
 ``` js
-import { KeyPair } from "@multiversx/sdk-core";
-
 {
     const keypair = KeyPair.generate();
 

@@ -1,7 +1,7 @@
-import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, Code, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core";
-import axios from "axios";
-import { promises } from "fs";
-import path from 'path';
+import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, Code, DevnetEntrypoint, SmartContractTransactionsOutcomeParser, U32Value } from "@multiversx/sdk-core"; // md-ignore
+import axios from "axios"; // md-ignore
+import { promises } from "fs"; // md-ignore
+import path from 'path'; // md-ignore
 // ## Smart Contracts
 
 // ### Contract ABIs

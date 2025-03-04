@@ -1,4 +1,4 @@
-import { Address, AddressFactory, LibraryConfig } from "@multiversx/sdk-core"; // md-ignore
+import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiversx/sdk-core"; // md-ignore
 
 // # Addresses
 
@@ -53,7 +53,6 @@ import { Address, AddressFactory, LibraryConfig } from "@multiversx/sdk-core"; /
 
 // ### Getting the shard of an address
 // ``` js
-import { AddressComputer } from "@multiversx/sdk-core";
 
 const addressComputer = new AddressComputer();
 console.log("Shard:", addressComputer.getShardOfAddress(address));

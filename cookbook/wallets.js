@@ -1,5 +1,5 @@
 
-import { Mnemonic, UserPem, UserWallet } from "@multiversx/sdk-core"; // md-ignore
+import { KeyPair, Mnemonic, UserPem, UserWallet } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
 // # Wallets
 
@@ -81,8 +81,6 @@ console.log({ words });
 // A `KeyPair` is a wrapper over a secret key and a public key. We can create a keypair and use it for signing or verifying.
 
 // ``` js
-import { KeyPair } from "@multiversx/sdk-core";
-
 {
     const keypair = KeyPair.generate();
 
