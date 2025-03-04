@@ -1,12 +1,12 @@
 
 import { Account, Address, Message, MessageComputer, Transaction, TransactionComputer, UserPublicKey, UserVerifier } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
-// ### Verifying signatures
+// # Verifying signatures
 
 // Signature verification is performed using an account’s public key. 
 // To simplify this process, we provide wrappers over public keys that make verification easier and more convenient.
 
-// **Verifying Transaction signature using a UserVerifier**:
+// ### Verifying Transaction signature using a UserVerifier
 
 // ```js
 {
@@ -41,7 +41,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Verifying Message signature using a UserVerifier**:
+// ### Verifying Message signature using a UserVerifier
 
 // ```js
 {
@@ -71,8 +71,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Verifying a signature using a public key**:
-
+// ### Verifying a signature using a public key
 // ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -104,10 +103,8 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// Sending messages over boundaries
-
+// ### Sending messages over boundaries
 // Signed Message objects are typically sent to a remote party (e.g., a service), which can then verify the signature.
-
 // To prepare a message for transmission, you can use the `MessageComputer.packMessage()` utility method.
 
 // ```js

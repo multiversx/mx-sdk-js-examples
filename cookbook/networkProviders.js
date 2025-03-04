@@ -1,12 +1,12 @@
 import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, Token, Transaction } from "@multiversx/sdk-core"; // md-ignore
-// ## Calling the Faucet
+// # Calling the Faucet
 
 // This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet.
 
 // - [Testnet Wallet](https://testnet-wallet.multiversx.com/).
 // - [Devnet Wallet](https://devnet-wallet.multiversx.com/).
 
-// Interacting with the network
+// ## Interacting with the network
 
 // The entrypoint exposes a few methods to directly interact with the network, such as:
 
@@ -29,9 +29,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // ```
 
 // ## Creating a network provider
-
 // When manually instantiating a network provider, you can provide a configuration to specify the client name and set custom request options.
-
 
 // ```js
 {
@@ -59,9 +57,9 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // The classes returned by the API expose the most commonly used fields directly for convenience. However, each object also contains a `raw` field that stores the original API response, allowing access to additional fields if needed.
 
 
-// ## Fetching data from the network
+// # Fetching data from the network
 
-// Fetching the network config
+// ## Fetching the network config
 
 // ```js
 {
@@ -72,7 +70,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// Fetching the network status
+// ## Fetching the network status
 
 // ```js
 {
@@ -84,12 +82,12 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// **Fetching a Block from the Network**
+// ## Fetching a Block from the Network
 // To fetch a block, we first instantiate the required arguments and use its hash. The API only supports fetching blocks by hash, whereas the **PROXY** allows fetching blocks by either hash or nonce.
 
 // When using the **PROXY**, keep in mind that the shard must also be specified in the arguments.
 
-// Fetching a block using the **API**
+// ### Fetching a block using the **API**
 // ```js
 {
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
@@ -107,7 +105,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// Fetching a block using the **PROXY**
+// ### Fetching a block using the **PROXY**
 
 // When using the proxy, we have to provide the shard, as well.
 // ```js
@@ -187,7 +185,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // ## Sending and Simulating Transactions
 // To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed
 
-// Sending a Transaction
+// ### Sending a Transaction
 
 // ```js
 {
@@ -209,7 +207,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// Sending multiple transactions
+// ### Sending multiple transactions
 // ```js
 {
   const entrypoint = new DevnetEntrypoint();
@@ -248,7 +246,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Simulating transactions
+// ### Simulating transactions
 // A transaction can be simulated before being sent for processing by the network. This is primarily used for smart contract calls, allowing you to preview the results produced by the smart contract.
 
 // ```js
@@ -271,7 +269,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Estimating the gas cost of a transaction
+// ### Estimating the gas cost of a transaction
 // Before sending a transaction to the network for processing, you can retrieve the estimated gas limit required for the transaction to be executed.
 
 // ```js

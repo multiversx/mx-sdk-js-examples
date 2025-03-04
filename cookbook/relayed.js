@@ -47,7 +47,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Creating relayed transactions using controllers**
+// ### Creating relayed transactions using controllers
 // We can create relayed transactions using any of the available controllers. 
 // Each controller includes a relayer argument, which must be set if we want to create a relayed transaction.
 
@@ -95,7 +95,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Creating relayed transactions using factories**
+// ### Creating relayed transactions using factories
 // Unlike controllers, `transaction factories` do not have a `relayer` argument. Instead, the **relayer must be set after creating the transaction**.
 // This approach is beneficial because the **transaction is not signed by the sender at the time of creation**, allowing flexibility in setting the relayer before signing.
 

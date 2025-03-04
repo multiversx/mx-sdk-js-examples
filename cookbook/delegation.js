@@ -15,8 +15,7 @@ import path from 'path'; // md-ignore
 // - [DelegationController](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationController.html)
 // - [DelegationTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationTransactionsFactory.html)
 
-// **Creating a New Delegation Contract Using the Controller**
-
+// ### Creating a New Delegation Contract Using the Controller
 // ```js
 {
   // create the entrypoint and the delegation controller // md-as-comment
@@ -48,7 +47,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Creating a new delegation contract using the factory** 
+// ### Creating a new delegation contract using the factory
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment
@@ -87,7 +86,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Delegating funds to the contract using the Controller**
+// ### Delegating funds to the contract using the Controller
 // We can send funds to a delegation contract to earn rewards.
 
 // ```js
@@ -117,8 +116,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Delegating funds to the contract using the factory** 
-
+// ### Delegating funds to the contract using the factory
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment
@@ -149,7 +147,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Redelegating rewards using the Controller**
+// ### Redelegating rewards using the Controller
 // Over time, as rewards accumulate, we may choose to redelegate them to the contract to maximize earnings.
 
 // ```js
@@ -177,7 +175,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Redelegating rewards using the factory** 
+// ### Redelegating rewards using the factory
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment
@@ -207,7 +205,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Claiming rewards using the Controller**
+// ### Claiming rewards using the Controller
 // We can also claim our rewards when needed.
 
 // ```js
@@ -235,7 +233,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Claiming rewards using the factory** 
+// ### Claiming rewards using the factory
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment
@@ -265,7 +263,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Undelegating funds using the Controller**
+// ### Undelegating funds using the Controller
 // By **undelegating**, we signal the contract that we want to retrieve our staked funds. This process requires a **10-epoch unbonding period** before the funds become available.
 
 // ```js
@@ -294,7 +292,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Undelegating funds using the factory** 
+// ### Undelegating funds using the factory
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment
@@ -325,7 +323,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Withdrawing funds using the Controller**
+// ### Withdrawing funds using the Controller
 // After the `10-epoch unbonding period` is complete, we can proceed with withdrawing our staked funds using the controller. This final step allows us to regain access to the previously delegated funds.
 
 // ```js
@@ -354,7 +352,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Withdrawing funds using the factory** 
+// ### Withdrawing funds using the factory
 // ```js
 {
   // create the entrypoint and the delegation factory // md-as-comment

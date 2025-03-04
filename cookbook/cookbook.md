@@ -1,8 +1,8 @@
-## Overview
+# Overview
 
 This guide walks you through handling common tasks using the MultiversX Javascript SDK (v14, latest stable version).
 
-## Creating an Entrypoint
+# Creating an Entrypoint
 
 An Entrypoint represents a network client that simplifies access to the most common operations.
 There is a dedicated entrypoint for each network: `MainnetEntrypoint`,  `DevnetEntrypoint`, `TestnetEntrypoint`, `LocalnetEntrypoint`.
@@ -13,14 +13,14 @@ For example, to create a Devnet entrypoint you have the following command:
 const entrypoint = new DevnetEntrypoint();
 ```
 
-## Using a Custom API
+Using a Custom API
 If you'd like to connect to a third-party API, you can specify the url parameter:
 
 ```js
 const apiEntrypoint = new DevnetEntrypoint({ url: 'https://custom-multiversx-devnet-api.com' });
 ```
 
-## Using a Proxy
+Using a Proxy
 
 By default, the DevnetEntrypoint uses the standard API. However, you can create a custom entrypoint that interacts with a proxy by specifying the kind parameter:
 
@@ -32,7 +32,7 @@ const customEntrypoint = new DevnetEntrypoint({
 });
 ```
 
-## Creating Accounts
+# Creating Accounts
 
 You can initialize an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
 Accounts are used for signing transactions and messages and managing the account's nonce. They can also be saved to a PEM or keystore file for future use.
@@ -47,7 +47,7 @@ For example, to create a Devnet entrypoint:
 
 ## Other Ways to Instantiate an Account
 
-1. Using a Secret Key
+### From a Secret Key
 ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -57,7 +57,7 @@ For example, to create a Devnet entrypoint:
 }
 ```
 
-2. Using a PEM file
+### From a PEM file
 ```js
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -65,7 +65,7 @@ For example, to create a Devnet entrypoint:
 }
 ```
 
-3. From a Keystore File
+### From a Keystore File
 ```js
 {
   const keystorePath = path.join("src", "testdata", "testwallets", "alice.json");
@@ -76,17 +76,16 @@ For example, to create a Devnet entrypoint:
 }
 ```
 
-4. From a Mnemonic
+### From a Mnemonic
 ```js
 
 const mnemonic = Mnemonic.generate();
 const accountFromMnemonic = Account.newFromMnemonic(mnemonic.getText());
 ```
 
-5. From a KeyPair
+### From a KeyPair
 
 ```js
-
 const keypair = KeyPair.generate();
 const accountFromKeyPairs = Account.newFromKeypair(keypair);
 ```
@@ -117,7 +116,7 @@ Each transaction must have the correct nonce, otherwise it will fail to execute.
 
 For more details, see the [Creating Transactions](#creating-transactions) section.
 
-## Saving the Account to a File
+### Saving the Account to a File
 
 Accounts can be saved to either a PEM file or a keystore file.
 While PEM wallets are less secure for storing secret keys, they are convenient for testing purposes.
@@ -158,7 +157,7 @@ Note: The multiversx-sdk package does not include Ledger support by default. To 
 npm install @multiversx/sdk-hw-provider
 ```
 
-## Creating a Ledger Account
+#### Creating a Ledger Account
 This can be done using the dedicated library. You can find more information [here](/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-hardware-wallet-provider)
 
 When signing transactions or messages, the Ledger device will prompt you to confirm the details before proceeding.
@@ -167,14 +166,14 @@ When signing transactions or messages, the Ledger device will prompt you to conf
 
 The `Account` implements the `IAccount` interface, making it compatible with transaction controllers and any other component that expects this interface.
 
-## Calling the Faucet
+# Calling the Faucet
 
 This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet.
 
 - [Testnet Wallet](https://testnet-wallet.multiversx.com/).
 - [Devnet Wallet](https://devnet-wallet.multiversx.com/).
 
-Interacting with the network
+## Interacting with the network
 
 The entrypoint exposes a few methods to directly interact with the network, such as:
 
@@ -197,9 +196,7 @@ To get the underlying network provider from our entrypoint, we can do as follows
 ```
 
 ## Creating a network provider
-
 When manually instantiating a network provider, you can provide a configuration to specify the client name and set custom request options.
-
 
 ```js
 {
@@ -227,9 +224,9 @@ Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interfac
 The classes returned by the API expose the most commonly used fields directly for convenience. However, each object also contains a `raw` field that stores the original API response, allowing access to additional fields if needed.
 
 
-## Fetching data from the network
+# Fetching data from the network
 
-Fetching the network config
+## Fetching the network config
 
 ```js
 {
@@ -240,7 +237,7 @@ Fetching the network config
 }
 ```
 
-Fetching the network status
+## Fetching the network status
 
 ```js
 {
@@ -252,12 +249,12 @@ Fetching the network status
 }
 ```
 
-**Fetching a Block from the Network**
+## Fetching a Block from the Network
 To fetch a block, we first instantiate the required arguments and use its hash. The API only supports fetching blocks by hash, whereas the **PROXY** allows fetching blocks by either hash or nonce.
 
 When using the **PROXY**, keep in mind that the shard must also be specified in the arguments.
 
-Fetching a block using the **API**
+### Fetching a block using the **API**
 ```js
 {
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
@@ -275,7 +272,7 @@ Additionally, we can fetch the latest block from the network:
 }
 ```
 
-Fetching a block using the **PROXY**
+### Fetching a block using the **PROXY**
 
 When using the proxy, we have to provide the shard, as well.
 ```js
@@ -355,7 +352,7 @@ Keep in mind that this method has a default timeout, which can be adjusted using
 ## Sending and Simulating Transactions
 To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed
 
-Sending a Transaction
+### Sending a Transaction
 
 ```js
 {
@@ -377,7 +374,7 @@ Sending a Transaction
 }
 ```
 
-Sending multiple transactions
+### Sending multiple transactions
 ```js
 {
   const entrypoint = new DevnetEntrypoint();
@@ -416,7 +413,7 @@ Sending multiple transactions
 }
 ```
 
-## Simulating transactions
+### Simulating transactions
 A transaction can be simulated before being sent for processing by the network. This is primarily used for smart contract calls, allowing you to preview the results produced by the smart contract.
 
 ```js
@@ -439,7 +436,7 @@ A transaction can be simulated before being sent for processing by the network. 
 }
 ```
 
-## Estimating the gas cost of a transaction
+### Estimating the gas cost of a transaction
 Before sending a transaction to the network for processing, you can retrieve the estimated gas limit required for the transaction to be executed.
 
 ```js
@@ -614,7 +611,7 @@ Let’s assume we want to retrieve all the transactions sent by Alice in which t
 }
 ```
 
-## Creating transactions
+# Creating transactions
 
 In this section, we’ll explore how to create different types of transactions. To create transactions, we can use either controllers or factories.
 Controllers are ideal for quick scripts or network interactions, while factories provide a more granular and lower-level approach, typically required for DApps.
@@ -646,7 +643,7 @@ There are two ways to create controllers and factories:
 
 ## Token transfers
 We can send both native tokens (EGLD) and ESDT tokens using either the controller or the factory.
-# Native Token Transfers Using the Controller
+### Native Token Transfers Using the Controller
 When using the controller, the transaction will be signed because we’ll be working with an Account.
 
 ```js
@@ -675,7 +672,7 @@ When using the controller, the transaction will be signed because we’ll be wor
 
 If you know you’ll only be sending native tokens, you can create the transaction using the `createTransactionForNativeTokenTransfer` method.
 
-## Native Token Transfers Using the Factory
+### Native Token Transfers Using the Factory
 When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly.
 You will need to handle these aspects after the transaction is created.
 
@@ -709,7 +706,7 @@ You will need to handle these aspects after the transaction is created.
 
 If you know you’ll only be sending native tokens, you can create the transaction using the `createTransactionForNativeTokenTransfer` method.
 
-## Custom token transfers using the controller
+### Custom token transfers using the controller
 
 ```js
 {
@@ -743,7 +740,7 @@ If you know you’ll only be sending native tokens, you can create the transacti
 
 If you know you'll only send ESDT tokens, the same transaction can be created using createTransactionForEsdtTokenTransfer.
 
-## Custom token transfers using the factory
+### Custom token transfers using the factory
 When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 ```js
@@ -784,7 +781,7 @@ When using the factory, only the sender's address is required. As a result, the 
 
 If you know you'll only send ESDT tokens, the same transaction can be created using createTransactionForEsdtTokenTransfer.
 
-## Sending native and custom tokens
+### Sending native and custom tokens
 Both native and custom tokens can now be sent. If a `nativeAmount` is provided along with `tokenTransfers`, the native token will be included in the `MultiESDTNFTTransfer` built-in function call.
 We can send both types of tokens using either the `controller` or the `factory`, but for simplicity, we’ll use the controller in this example.
 
@@ -805,7 +802,6 @@ We can send both types of tokens using either the `controller` or the `factory`,
   const nft = new Token({ identifier: "NFT-987654", nonce: 10n });
   const secondTransfer = new TokenTransfer({ token: nft, amount: 1n });
 
-
   const transfersController = entrypoint.createTransfersController();
   const transaction = transfersController.createTransactionForTransfer(alice, alice.getNonceThenIncrement(), {
     receiver: bob,
@@ -823,12 +819,12 @@ import { promises } from "fs";
 import path from 'path';
 ## Smart Contracts
 
-Contract ABIs
+### Contract ABIs
 
 A contract's ABI (Application Binary Interface) describes the endpoints, data structures, and events that the contract exposes.
 While interactions with the contract are possible without the ABI, they are much easier to implement when the definitions are available.
 
-Loading the ABI from a file
+#### Loading the ABI from a file
 ```js
 {
   let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
@@ -837,7 +833,7 @@ Loading the ABI from a file
 }
 ```
 
-Loading the ABI from an URL
+#### Loading the ABI from an URL
 
 ```js
 {
@@ -846,7 +842,7 @@ Loading the ABI from an URL
 }
 ```
 
-Manually construct the ABI
+#### Manually construct the ABI
 
 If an ABI file isn’t available, but you know the contract’s endpoints and data types, you can manually construct the ABI.
 
@@ -895,7 +891,7 @@ For creating smart contract deployment transactions, we have two options: a cont
 When creating transactions that interact with smart contracts, it's recommended to provide the ABI file to the controller or factory if possible.
 This allows arguments to be passed as native Javascript values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
 
-# Deploying a Smart Contract Using the Controller
+### Deploying a Smart Contract Using the Controller
 
 ```js
 {
@@ -946,7 +942,7 @@ let args = [new U32Value(42), "hello", { foo: "bar" }, new TokenIdentifierValue(
 
 :::
 
-# Parsing contract deployment transactions
+### Parsing contract deployment transactions
 
 ```js
 {
@@ -985,7 +981,7 @@ Even before broadcasting, at the moment you know the sender's address and the no
 }
 ```
 
-## Deploying a smart contract using the factory
+### Deploying a smart contract using the factory
 After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 ```js
@@ -1042,11 +1038,11 @@ After the transaction is created the nonce needs to be properly set and the tran
 }
 ```
 
-### Smart Contract calls
+## Smart Contract calls
 
 In this section we'll see how we can call an endpoint of our previously deployed smart contract using both approaches with the `controller` and the `factory`.
 
-**Calling a smart contract using the controller**
+### Calling a smart contract using the controller
 
 ```js
 {
@@ -1090,7 +1086,7 @@ In this section we'll see how we can call an endpoint of our previously deployed
 }
 ```
 
-**Parsing smart contract call transactions**
+### Parsing smart contract call transactions
 In our case, calling the add endpoint does not return anything, but similar to the example above, we could parse this transaction to get the output values of a smart contract call.
 
 ```js
@@ -1101,7 +1097,7 @@ waits for transaction completion and parses the result
 }
 ```
 
-## **Calling a smart contract and sending tokens (transfer & execute)**
+### Calling a smart contract and sending tokens (transfer & execute)
 Additionally, if an endpoint requires a payment when called, we can send tokens to the contract while creating a smart contract call transaction.
 Both EGLD and ESDT tokens or a combination of both can be sent. This functionality is supported by both the controller and the factory.
 
@@ -1158,7 +1154,7 @@ Both EGLD and ESDT tokens or a combination of both can be sent. This functionali
 }
 ```
 
-## **Calling a smart contract using the factory**
+### Calling a smart contract using the factory
 Let's create the same smart contract call transaction, but using the `factory`.
 
 ```js
@@ -1216,7 +1212,7 @@ Let's create the same smart contract call transaction, but using the `factory`.
 }
 ```
 
-**Parsing transaction outcome**
+### Parsing transaction outcome
 As said before, the `add` endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
 
 ```js
@@ -1229,7 +1225,7 @@ As said before, the `add` endpoint we called does not return anything, but we co
 }
 ```
 
-**Decoding transaction events**
+### Decoding transaction events
 You might be interested into decoding events emitted by a contract. You can do so by using the `TransactionEventsParser`.
 
 Suppose we'd like to decode a `startPerformAction` event emitted by the [multisig](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract.
@@ -1238,14 +1234,12 @@ First, we load the abi file, then we fetch the transaction, we extract the event
 
 ```js
 {
-  {
-    // load the abi files
-    abi = await loadAbiRegistry("src/testdata/adder.abi.json");
-    const parser = new TransactionEventsParser({ abi });
-    const transactionOnNetwork = entrypoint.getTransaction(txHash);
-    const events = gatherAllEvents(transactionOnNetwork);
-    const outcome = parser.parseEvents({ events });
-  }
+  // load the abi files
+  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const parser = new TransactionEventsParser({ abi });
+  const transactionOnNetwork = entrypoint.getTransaction(txHash);
+  const events = gatherAllEvents(transactionOnNetwork);
+  const outcome = parser.parseEvents({ events });
 }
 ```
 
@@ -1301,7 +1295,7 @@ Loading the ABI from a file
 }
 ```
 
-**Issuing fungible tokens using the factory**
+### Issuing fungible tokens using the factory
 ```js
 {
   // create the entrypoint and the token management transactions factory
@@ -1349,8 +1343,7 @@ Loading the ABI from a file
 ```
 
 
-Setting special roles for fungible tokens using the controller
-
+### Setting special roles for fungible tokens using the controller
 ```js
 {
   // create the entrypoint and the token management controller
@@ -1389,7 +1382,7 @@ Setting special roles for fungible tokens using the controller
 }
 ```
 
-**Setting special roles for fungible tokens using the factory**
+### Setting special roles for fungible tokens using the factory
 ```js
 {
   // create the entrypoint and the token management controller
@@ -1433,8 +1426,7 @@ Setting special roles for fungible tokens using the controller
 }
 ```
 
-**Issuing semi-fungible tokens using the controller**
-
+### Issuing semi-fungible tokens using the controller
 ```js
 {
   // create the entrypoint and the token management controller
@@ -1474,7 +1466,7 @@ Setting special roles for fungible tokens using the controller
 }
 ```
 
-**Issuing semi-fungible tokens using the factory**
+### Issuing semi-fungible tokens using the factory
 ```js
 {
   // create the entrypoint and the token management controller
@@ -1520,7 +1512,7 @@ Setting special roles for fungible tokens using the controller
 }
 ```
 
-**Issuing NFT collection & creating NFTs using the controller**
+### Issuing NFT collection & creating NFTs using the controller
 
 ```js
 {
@@ -1586,7 +1578,7 @@ Setting special roles for fungible tokens using the controller
 }
 ```
 
-**Issuing NFT collection & creating NFTs using the factory**
+### Issuing NFT collection & creating NFTs using the factory
 ```js
 {
   // create the entrypoint and the token management transdactions factory
@@ -1676,8 +1668,7 @@ The account management controller and factory allow us to create transactions fo
 To learn more about Guardians, refer to the [official documentation](/developers/built-in-functions/#setguardian).
 A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
 
-**Guarding an account using the controller**
-
+### Guarding an account using the controller
 ```js
 {
   // create the entrypoint and the account controller
@@ -1708,7 +1699,7 @@ A guardian can also be set using the WebWallet, which leverages our hosted `Trus
 }
 ```
 
-**Guarding an account using the factory**
+### Guarding an account using the factory
 ```js
 {
   // create the entrypoint and the account management factory
@@ -1745,7 +1736,7 @@ A guardian can also be set using the WebWallet, which leverages our hosted `Trus
 
 Once a guardian is set, we must wait **20 epochs** before it can be activated. After activation, all transactions sent from the account must also be signed by the guardian.
 
-**Activating the guardian using the controller**
+### Activating the guardian using the controller
 ```js
 {
   // create the entrypoint and the account controller
@@ -1769,7 +1760,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 }
 ```
 
-**Activating the guardian using the factory**
+### Activating the guardian using the factory
 ```js
 {
   // create the entrypoint and the account factory
@@ -1798,8 +1789,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 }
 ```
 
-**Unguarding the account using the controller**
-
+### Unguarding the account using the controller
 ```js
 {
   // create the entrypoint and the account controller
@@ -1828,7 +1818,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 }
 ```
 
-**Unguarding the guardian using the factory**
+### Unguarding the guardian using the factory
 ```js
 {
   // create the entrypoint and the account factory
@@ -1859,7 +1849,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 }
 ```
 
-**Saving a key-value pair to an account using the controller**
+### Saving a key-value pair to an account using the controller
 You can find more information [here](/developers/account-storage) regarding the account storage
 
 ```js
@@ -1891,7 +1881,7 @@ You can find more information [here](/developers/account-storage) regarding the 
 }
 ```
 
-**Saving a key-value pair to an account using the factory**
+### Saving a key-value pair to an account using the factory
 ```js
 {
   // create the entrypoint and the account factory
@@ -1939,8 +1929,7 @@ These operations can be performed using both the controller and the **factory**.
 - [DelegationController](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationController.html)
 - [DelegationTransactionsFactory](https://multiversx.github.io/mx-sdk-js-core/v14/classes/DelegationTransactionsFactory.html)
 
-**Creating a New Delegation Contract Using the Controller**
-
+### Creating a New Delegation Contract Using the Controller
 ```js
 {
   // create the entrypoint and the delegation controller
@@ -1972,7 +1961,7 @@ These operations can be performed using both the controller and the **factory**.
 }
 ```
 
-**Creating a new delegation contract using the factory**
+### Creating a new delegation contract using the factory
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2011,7 +2000,7 @@ These operations can be performed using both the controller and the **factory**.
 }
 ```
 
-**Delegating funds to the contract using the Controller**
+### Delegating funds to the contract using the Controller
 We can send funds to a delegation contract to earn rewards.
 
 ```js
@@ -2041,8 +2030,7 @@ We can send funds to a delegation contract to earn rewards.
 }
 ```
 
-**Delegating funds to the contract using the factory**
-
+### Delegating funds to the contract using the factory
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2073,7 +2061,7 @@ We can send funds to a delegation contract to earn rewards.
 }
 ```
 
-**Redelegating rewards using the Controller**
+### Redelegating rewards using the Controller
 Over time, as rewards accumulate, we may choose to redelegate them to the contract to maximize earnings.
 
 ```js
@@ -2101,7 +2089,7 @@ Over time, as rewards accumulate, we may choose to redelegate them to the contra
 }
 ```
 
-**Redelegating rewards using the factory**
+### Redelegating rewards using the factory
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2131,7 +2119,7 @@ Over time, as rewards accumulate, we may choose to redelegate them to the contra
 }
 ```
 
-**Claiming rewards using the Controller**
+### Claiming rewards using the Controller
 We can also claim our rewards when needed.
 
 ```js
@@ -2159,7 +2147,7 @@ We can also claim our rewards when needed.
 }
 ```
 
-**Claiming rewards using the factory**
+### Claiming rewards using the factory
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2189,7 +2177,7 @@ We can also claim our rewards when needed.
 }
 ```
 
-**Undelegating funds using the Controller**
+### Undelegating funds using the Controller
 By **undelegating**, we signal the contract that we want to retrieve our staked funds. This process requires a **10-epoch unbonding period** before the funds become available.
 
 ```js
@@ -2218,7 +2206,7 @@ By **undelegating**, we signal the contract that we want to retrieve our staked 
 }
 ```
 
-**Undelegating funds using the factory**
+### Undelegating funds using the factory
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2249,7 +2237,7 @@ By **undelegating**, we signal the contract that we want to retrieve our staked 
 }
 ```
 
-**Withdrawing funds using the Controller**
+### Withdrawing funds using the Controller
 After the `10-epoch unbonding period` is complete, we can proceed with withdrawing our staked funds using the controller. This final step allows us to regain access to the previously delegated funds.
 
 ```js
@@ -2278,7 +2266,7 @@ After the `10-epoch unbonding period` is complete, we can proceed with withdrawi
 }
 ```
 
-**Withdrawing funds using the factory**
+### Withdrawing funds using the factory
 ```js
 {
   // create the entrypoint and the delegation factory
@@ -2355,7 +2343,7 @@ Let’s see how to create a relayed transaction:
 }
 ```
 
-**Creating relayed transactions using controllers**
+### Creating relayed transactions using controllers
 We can create relayed transactions using any of the available controllers.
 Each controller includes a relayer argument, which must be set if we want to create a relayed transaction.
 
@@ -2403,7 +2391,7 @@ Let’s issue a fungible token using a relayed transaction:
 }
 ```
 
-**Creating relayed transactions using factories**
+### Creating relayed transactions using factories
 Unlike controllers, `transaction factories` do not have a `relayer` argument. Instead, the **relayer must be set after creating the transaction**.
 This approach is beneficial because the **transaction is not signed by the sender at the time of creation**, allowing flexibility in setting the relayer before signing.
 
@@ -2515,7 +2503,7 @@ Let’s issue a fungible token using a relayed transaction:
 }
 ```
 
-**Creating guarded transactions using factories**
+### Creating guarded transactions using factories
 Unlike controllers, `transaction factories` do not have a `guardian` argument. Instead, the **guardian must be set after creating the transaction**.
 This approach is beneficial because the transaction is *not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
 
@@ -2584,7 +2572,7 @@ Flow for Creating Guarded Relayed Transactions:
 4. Then, the guardian signs.
 5. Finally, the relayer signs before broadcasting.
 
-### Addresses
+# Addresses
 
 Create an `Address` object from a bech32-encoded string:
 
@@ -2622,7 +2610,7 @@ Create an address from a raw public key
 }
 ```
 
-**Using an AddressFactory to create addresses**
+Using an AddressFactory to create addresses
 AddressFactory allows creating addresses with a custom HRP, ensuring consistency across your application.
 
 ``` js
@@ -2635,7 +2623,7 @@ AddressFactory allows creating addresses with a custom HRP, ensuring consistency
 }
 ```
 
-Getting the shard of an address
+### Getting the shard of an address
 ``` js
 import { AddressComputer } from "@multiversx/sdk-core";
 
@@ -2650,7 +2638,7 @@ const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0
 console.log("Is contract address:", contractAddress.isSmartContract());
 ```
 
-**Changing the default hrp**
+## Changing the default hrp
 The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default.
 You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 ``` js
@@ -2667,19 +2655,19 @@ Reset HRP back to "erd" to avoid affecting other parts of the application.
 LibraryConfig.defaultAddressHrp = "erd";
 ```
 
-### Wallets
+# Wallets
 
-**Generating a mnemonic**
+### Generating a mnemonic
 Mnemonic generation is based on [bip39](https://www.npmjs.com/package/bip39) and can be achieved as follows:
 
 ``` js
 
 const mnemonic = Mnemonic.generate();
 const words = mnemonic.getWords();
-console.log( { words } );
+console.log({ words });
 ```
 
-**Saving the mnemonic to a keystore file**
+### Saving the mnemonic to a keystore file
 The mnemonic can be saved to a keystore file:
 
 ``` js
@@ -2687,29 +2675,29 @@ The mnemonic can be saved to a keystore file:
     const mnemonic = Mnemonic.generate();
 
     // saves the mnemonic to a keystore file with kind=mnemonic
-    const wallet = UserWallet.fromMnemonic( { mnemonic: mnemonic.getText(), password: "password" } );
+    const wallet = UserWallet.fromMnemonic({ mnemonic: mnemonic.getText(), password: "password" });
 
-    const filePath = path.join( "src", "testdata", "testwallets", "walletWithMnemonic.json" );
-    wallet.save( filePath );
+    const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
+    wallet.save(filePath);
 }
 ```
 
-**Deriving secret keys from a mnemonic**
+### Deriving secret keys from a mnemonic
 Given a mnemonic, we can derive keypairs:
 
 ``` js
 {
     const mnemonic = Mnemonic.generate();
 
-    const secretKey = mnemonic.deriveKey( 0 );
+    const secretKey = mnemonic.deriveKey(0);
     const publicKey = secretKey.generatePublicKey();
 
-    console.log( "Secret key: ", secretKey.hex() );
-    console.log( "Public key: ", publicKey.hex() );
+    console.log("Secret key: ", secretKey.hex());
+    console.log("Public key: ", publicKey.hex());
 }
 ```
 
-**Saving a secret key to a keystore file**
+### Saving a secret key to a keystore file
 The secret key can also be saved to a keystore file:
 
 ``` js
@@ -2717,14 +2705,14 @@ The secret key can also be saved to a keystore file:
     const mnemonic = Mnemonic.generate();
     const secretKey = mnemonic.deriveKey();
 
-    const wallet = UserWallet.fromSecretKey( { secretKey: secretKey, password: "password" } );
+    const wallet = UserWallet.fromSecretKey({ secretKey: secretKey, password: "password" });
 
-    const filePath = path.join( "src", "testdata", "testwallets", "walletWithSecretKey.json" );
-    wallet.save( filePath );
+    const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
+    wallet.save(filePath);
 }
 ```
 
-**Saving a secret key to a PEM file**
+### Saving a secret key to a PEM file
 We can save a secret key to a pem file. *This is not recommended as it is not secure, but it's very convenient for testing purposes.*
 
 ``` js
@@ -2736,14 +2724,14 @@ We can save a secret key to a pem file. *This is not recommended as it is not se
     const publicKey = secretKey.generatePublicKey();
 
     const label = publicKey.toAddress().toBech32();
-    const pem = new UserPem( label, secretKey );
+    const pem = new UserPem(label, secretKey);
 
-    const filePath = path.join( "src", "testdata", "testwallets", "wallet.pem" );
-    pem.save( filePath );
+    const filePath = path.join("src", "testdata", "testwallets", "wallet.pem");
+    pem.save(filePath);
 }
 ```
 
-**Generating a KeyPair**
+### Generating a KeyPair
 A `KeyPair` is a wrapper over a secret key and a public key. We can create a keypair and use it for signing or verifying.
 
 ``` js
@@ -2758,63 +2746,62 @@ import { KeyPair } from "@multiversx/sdk-core";
 }
 ```
 
-**Loading a wallet from keystore mnemonic file**
+### Loading a wallet from keystore mnemonic file
 Load a keystore that holds an encrypted mnemonic (and perform wallet derivation at the same time):
 
 ``` js
-
 {
-    const filePath = path.join( "src", "testdata", "testwallets", "walletWithMnemonic.json" );
+    const filePath = path.join("src", "testdata", "testwallets", "walletWithMnemonic.json");
 
     // loads the mnemonic and derives the a secret key; default index = 0
-    let secretKey = UserWallet.loadSecretKey( filePath, "password" );
-    let address = secretKey.generatePublicKey().toAddress( 'erd' );
+    let secretKey = UserWallet.loadSecretKey(filePath, "password");
+    let address = secretKey.generatePublicKey().toAddress('erd');
 
-    console.log( "Secret key: ", secretKey.hex() );
-    console.log( "Address: ", address.toBech32() );
+    console.log("Secret key: ", secretKey.hex());
+    console.log("Address: ", address.toBech32());
 
     // derive secret key with index = 7
-    secretKey = UserWallet.loadSecretKey( path, "password", 7 );
+    secretKey = UserWallet.loadSecretKey(path, "password", 7);
     address = secretKey.generatePublicKey().toAddress();
 
-    console.log( "Secret key: ", secretKey.hex() );
-    console.log( "Address: ", address.toBech32() );
+    console.log("Secret key: ", secretKey.hex());
+    console.log("Address: ", address.toBech32());
 }
 ```
 
-**Loading a wallet from a keystore secret key file**
+### Loading a wallet from a keystore secret key file
 
 ``` js
 {
-    const filePath = path.join( "src", "testdata", "testwallets", "walletWithSecretKey.json" );
+    const filePath = path.join("src", "testdata", "testwallets", "walletWithSecretKey.json");
 
-    let secretKey = UserWallet.loadSecretKey( filePath, "password" );
-    let address = secretKey.generatePublicKey().toAddress( 'erd' );
+    let secretKey = UserWallet.loadSecretKey(filePath, "password");
+    let address = secretKey.generatePublicKey().toAddress('erd');
 
-    console.log( "Secret key: ", secretKey.hex() );
-    console.log( "Address: ", address.toBech32() );
+    console.log("Secret key: ", secretKey.hex());
+    console.log("Address: ", address.toBech32());
 }
 ```
 
-**Loading a wallet from a PEM file**
+### Loading a wallet from a PEM file
 
 ``` js
 {
-    const filePath = path.join( "src", "testdata", "testwallets", "wallet.pem" );
+    const filePath = path.join("src", "testdata", "testwallets", "wallet.pem");
 
-    let pem = UserPem.fromFile( filePath );
+    let pem = UserPem.fromFile(filePath);
 
-    console.log( "Secret key: ", pem.secretKey.hex() );
-    console.log( "Public key: ", pem.publicKey.hex() );
+    console.log("Secret key: ", pem.secretKey.hex());
+    console.log("Public key: ", pem.publicKey.hex());
 }
 ```
 
-## Signing objects
+# Signing objects
 
 Signing is done using an account's secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations.
 First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
-## Signing a Transaction using an Account
+### Signing a Transaction using an Account
 We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account section](#creating-accounts).
 ```js
 {
@@ -2834,7 +2821,7 @@ We are going to assume we have an account at this point. If you don't, feel free
 }
 ```
 
-Signing a Transaction using a SecretKey
+### Signing a Transaction using a SecretKey
 ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -2861,7 +2848,7 @@ Signing a Transaction using a SecretKey
 }
 ```
 
-Signing a Transaction by hash
+### Signing a Transaction by hash
 ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -2891,7 +2878,7 @@ Signing a Transaction by hash
 }
 ```
 
-Signing a Message using an Account:
+### Signing a Message using an Account:
 ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -2906,7 +2893,7 @@ Signing a Message using an Account:
 }
 ```
 
-Signing a Message using an SecretKey:
+### Signing a Message using an SecretKey:
 ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -2925,12 +2912,12 @@ Signing a Message using an SecretKey:
 }
 ```
 
-### Verifying signatures
+# Verifying signatures
 
 Signature verification is performed using an account’s public key.
 To simplify this process, we provide wrappers over public keys that make verification easier and more convenient.
 
-**Verifying Transaction signature using a UserVerifier**:
+### Verifying Transaction signature using a UserVerifier
 
 ```js
 {
@@ -2965,7 +2952,7 @@ To simplify this process, we provide wrappers over public keys that make verific
 }
 ```
 
-**Verifying Message signature using a UserVerifier**:
+### Verifying Message signature using a UserVerifier
 
 ```js
 {
@@ -2995,8 +2982,7 @@ To simplify this process, we provide wrappers over public keys that make verific
 }
 ```
 
-**Verifying a signature using a public key**:
-
+### Verifying a signature using a public key
 ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -3028,10 +3014,8 @@ To simplify this process, we provide wrappers over public keys that make verific
 }
 ```
 
-Sending messages over boundaries
-
+### Sending messages over boundaries
 Signed Message objects are typically sent to a remote party (e.g., a service), which can then verify the signature.
-
 To prepare a message for transmission, you can use the `MessageComputer.packMessage()` utility method.
 
 ```js

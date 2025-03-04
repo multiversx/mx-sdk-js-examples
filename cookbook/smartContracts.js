@@ -4,12 +4,12 @@ import { promises } from "fs";
 import path from 'path';
 // ## Smart Contracts
 
-// Contract ABIs
+// ### Contract ABIs
 
 // A contract's ABI (Application Binary Interface) describes the endpoints, data structures, and events that the contract exposes. 
 // While interactions with the contract are possible without the ABI, they are much easier to implement when the definitions are available.
 
-// Loading the ABI from a file
+// #### Loading the ABI from a file
 // ```js
 {
   let abiJson = await promises.readFile("../contracts/adder.abi.json", { encoding: "utf8" });
@@ -18,7 +18,7 @@ import path from 'path';
 }
 // ```
 
-// Loading the ABI from an URL
+// #### Loading the ABI from an URL
 
 // ```js
 {
@@ -27,7 +27,7 @@ import path from 'path';
 }
 // ```
 
-// Manually construct the ABI
+// #### Manually construct the ABI
 
 // If an ABI file isn’t available, but you know the contract’s endpoints and data types, you can manually construct the ABI.
 
@@ -76,7 +76,7 @@ import path from 'path';
 // When creating transactions that interact with smart contracts, it's recommended to provide the ABI file to the controller or factory if possible. 
 // This allows arguments to be passed as native Javascript values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
 
-// # Deploying a Smart Contract Using the Controller
+// ### Deploying a Smart Contract Using the Controller
 
 // ```js
 {
@@ -117,7 +117,7 @@ import path from 'path';
 
 // md-insert:mixedTypedValuesAndNativeValues
 
-// # Parsing contract deployment transactions
+// ### Parsing contract deployment transactions
 
 // ```js
 {
@@ -156,7 +156,7 @@ import path from 'path';
 }
 // ```
 
-// ## Deploying a smart contract using the factory
+// ### Deploying a smart contract using the factory
 // After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 // ```js
@@ -213,11 +213,11 @@ import path from 'path';
 }
 // ```
 
-// ### Smart Contract calls
+// ## Smart Contract calls
 
 // In this section we'll see how we can call an endpoint of our previously deployed smart contract using both approaches with the `controller` and the `factory`.
 
-// **Calling a smart contract using the controller**
+// ### Calling a smart contract using the controller
 
 // ```js
 {
@@ -261,7 +261,7 @@ import path from 'path';
 }
 // ```
 
-// **Parsing smart contract call transactions**
+// ### Parsing smart contract call transactions
 // In our case, calling the add endpoint does not return anything, but similar to the example above, we could parse this transaction to get the output values of a smart contract call.
 
 // ```js
@@ -272,7 +272,7 @@ import path from 'path';
 }
 // ```
 
-// ## **Calling a smart contract and sending tokens (transfer & execute)**
+// ### Calling a smart contract and sending tokens (transfer & execute)
 // Additionally, if an endpoint requires a payment when called, we can send tokens to the contract while creating a smart contract call transaction. 
 // Both EGLD and ESDT tokens or a combination of both can be sent. This functionality is supported by both the controller and the factory.
 
@@ -329,7 +329,7 @@ import path from 'path';
 }
 // ```
 
-// ## **Calling a smart contract using the factory**
+// ### Calling a smart contract using the factory
 // Let's create the same smart contract call transaction, but using the `factory`.
 
 // ```js
@@ -387,7 +387,7 @@ import path from 'path';
 }
 // ```
 
-// **Parsing transaction outcome**
+// ### Parsing transaction outcome
 // As said before, the `add` endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
 
 // ```js
@@ -400,7 +400,7 @@ import path from 'path';
 }
 // ```
 
-// **Decoding transaction events**
+// ### Decoding transaction events
 // You might be interested into decoding events emitted by a contract. You can do so by using the `TransactionEventsParser`.
 
 // Suppose we'd like to decode a `startPerformAction` event emitted by the [multisig](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract.
@@ -409,13 +409,11 @@ import path from 'path';
 
 // ```js
 {
-  {
-    // load the abi files
-    abi = await loadAbiRegistry("src/testdata/adder.abi.json");
-    const parser = new TransactionEventsParser({ abi });
-    const transactionOnNetwork = entrypoint.getTransaction(txHash);
-    const events = gatherAllEvents(transactionOnNetwork);
-    const outcome = parser.parseEvents({ events });
-  }
+  // load the abi files
+  abi = await loadAbiRegistry("src/testdata/adder.abi.json");
+  const parser = new TransactionEventsParser({ abi });
+  const transactionOnNetwork = entrypoint.getTransaction(txHash);
+  const events = gatherAllEvents(transactionOnNetwork);
+  const outcome = parser.parseEvents({ events });
 }
 // ```

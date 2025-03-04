@@ -52,7 +52,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Issuing fungible tokens using the factory** 
+// ### Issuing fungible tokens using the factory
 // ```js
 {
   // create the entrypoint and the token management transactions factory // md-as-comment
@@ -100,8 +100,7 @@ import path from 'path'; // md-ignore
 // ```
 
 
-//  Setting special roles for fungible tokens using the controller
-
+// ### Setting special roles for fungible tokens using the controller
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -140,7 +139,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Setting special roles for fungible tokens using the factory**
+// ### Setting special roles for fungible tokens using the factory
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -184,8 +183,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Issuing semi-fungible tokens using the controller**
-
+// ### Issuing semi-fungible tokens using the controller
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -225,7 +223,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Issuing semi-fungible tokens using the factory**
+// ### Issuing semi-fungible tokens using the factory
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -271,7 +269,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Issuing NFT collection & creating NFTs using the controller**
+// ### Issuing NFT collection & creating NFTs using the controller
 
 // ```js
 {
@@ -337,7 +335,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// **Issuing NFT collection & creating NFTs using the factory**
+// ### Issuing NFT collection & creating NFTs using the factory
 // ```js
 {
   // create the entrypoint and the token management transdactions factory // md-as-comment
