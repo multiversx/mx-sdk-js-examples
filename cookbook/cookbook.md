@@ -514,8 +514,6 @@ After sending a transaction, we can fetch it from the network using the transact
   const entrypoint = new DevnetEntrypoint();
   const api = entrypoint.createNetworkProvider();
 
-  const condition = (txOnNetwork) => !txOnNetwork.status.isSuccessful();
-
   const txHash = "exampletransactionhash";
   const transactionOnNetwork = await api.getTransaction(txHash);
 }
@@ -531,11 +529,11 @@ We can fetch a specific token (ESDT, MetaESDT, SFT, NFT) from an account by prov
 
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   let token = new Token({ identifier: "TEST-ff155e" }); // ESDT
-  let tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
+  let tokenOnNetwork = await api.getTokenOfAccount(alice, token);
 
 
   token = new Token({ identifier: "NFT-987654", nonce: 11n }); // NFT
-  tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
+  tokenOnNetwork = await api.getTokenOfAccount(alice, token);
 }
 ```
 
@@ -548,7 +546,7 @@ Fetches all fungible tokens held by an account. Note that this method does not h
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
-  const fungibleTokens = await apiProvider.getFungibleTokensOfAccount(alice);
+  const fungibleTokens = await api.getFungibleTokensOfAccount(alice);
 }
 ```
 
@@ -561,7 +559,7 @@ Fetches all non-fungible tokens held by an account. Note that this method does n
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
-  const nfts = await apiProvider.getNonFungibleTokensOfAccount(alice);
+  const nfts = await api.getNonFungibleTokensOfAccount(alice);
 }
 ```
 
@@ -574,10 +572,10 @@ If we want to fetch the metadata of a token (e.g., owner, decimals, etc.), we ca
   const api = entrypoint.createNetworkProvider();
 
   // used for ESDT
-  const fungibleTokenDefinition = await apiProvider.getDefinitionOfFungibleToken("TEST-ff155e");
+  const fungibleTokenDefinition = await api.getDefinitionOfFungibleToken("TEST-ff155e");
 
   // used for METAESDT, SFT, NFT
-  const nonFungibleTokenDefinition = await apiProvider.getDefinitionOfTokenCollection("NFTEST-ec88b8");
+  const nonFungibleTokenDefinition = await api.getDefinitionOfTokenCollection("NFTEST-ec88b8");
 }
 ```
 
