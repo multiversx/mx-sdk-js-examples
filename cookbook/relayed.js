@@ -36,10 +36,10 @@ import path from 'path'; // md-ignore
   });
 
   // sender signs the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // relayer signs the transaction // md-as-comment
-  transaction.RelayerSignature = carol.signTransaction(transaction);
+  transaction.RelayerSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction // md-as-comment
   const entrypoint = new DevnetEntrypoint();
@@ -88,7 +88,7 @@ import path from 'path'; // md-ignore
   );
 
   // relayer also signs the transaction // md-as-comment
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.relayerSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -134,14 +134,14 @@ import path from 'path'; // md-ignore
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
   transaction.nonce = alice.getNonceThenIncrement();
 
-  // fetch the relayer // md-as-comment
+  // set the relayer // md-as-comment
   transaction.relayer = carol.address;
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // relayer also signs the transaction // md-as-comment
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.relayerSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);

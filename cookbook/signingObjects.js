@@ -21,7 +21,7 @@ import path from 'path'; // md-ignore
         nonce: 90n
     });
 
-    transaction.signature = alice.signTransaction(transaction);
+    transaction.signature = await alice.signTransaction(transaction);
     console.log(transaction.toPlainObject());
 }
 // ```
@@ -77,7 +77,7 @@ import path from 'path'; // md-ignore
     const hash = transactionComputer.computeHashForSigning(transaction);
 
     // sign and apply the signature on the transaction // md-as-comment
-    transaction.signature = await alice.sign(hash);
+    transaction.signature = await alice.signTransaction(hash);
 
     console.log(transaction.toPlainObject());
 }
@@ -94,7 +94,7 @@ import path from 'path'; // md-ignore
         address: alice.address
     });
 
-    message.signature = await alice.sign(message);
+    message.signature = await alice.signMessage(message);
 }
 // ```
 

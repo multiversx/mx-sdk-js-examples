@@ -155,7 +155,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Deploying a smart contract using the factory
+// ### Deploying a Smart Contract using the factory
 // After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 // ```js
@@ -190,7 +190,7 @@ import path from 'path'; // md-ignore
   deployTransaction.nonce = alice.nonce;
 
   // sign the transaction
-  deployTransaction.signature = alice.signTransaction(transaction);
+  deployTransaction.signature = await alice.signTransaction(transaction);
 
   // broadcasting the transaction
   const txHash = await entrypoint.sendTransaction(deployTransaction);
@@ -203,7 +203,7 @@ import path from 'path'; // md-ignore
   const parsedOutcome = parser.parseDeploy(transactionOnNetwork);
   const contractAddress = parsedOutcome.contracts[0].address;
 
-  console.log(contractAddress);
+  console.log(contractAddress.toBech32());
 }
 // ```
 
@@ -217,14 +217,13 @@ import path from 'path'; // md-ignore
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const sender = await Account.newFromPem(filePath);
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
   // load the abi file
-  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
-
-  const entrypoint = new DevnetEntrypoint();
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");;
   const controller = entrypoint.createSmartContractController(abi);
 
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
@@ -256,8 +255,8 @@ import path from 'path'; // md-ignore
 // In our case, calling the add endpoint does not return anything, but similar to the example above, we could parse this transaction to get the output values of a smart contract call.
 
 // ```js
-// waits for transaction completion and parses the result
 {
+  // waits for transaction completion and parses the result
   const parsedOutcome = controller.awaitCompletedExecute(transactionOnNetwork);
   const values = parsedOutcome.contracts.values;
 }
@@ -271,6 +270,7 @@ import path from 'path'; // md-ignore
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const sender = await Account.newFromPem(filePath);
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
@@ -279,7 +279,6 @@ import path from 'path'; // md-ignore
   const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
-  const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractController(abi);
 
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
@@ -322,16 +321,16 @@ import path from 'path'; // md-ignore
 // ```js
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const sender = await Account.newFromPem(filePath);
+  const alice = await Account.newFromPem(filePath);
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
-  sender.nonce = await entrypoint.recallAccountNonce(sender.address);
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // load the abi file
   const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
-  const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractTransactionsFactory(abi);
 
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
@@ -360,8 +359,8 @@ import path from 'path'; // md-ignore
     },
   );
 
-  transaction.nonce = sender.getNonceThenIncrement();
-  transaction.signature = sender.signTransaction(transaction);
+  transaction.nonce = alice.getNonceThenIncrement();
+  transaction.signature = await alice.signTransaction(transaction);
 
   // broadcasting the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -527,7 +526,7 @@ import path from 'path'; // md-ignore
   );
 
   // broadcasting the transaction
-  const txHash = await entrypoint.sendTransaction(deployTransaction);
+  const txHash = await entrypoint.sendTransaction(upgradeTransaction);
 
   console.log({ txHash });
 }

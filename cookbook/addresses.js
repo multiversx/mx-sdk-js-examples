@@ -29,7 +29,7 @@ import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiv
 }
 // ```
 
-// Create an address from a raw public key
+// ### Create an address from a raw public key
 
 // ``` js
 {
@@ -38,7 +38,7 @@ import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiv
 }
 // ```
 
-// Using an AddressFactory to create addresses
+// ### Using an AddressFactory to create addresses
 // AddressFactory allows creating addresses with a custom HRP, ensuring consistency across your application.
 
 // ``` js
@@ -78,7 +78,7 @@ LibraryConfig.defaultAddressHrp = "test";
 const testAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
 console.log(testAddress.toBech32());
 
-// Reset HRP back to "erd" to avoid affecting other parts of the application.
+// Reset HRP back to "erd" to avoid affecting other parts of the application. // md-as-comment
 LibraryConfig.defaultAddressHrp = "erd";
 // ```
 

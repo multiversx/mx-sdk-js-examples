@@ -41,17 +41,18 @@ import path from 'path'; // md-ignore
   const entrypoint = new DevnetEntrypoint();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const sender = await Account.newFromPem(filePath);
+  const alice = await Account.newFromPem(filePath);
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  sender.nonce = await entrypoint.recallAccountNonce(sender.address);
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
-    sender,
-    sender.getNonceThenIncrement(),
+    alice,
+    alice.getNonceThenIncrement(),
     {
-      receiver: sender.address,
+      receiver: bob,
       nativeAmount: 1n,
     },
   );

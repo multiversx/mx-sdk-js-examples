@@ -432,7 +432,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 
 // ## Custom Api/Proxy calls
 // The methods exposed by the `ApiNetworkProvider` or `ProxyNetworkProvider` are the most common and widely used. However, there may be times when custom API calls are needed. For these cases, we’ve created generic methods for both GET and POST requests.
-// Let’s assume we want to retrieve all the transactions sent by Alice in which the `testFunction` function was called.
+// Let’s assume we want to retrieve all the transactions sent by Alice in which the `delegate` function was called.
 
 // ```js
 {
@@ -440,7 +440,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
-  const url = `transactions/${alice.toBech32()}?function=testFunction`;
+  const url = `transactions/${alice.toBech32()}?function=delegate`;
 
   const response = await api.doGetGeneric(url);
 }

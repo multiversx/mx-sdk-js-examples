@@ -83,7 +83,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -166,7 +166,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -253,7 +253,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -365,7 +365,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   let txHash = await entrypoint.sendTransaction(transaction);
@@ -395,7 +395,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   txHash = await entrypoint.sendTransaction(transaction);

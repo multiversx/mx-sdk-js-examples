@@ -598,7 +598,7 @@ Smart contract queries, or view functions, are endpoints that only read data fro
 
 ## Custom Api/Proxy calls
 The methods exposed by the `ApiNetworkProvider` or `ProxyNetworkProvider` are the most common and widely used. However, there may be times when custom API calls are needed. For these cases, we’ve created generic methods for both GET and POST requests.
-Let’s assume we want to retrieve all the transactions sent by Alice in which the `testFunction` function was called.
+Let’s assume we want to retrieve all the transactions sent by Alice in which the `delegate` function was called.
 
 ```js
 {
@@ -606,7 +606,7 @@ Let’s assume we want to retrieve all the transactions sent by Alice in which t
   const api = entrypoint.createNetworkProvider();
 
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
-  const url = `transactions/${alice.toBech32()}?function=testFunction`;
+  const url = `transactions/${alice.toBech32()}?function=delegate`;
 
   const response = await api.doGetGeneric(url);
 }
@@ -652,17 +652,18 @@ When using the controller, the transaction will be signed because we’ll be wor
   const entrypoint = new DevnetEntrypoint();
 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const sender = await Account.newFromPem(filePath);
+  const alice = await Account.newFromPem(filePath);
+  const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
   // the developer is responsible for managing the nonce
-  sender.nonce = await entrypoint.recallAccountNonce(sender.address);
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   const transfersController = entrypoint.createTransfersController();
   const transaction = await transfersController.createTransactionForTransfer(
-    sender,
-    sender.getNonceThenIncrement(),
+    alice,
+    alice.getNonceThenIncrement(),
     {
-      receiver: sender.address,
+      receiver: bob,
       nativeAmount: 1n,
     },
   );
@@ -977,7 +978,7 @@ Even before broadcasting, at the moment you know the sender's address and the no
 }
 ```
 
-### Deploying a smart contract using the factory
+### Deploying a Smart Contract using the factory
 After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 ```js
@@ -1012,7 +1013,7 @@ After the transaction is created the nonce needs to be properly set and the tran
   deployTransaction.nonce = alice.nonce;
 
   // sign the transaction
-  deployTransaction.signature = alice.signTransaction(transaction);
+  deployTransaction.signature = await alice.signTransaction(transaction);
 
   // broadcasting the transaction
   const txHash = await entrypoint.sendTransaction(deployTransaction);
@@ -1025,7 +1026,7 @@ After the transaction is created the nonce needs to be properly set and the tran
   const parsedOutcome = parser.parseDeploy(transactionOnNetwork);
   const contractAddress = parsedOutcome.contracts[0].address;
 
-  console.log(contractAddress);
+  console.log(contractAddress.toBech32());
 }
 ```
 
@@ -1039,14 +1040,13 @@ In this section we'll see how we can call an endpoint of our previously deployed
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const sender = await Account.newFromPem(filePath);
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
 
   // load the abi file
-  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
-
-  const entrypoint = new DevnetEntrypoint();
+  const abi = await loadAbiRegistry("src/testdata/adder.abi.json");;
   const controller = entrypoint.createSmartContractController(abi);
 
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
@@ -1078,8 +1078,8 @@ In this section we'll see how we can call an endpoint of our previously deployed
 In our case, calling the add endpoint does not return anything, but similar to the example above, we could parse this transaction to get the output values of a smart contract call.
 
 ```js
-waits for transaction completion and parses the result
 {
+  // waits for transaction completion and parses the result
   const parsedOutcome = controller.awaitCompletedExecute(transactionOnNetwork);
   const values = parsedOutcome.contracts.values;
 }
@@ -1093,6 +1093,7 @@ Both EGLD and ESDT tokens or a combination of both can be sent. This functionali
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const sender = await Account.newFromPem(filePath);
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
   sender.nonce = await entrypoint.recallAccountNonce(sender.address);
@@ -1101,7 +1102,6 @@ Both EGLD and ESDT tokens or a combination of both can be sent. This functionali
   const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
-  const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractController(abi);
 
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
@@ -1144,16 +1144,16 @@ Let's create the same smart contract call transaction, but using the `factory`.
 ```js
 {
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
-  const sender = await Account.newFromPem(filePath);
+  const alice = await Account.newFromPem(filePath);
+  const entrypoint = new DevnetEntrypoint();
 
   // the developer is responsible for managing the nonce
-  sender.nonce = await entrypoint.recallAccountNonce(sender.address);
+  alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
   // load the abi file
   const abi = await loadAbiRegistry("src/testdata/adder.abi.json");
 
   // get the smart contracts controller
-  const entrypoint = new DevnetEntrypoint();
   const controller = entrypoint.createSmartContractTransactionsFactory(abi);
 
   const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgq7cmfueefdqkjsnnjnwydw902v8pwjqy3d8ssd4meug");
@@ -1182,8 +1182,8 @@ Let's create the same smart contract call transaction, but using the `factory`.
     },
   );
 
-  transaction.nonce = sender.getNonceThenIncrement();
-  transaction.signature = sender.signTransaction(transaction);
+  transaction.nonce = alice.getNonceThenIncrement();
+  transaction.signature = await alice.signTransaction(transaction);
 
   // broadcasting the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1349,7 +1349,7 @@ However, in this case, the contract address is already known. Like deploying a s
   );
 
   // broadcasting the transaction
-  const txHash = await entrypoint.sendTransaction(deployTransaction);
+  const txHash = await entrypoint.sendTransaction(upgradeTransaction);
 
   console.log({ txHash });
 }
@@ -1438,7 +1438,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1521,7 +1521,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1608,7 +1608,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1720,7 +1720,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   let txHash = await entrypoint.sendTransaction(transaction);
@@ -1750,7 +1750,7 @@ For scripts or quick network interactions, we recommend using the controller. Ho
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   txHash = await entrypoint.sendTransaction(transaction);
@@ -1839,7 +1839,7 @@ A guardian can also be set using the WebWallet, which leverages our hosted `Trus
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1894,7 +1894,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1954,7 +1954,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -1962,7 +1962,7 @@ Once a guardian is set, we must wait **20 epochs** before it can be activated. A
 ```
 
 ### Saving a key-value pair to an account using the controller
-You can find more information [here](/developers/account-storage) regarding the account storage
+You can find more information [here](/developers/account-storage) regarding the account storage.
 
 ```js
 {
@@ -1974,7 +1974,7 @@ You can find more information [here](/developers/account-storage) regarding the 
   const alice = await Account.newFromPem(filePath);
 
   // creating the key-value pairs we want to save
-  const keyValuePairs = new Map([ [ Buffer.from("key0"), Buffer.from("value0") ] ]);
+  const keyValuePairs = new Map([[Buffer.from("key0"), Buffer.from("value0")]]);
 
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
@@ -2005,12 +2005,12 @@ You can find more information [here](/developers/account-storage) regarding the 
   const alice = await Account.newFromPem(filePath);
 
   // creating the key-value pairs we want to save
-  const keyValuePairs = new Map([ [ Buffer.from("key0"), Buffer.from("value0") ] ]);
+  const keyValuePairs = new Map([[Buffer.from("key0"), Buffer.from("value0")]]);
 
   const transaction = await factory.createTransactionForSavingKeyValue(
-    alice.address,
-    keyValuePairs
-  );
+    alice.address, {
+    keyValuePairs: keyValuePairs,
+  });
 
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
@@ -2019,7 +2019,7 @@ You can find more information [here](/developers/account-storage) regarding the 
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2069,7 +2069,7 @@ These operations can be performed using both the controller and the **factory**.
   // wait for transaction completion, extract delegation contract's address
   const outcome = await controller.awaitCompletedCreateNewDelegationContract(txHash);
 
-  const contractAddress = outcome[ 0 ].contractAddress;
+  const contractAddress = outcome[0].contractAddress;
 }
 ```
 
@@ -2097,7 +2097,7 @@ These operations can be performed using both the controller and the **factory**.
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2108,7 +2108,7 @@ These operations can be performed using both the controller and the **factory**.
   // extract the contract address
   const parser = new TokenManagementTransactionsOutcomeParser();
   const outcome = parser.parseIssueFungible(transactionOnNetwork);
-  const contractAddress = outcome[ 0 ].contractAddress;
+  const contractAddress = outcome[0].contractAddress;
 }
 ```
 
@@ -2152,7 +2152,7 @@ We can send funds to a delegation contract to earn rewards.
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await factory.createTransactionForDelegating(alice.address,
     {
@@ -2166,7 +2166,7 @@ We can send funds to a delegation contract to earn rewards.
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2185,7 +2185,7 @@ Over time, as rewards accumulate, we may choose to redelegate them to the contra
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
@@ -2211,7 +2211,7 @@ Over time, as rewards accumulate, we may choose to redelegate them to the contra
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await factory.createTransactionForRedelegatingRewards(alice.address,
     {
@@ -2224,7 +2224,7 @@ Over time, as rewards accumulate, we may choose to redelegate them to the contra
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2243,7 +2243,7 @@ We can also claim our rewards when needed.
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
@@ -2269,7 +2269,7 @@ We can also claim our rewards when needed.
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await factory.createTransactionForClaimingRewards(alice.address,
     {
@@ -2282,7 +2282,7 @@ We can also claim our rewards when needed.
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2301,7 +2301,7 @@ By **undelegating**, we signal the contract that we want to retrieve our staked 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
 
@@ -2328,7 +2328,7 @@ By **undelegating**, we signal the contract that we want to retrieve our staked 
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await factory.createTransactionForUndelegating(alice.address,
     {
@@ -2342,7 +2342,7 @@ By **undelegating**, we signal the contract that we want to retrieve our staked 
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2361,7 +2361,7 @@ After the `10-epoch unbonding period` is complete, we can proceed with withdrawi
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   // fetch the nonce of the network
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
@@ -2388,7 +2388,7 @@ After the `10-epoch unbonding period` is complete, we can proceed with withdrawi
   const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
   const alice = await Account.newFromPem(filePath);
 
-  const contract = Address.newFromBech32(erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva);
+  const contract = Address.newFromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqf8llllswuedva");
 
   const transaction = await factory.createTransactionForWithdrawing(alice.address,
     {
@@ -2401,7 +2401,7 @@ After the `10-epoch unbonding period` is complete, we can proceed with withdrawi
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2444,10 +2444,10 @@ Let’s see how to create a relayed transaction:
   });
 
   // sender signs the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // relayer signs the transaction
-  transaction.RelayerSignature = carol.signTransaction(transaction);
+  transaction.RelayerSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction
   const entrypoint = new DevnetEntrypoint();
@@ -2496,7 +2496,7 @@ Let’s issue a fungible token using a relayed transaction:
   );
 
   // relayer also signs the transaction
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.relayerSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2542,14 +2542,14 @@ Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
   transaction.nonce = alice.getNonceThenIncrement();
 
-  // fetch the relayer
+  // set the relayer
   transaction.relayer = carol.address;
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // relayer also signs the transaction
-  transaction.relayerSignature = carol.signTransaction(transaction);
+  transaction.relayerSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2568,7 +2568,7 @@ Each controller includes an argument for the guardian. The transaction can eithe
 
 Let’s issue a token using a guarded account:
 
-**Creating guarded transactions using controllers**
+### Creating guarded transactions using controllers
 We can create guarded transactions using any of the available controllers.
 
 Each controller method includes a guardian argument, which must be set if we want to create a guarded transaction.
@@ -2609,7 +2609,7 @@ Let’s issue a fungible token using a relayed transaction:
   );
 
   // guardian also signs the transaction
-  transaction.guardianSignature = carol.signTransaction(transaction);
+  transaction.guardianSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2618,7 +2618,7 @@ Let’s issue a fungible token using a relayed transaction:
 
 ### Creating guarded transactions using factories
 Unlike controllers, `transaction factories` do not have a `guardian` argument. Instead, the **guardian must be set after creating the transaction**.
-This approach is beneficial because the transaction is *not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
+This approach is beneficial because the transaction is **not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
 
 Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
 
@@ -2659,10 +2659,10 @@ Let’s issue a fungible token using the `TokenManagementTransactionsFactory`:
   transaction.guardian = carol.address;
 
   // sign the transaction
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // guardian also signs the transaction
-  transaction.guardianSignature = carol.signTransaction(transaction);
+  transaction.guardianSignature = await carol.signTransaction(transaction);
 
   // broadcast the transaction
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -2714,7 +2714,7 @@ If the HRP (human-readable part) is not provided, the SDK will use the default o
 }
 ```
 
-Create an address from a raw public key
+### Create an address from a raw public key
 
 ``` js
 {
@@ -2723,7 +2723,7 @@ Create an address from a raw public key
 }
 ```
 
-Using an AddressFactory to create addresses
+### Using an AddressFactory to create addresses
 AddressFactory allows creating addresses with a custom HRP, ensuring consistency across your application.
 
 ``` js
@@ -2763,7 +2763,7 @@ LibraryConfig.defaultAddressHrp = "test";
 const testAddress = Address.newFromHex("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1");
 console.log(testAddress.toBech32());
 
-Reset HRP back to "erd" to avoid affecting other parts of the application.
+// Reset HRP back to "erd" to avoid affecting other parts of the application.
 LibraryConfig.defaultAddressHrp = "erd";
 ```
 
@@ -2926,7 +2926,7 @@ We are going to assume we have an account at this point. If you don't, feel free
         nonce: 90n
     });
 
-    transaction.signature = alice.signTransaction(transaction);
+    transaction.signature = await alice.signTransaction(transaction);
     console.log(transaction.toPlainObject());
 }
 ```
@@ -2982,7 +2982,7 @@ We are going to assume we have an account at this point. If you don't, feel free
     const hash = transactionComputer.computeHashForSigning(transaction);
 
     // sign and apply the signature on the transaction
-    transaction.signature = await alice.sign(hash);
+    transaction.signature = await alice.signTransaction(hash);
 
     console.log(transaction.toPlainObject());
 }
@@ -2999,7 +2999,7 @@ We are going to assume we have an account at this point. If you don't, feel free
         address: alice.address
     });
 
-    message.signature = await alice.sign(message);
+    message.signature = await alice.signMessage(message);
 }
 ```
 

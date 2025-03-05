@@ -70,7 +70,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -125,7 +125,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -185,7 +185,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
@@ -193,7 +193,7 @@ import path from 'path'; // md-ignore
 // ```
 
 // ### Saving a key-value pair to an account using the controller
-// You can find more information [here](https://docs.multiversx.com/developers/account-storage) regarding the account storage
+// You can find more information [here](https://docs.multiversx.com/developers/account-storage) regarding the account storage.
 
 // ```js
 {
@@ -205,7 +205,7 @@ import path from 'path'; // md-ignore
   const alice = await Account.newFromPem(filePath);
 
   // creating the key-value pairs we want to save // md-as-comment
-  const keyValuePairs = new Map([ [ Buffer.from("key0"), Buffer.from("value0") ] ]);
+  const keyValuePairs = new Map([[Buffer.from("key0"), Buffer.from("value0")]]);
 
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
@@ -236,12 +236,12 @@ import path from 'path'; // md-ignore
   const alice = await Account.newFromPem(filePath);
 
   // creating the key-value pairs we want to save // md-as-comment
-  const keyValuePairs = new Map([ [ Buffer.from("key0"), Buffer.from("value0") ] ]);
+  const keyValuePairs = new Map([[Buffer.from("key0"), Buffer.from("value0")]]);
 
   const transaction = await factory.createTransactionForSavingKeyValue(
-    alice.address,
-    keyValuePairs
-  );
+    alice.address, {
+    keyValuePairs: keyValuePairs,
+  });
 
   // fetch the nonce of the network // md-as-comment
   alice.nonce = await entrypoint.recallAccountNonce(alice.address);
@@ -250,7 +250,7 @@ import path from 'path'; // md-ignore
   transaction.nonce = alice.getNonceThenIncrement();
 
   // sign the transaction // md-as-comment
-  transaction.signature = alice.signTransaction(transaction);
+  transaction.signature = await alice.signTransaction(transaction);
 
   // sending the transaction // md-as-comment
   const txHash = await entrypoint.sendTransaction(transaction);
