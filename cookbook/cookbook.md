@@ -157,7 +157,7 @@ npm install @multiversx/sdk-hw-provider
 ```
 
 ### Creating a Ledger Account
-This can be done using the dedicated library. You can find more information [here](/sdk-and-tools/sdk-js/sdk-js-signing-providers).
+This can be done using the dedicated library. You can find more information [here](/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-hardware-wallet-provider).
 
 When signing transactions or messages, the Ledger device will prompt you to confirm the details before proceeding.
 
@@ -534,7 +534,7 @@ We can fetch a specific token (ESDT, MetaESDT, SFT, NFT) from an account by prov
   let tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 
 
-  token = new Token({ identifier: "NFT-987654" }); // NFT
+  token = new Token({ identifier: "NFT-987654", nonce: 11n }); // NFT
   tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 }
 ```

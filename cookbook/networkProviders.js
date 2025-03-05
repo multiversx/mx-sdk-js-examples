@@ -368,7 +368,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   let tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 
 
-  token = new Token({ identifier: "NFT-987654" }); // NFT // md-as-comment
+  token = new Token({ identifier: "NFT-987654", nonce: 11n }); // NFT // md-as-comment
   tokenOnNetwork = await apiProvider.getTokenOfAccount(alice, token);
 }
 // ```
