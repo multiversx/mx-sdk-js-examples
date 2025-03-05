@@ -7,7 +7,7 @@ import path from 'path'; // md-ignore
 // First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 // ### Signing a Transaction using an Account
-// We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account section](#creating-accounts).
+// We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account](#creating-accounts) section.
 // ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");

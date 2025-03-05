@@ -13,14 +13,14 @@ For example, to create a Devnet entrypoint you have the following command:
 const entrypoint = new DevnetEntrypoint();
 ```
 
-Using a Custom API
+#### Using a Custom API
 If you'd like to connect to a third-party API, you can specify the url parameter:
 
 ```js
 const apiEntrypoint = new DevnetEntrypoint({ url: 'https://custom-multiversx-devnet-api.com' });
 ```
 
-Using a Proxy
+#### Using a Proxy
 
 By default, the DevnetEntrypoint uses the standard API. However, you can create a custom entrypoint that interacts with a proxy by specifying the kind parameter:
 
@@ -37,7 +37,6 @@ const customEntrypoint = new DevnetEntrypoint({
 You can initialize an account directly from the entrypoint. Keep in mind that the account is network agnostic, meaning it doesn't matter which entrypoint is used.
 Accounts are used for signing transactions and messages and managing the account's nonce. They can also be saved to a PEM or keystore file for future use.
 
-For example, to create a Devnet entrypoint:
 ```js
 {
   const entrypoint = new DevnetEntrypoint();
@@ -122,7 +121,7 @@ Accounts can be saved to either a PEM file or a keystore file.
 While PEM wallets are less secure for storing secret keys, they are convenient for testing purposes.
 Keystore files offer a higher level of security.
 
-### Saving the Account to a PEM File
+#### Saving the Account to a PEM File
 ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -133,7 +132,7 @@ Keystore files offer a higher level of security.
 }
 ```
 
-### Saving the Account to a Keystore File
+#### Saving the Account to a Keystore File
 ```js
 {
   const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -152,13 +151,13 @@ Keystore files offer a higher level of security.
 
 You can manage your account with a Ledger device, allowing you to sign both transactions and messages while keeping your keys secure.
 
-Note: The multiversx-sdk package does not include Ledger support by default. To enable it, install the package with Ledger dependencies:
+Note: **The multiversx-sdk package does not include Ledger support by default. To enable it, install the package with Ledger dependencies**:
 ```bash
 npm install @multiversx/sdk-hw-provider
 ```
 
-#### Creating a Ledger Account
-This can be done using the dedicated library. You can find more information [here](/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-hardware-wallet-provider)
+### Creating a Ledger Account
+This can be done using the dedicated library. You can find more information [here](/sdk-and-tools/sdk-js/sdk-js-signing-providers).
 
 When signing transactions or messages, the Ledger device will prompt you to confirm the details before proceeding.
 
@@ -168,21 +167,23 @@ The `Account` implements the `IAccount` interface, making it compatible with tra
 
 # Calling the Faucet
 
-This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet.
+This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet. For more details about hthe faucet [see this](/wallet/web-wallet/#testnet-and-devnet-faucet).
 
 - [Testnet Wallet](https://testnet-wallet.multiversx.com/).
 - [Devnet Wallet](https://devnet-wallet.multiversx.com/).
 
 ## Interacting with the network
 
-The entrypoint exposes a few methods to directly interact with the network, such as:
+The entrypoint exposes a few ways to directly interact with the network, such as:
 
-- `recall_account_nonce(address: Address) -> int;`
-- `send_transaction(transaction: Transaction) -> bytes;`
-- `send_transactions(transactions: list[Transaction]) -> tuple[int, list[bytes]];`
-- `get_transaction(tx_hash: str | bytes) -> TransactionOnNetwork;`
-- `await_transaction_completed(tx_hash: str | bytes) -> TransactionOnNetwork;`
+- `recallAccountNonce(address: Address): Promise<bigint>;`
+- `sendTransactions(transactions: Transaction[]): Promise<[number, string[]]>;`
+- `sendTransaction(transaction: Transaction): Promise<string>;`
+- `getTransaction(txHash: string): Promise<TransactionOnNetwork>;`
+- `awaitCompletedTransaction(txHash: string): Promise<TransactionOnNetwork>;`
+
 Some other methods are exposed through a so called **network provider**.
+
 - **ApiNetworkProvider**: Interacts with the API, which is a layer over the proxy. It fetches data from the network and `Elastic Search`.
 - **ProxyNetworkProvider**: Interacts directly with the proxy of an observing squad.
 
@@ -219,7 +220,7 @@ When manually instantiating a network provider, you can provide a configuration 
 
 A full list of available methods for `ApiNetworkProvider` can be found [here](https://multiversx.github.io/mx-sdk-js-core/v14/classes/ApiNetworkProvider.html).
 
-Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interface, which can be found [here](TO DO). This allows them to be used interchangeably.
+Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interface, which can be found [here](https://multiversx.github.io/mx-sdk-js-core/v14/interfaces/INetworkProvider.html). This allows them to be used interchangeably.
 
 The classes returned by the API expose the most commonly used fields directly for convenience. However, each object also contains a `raw` field that stores the original API response, allowing access to additional fields if needed.
 
@@ -350,7 +351,7 @@ Keep in mind that this method has a default timeout, which can be adjusted using
 ```
 
 ## Sending and Simulating Transactions
-To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed
+To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed.
 
 ### Sending a Transaction
 
@@ -362,13 +363,14 @@ To execute transactions, we use the network providers to broadcast them to the n
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  // this transaction is not signed
   const transaction = new Transaction({
     sender: alice,
     receiver: bob,
     gasLimit: 50000n,
     chainID: "D",
   });
+
+  // set the correct nonce and sign the transaction ...
 
   const transactionHash = await api.sendTransaction(transaction);
 }
@@ -383,7 +385,6 @@ To execute transactions, we use the network providers to broadcast them to the n
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  // this transaction is not signed
   const firstTransaction = new Transaction({
     sender: alice,
     receiver: bob,
@@ -408,6 +409,8 @@ To execute transactions, we use the network providers to broadcast them to the n
     nonce: 3,
     data: new Uint8Array(Buffer.from("hello"))
   });
+
+  // set the correct nonce and sign the transaction ...
 
   const [numOfSentTxs, hashes] = await api.sendTransactions([firstTransaction, secondTransaction, thirdTransaction]);
 }
@@ -2911,7 +2914,7 @@ Signing is done using an account's secret key. To simplify this process, we prov
 First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
 ### Signing a Transaction using an Account
-We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account section](#creating-accounts).
+We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account](#creating-accounts) section.
 ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");

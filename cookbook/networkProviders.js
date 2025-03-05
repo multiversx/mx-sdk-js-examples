@@ -1,21 +1,23 @@
 import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, Token, Transaction } from "@multiversx/sdk-core"; // md-ignore
 // # Calling the Faucet
 
-// This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet.
+// This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet. For more details about hthe faucet [see this](https://docs.multiversx.com/wallet/web-wallet/#testnet-and-devnet-faucet).
 
 // - [Testnet Wallet](https://testnet-wallet.multiversx.com/).
 // - [Devnet Wallet](https://devnet-wallet.multiversx.com/).
 
 // ## Interacting with the network
 
-// The entrypoint exposes a few methods to directly interact with the network, such as:
+// The entrypoint exposes a few ways to directly interact with the network, such as:
 
-// - `recall_account_nonce(address: Address) -> int;`
-// - `send_transaction(transaction: Transaction) -> bytes;`
-// - `send_transactions(transactions: list[Transaction]) -> tuple[int, list[bytes]];`
-// - `get_transaction(tx_hash: str | bytes) -> TransactionOnNetwork;`
-// - `await_transaction_completed(tx_hash: str | bytes) -> TransactionOnNetwork;`
+// - `recallAccountNonce(address: Address): Promise<bigint>;`
+// - `sendTransactions(transactions: Transaction[]): Promise<[number, string[]]>;`
+// - `sendTransaction(transaction: Transaction): Promise<string>;`
+// - `getTransaction(txHash: string): Promise<TransactionOnNetwork>;`
+// - `awaitCompletedTransaction(txHash: string): Promise<TransactionOnNetwork>;`
+
 // Some other methods are exposed through a so called **network provider**. 
+
 // - **ApiNetworkProvider**: Interacts with the API, which is a layer over the proxy. It fetches data from the network and `Elastic Search`.
 // - **ProxyNetworkProvider**: Interacts directly with the proxy of an observing squad.
 
@@ -52,7 +54,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 
 // A full list of available methods for `ApiNetworkProvider` can be found [here](https://multiversx.github.io/mx-sdk-js-core/v14/classes/ApiNetworkProvider.html).
 
-// Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interface, which can be found [here](TO DO). This allows them to be used interchangeably.
+// Both `ApiNetworkProvider` and `ProxyNetworkProvider` implement a common interface, which can be found [here](https://multiversx.github.io/mx-sdk-js-core/v14/interfaces/INetworkProvider.html). This allows them to be used interchangeably.
 
 // The classes returned by the API expose the most commonly used fields directly for convenience. However, each object also contains a `raw` field that stores the original API response, allowing access to additional fields if needed.
 
@@ -183,7 +185,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // ```
 
 // ## Sending and Simulating Transactions
-// To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed
+// To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed.
 
 // ### Sending a Transaction
 
@@ -195,13 +197,14 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  // this transaction is not signed // md-as-comment
   const transaction = new Transaction({
     sender: alice,
     receiver: bob,
     gasLimit: 50000n,
     chainID: "D",
   });
+
+  // set the correct nonce and sign the transaction ...
 
   const transactionHash = await api.sendTransaction(transaction);
 }
@@ -216,7 +219,6 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
   const alice = Address.newFromBech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
   const bob = Address.newFromBech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
 
-  // this transaction is not signed // md-as-comment
   const firstTransaction = new Transaction({
     sender: alice,
     receiver: bob,
@@ -241,6 +243,8 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
     nonce: 3,
     data: new Uint8Array(Buffer.from("hello"))
   });
+
+  // set the correct nonce and sign the transaction ...
 
   const [numOfSentTxs, hashes] = await api.sendTransactions([firstTransaction, secondTransaction, thirdTransaction]);
 }
