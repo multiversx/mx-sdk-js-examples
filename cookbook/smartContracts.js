@@ -2,9 +2,9 @@ import { AbiRegistry, Account, Address, AddressComputer, BigUIntValue, DevnetEnt
 import axios from "axios"; // md-ignore
 import { promises } from "fs"; // md-ignore
 import path from 'path'; // md-ignore
-// ## Smart Contracts
+// ### Smart Contracts
 
-// ### Contract ABIs
+// #### Contract ABIs
 
 // A contract's ABI (Application Binary Interface) describes the endpoints, data structures, and events that the contract exposes. 
 // While interactions with the contract are possible without the ABI, they are much easier to implement when the definitions are available.
@@ -71,12 +71,12 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ## Smart Contract deployments
+// ### Smart Contract deployments
 // For creating smart contract deployment transactions, we have two options: a controller and a factory. Both function similarly to the ones used for token transfers.
 // When creating transactions that interact with smart contracts, it's recommended to provide the ABI file to the controller or factory if possible. 
 // This allows arguments to be passed as native Javascript values. If the ABI is not available, but we know the expected data types, we can pass arguments as typed values (e.g., `BigUIntValue`, `ListValue`, `StructValue`, etc.) or as raw bytes.
 
-// ### Deploying a Smart Contract Using the Controller
+// #### Deploying a Smart Contract Using the Controller
 
 // ```js
 {
@@ -116,7 +116,7 @@ import path from 'path'; // md-ignore
 
 // md-insert:mixedTypedValuesAndNativeValues
 
-// ### Parsing contract deployment transactions
+// #### Parsing contract deployment transactions
 
 // ```js
 {
@@ -139,7 +139,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Computing the contract address
+// #### Computing the contract address
 
 // Even before broadcasting, at the moment you know the sender's address and the nonce for your deployment transaction, you can (deterministically) compute the (upcoming) address of the smart contract:
 
@@ -155,7 +155,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Deploying a Smart Contract using the factory
+// #### Deploying a Smart Contract using the factory
 // After the transaction is created the nonce needs to be properly set and the transaction should be signed before broadcasting it.
 
 // ```js
@@ -207,11 +207,11 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ## Smart Contract calls
+// ### Smart Contract calls
 
 // In this section we'll see how we can call an endpoint of our previously deployed smart contract using both approaches with the `controller` and the `factory`.
 
-// ### Calling a smart contract using the controller
+// #### Calling a smart contract using the controller
 
 // ```js
 {
@@ -251,7 +251,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Parsing smart contract call transactions
+// #### Parsing smart contract call transactions
 // In our case, calling the add endpoint does not return anything, but similar to the example above, we could parse this transaction to get the output values of a smart contract call.
 
 // ```js
@@ -262,7 +262,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Calling a smart contract and sending tokens (transfer & execute)
+// #### Calling a smart contract and sending tokens (transfer & execute)
 // Additionally, if an endpoint requires a payment when called, we can send tokens to the contract while creating a smart contract call transaction. 
 // Both EGLD and ESDT tokens or a combination of both can be sent. This functionality is supported by both the controller and the factory.
 
@@ -315,7 +315,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Calling a smart contract using the factory
+// #### Calling a smart contract using the factory
 // Let's create the same smart contract call transaction, but using the `factory`.
 
 // ```js
@@ -369,7 +369,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Parsing transaction outcome
+// #### Parsing transaction outcome
 // As said before, the `add` endpoint we called does not return anything, but we could parse the outcome of smart contract call transactions, as follows:
 
 // ```js
@@ -383,7 +383,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Decoding transaction events
+// #### Decoding transaction events
 // You might be interested into decoding events emitted by a contract. You can do so by using the `TransactionEventsParser`.
 
 // Suppose we'd like to decode a `startPerformAction` event emitted by the [multisig](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract.
@@ -402,7 +402,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Decoding transaction events
+// #### Decoding transaction events
 // Whenever needed, the contract ABI can be used for manually encoding or decoding custom types.
 
 // Let's encode a struct called EsdtTokenPayment (of [multisig](https://github.com/multiversx/mx-contracts-rs/tree/main/contracts/multisig) contract) into binary data.
@@ -436,7 +436,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ## Smart Contract queries
+// ### Smart Contract queries
 // When querying a smart contract, a **view function** is called. A view function does not modify the state of the contract, so we do not need to send a transaction.
 // To perform this query, we use the **SmartContractController**. While we can use the contract's ABI file to encode the query arguments, we can also use it to parse the result.
 // In this example, we will query the **adder smart contract** by calling its `getSum` endpoint.
@@ -481,11 +481,11 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ## Upgrading a smart contract
+// ### Upgrading a smart contract
 // Contract upgrade transactions are similar to deployment transactions (see above) because they also require contract bytecode. 
 // However, in this case, the contract address is already known. Like deploying a smart contract, we can upgrade a smart contract using either the **controller** or the **factory**.
 
-// ### Uprgrading a smart contract using the controller
+// #### Uprgrading a smart contract using the controller
 // ```js
 {
   // prepare the account

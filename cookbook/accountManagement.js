@@ -2,7 +2,7 @@
 import { Account, Address, DevnetEntrypoint } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
 
-// ## Account management
+// ### Account management
 
 // The account management controller and factory allow us to create transactions for managing accounts, such as:
 // - Guarding and unguarding accounts
@@ -11,7 +11,7 @@ import path from 'path'; // md-ignore
 // To learn more about Guardians, please refer to the [official documentation](https://docs.multiversx.com/developers/built-in-functions/#setguardian).
 // A guardian can also be set using the WebWallet, which leverages our hosted `Trusted Co-Signer Service`. Follow [this guide](https://docs.multiversx.com/wallet/web-wallet/#guardian) for step-by-step instructions on guarding an account using the wallet.
 
-// ### Guarding an account using the controller
+// #### Guarding an account using the controller
 // ```js
 {
   // create the entrypoint and the account controller // md-as-comment
@@ -42,7 +42,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Guarding an account using the factory
+// #### Guarding an account using the factory
 // ```js
 {
   // create the entrypoint and the account management factory // md-as-comment
@@ -79,7 +79,7 @@ import path from 'path'; // md-ignore
 
 //  Once a guardian is set, we must wait **20 epochs** before it can be activated. After activation, all transactions sent from the account must also be signed by the guardian.
 
-// ### Activating the guardian using the controller
+// #### Activating the guardian using the controller
 // ```js
 {
   // create the entrypoint and the account controller // md-as-comment
@@ -103,7 +103,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Activating the guardian using the factory
+// #### Activating the guardian using the factory
 // ```js
 {
   // create the entrypoint and the account factory // md-as-comment
@@ -132,7 +132,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Unguarding the account using the controller
+// #### Unguarding the account using the controller
 // ```js
 {
   // create the entrypoint and the account controller // md-as-comment
@@ -161,7 +161,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Unguarding the guardian using the factory
+// #### Unguarding the guardian using the factory
 // ```js
 {
   // create the entrypoint and the account factory // md-as-comment
@@ -192,7 +192,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Saving a key-value pair to an account using the controller
+// #### Saving a key-value pair to an account using the controller
 // You can find more information [here](https://docs.multiversx.com/developers/account-storage) regarding the account storage.
 
 // ```js
@@ -224,7 +224,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Saving a key-value pair to an account using the factory
+// #### Saving a key-value pair to an account using the factory
 // ```js
 {
   // create the entrypoint and the account factory // md-as-comment

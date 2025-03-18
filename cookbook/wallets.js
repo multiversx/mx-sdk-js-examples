@@ -1,9 +1,9 @@
 
 import { KeyPair, Mnemonic, UserPem, UserWallet } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
-// # Wallets
+// ## Wallets
 
-// ### Generating a mnemonic
+// #### Generating a mnemonic
 // Mnemonic generation is based on [bip39](https://www.npmjs.com/package/bip39) and can be achieved as follows:
 
 // ``` js
@@ -13,7 +13,7 @@ const words = mnemonic.getWords();
 console.log({ words });
 // ```
 
-// ### Saving the mnemonic to a keystore file
+// #### Saving the mnemonic to a keystore file
 // The mnemonic can be saved to a keystore file:
 
 // ``` js
@@ -28,7 +28,7 @@ console.log({ words });
 }
 // ```
 
-// ### Deriving secret keys from a mnemonic
+// #### Deriving secret keys from a mnemonic
 // Given a mnemonic, we can derive keypairs:
 
 // ``` js
@@ -43,7 +43,7 @@ console.log({ words });
 }
 // ```
 
-// ### Saving a secret key to a keystore file
+// #### Saving a secret key to a keystore file
 // The secret key can also be saved to a keystore file:
 
 // ``` js
@@ -58,7 +58,7 @@ console.log({ words });
 }
 // ```
 
-// ### Saving a secret key to a PEM file
+// #### Saving a secret key to a PEM file
 // We can save a secret key to a pem file. *This is not recommended as it is not secure, but it's very convenient for testing purposes.*
 
 // ``` js
@@ -77,7 +77,7 @@ console.log({ words });
 }
 // ```
 
-// ### Generating a KeyPair
+// #### Generating a KeyPair
 // A `KeyPair` is a wrapper over a secret key and a public key. We can create a keypair and use it for signing or verifying.
 
 // ``` js
@@ -90,7 +90,7 @@ console.log({ words });
 }
 // ```
 
-// ### Loading a wallet from keystore mnemonic file
+// #### Loading a wallet from keystore mnemonic file
 // Load a keystore that holds an encrypted mnemonic (and perform wallet derivation at the same time):
 
 // ``` js
@@ -113,7 +113,7 @@ console.log({ words });
 }
 // ```
 
-// ### Loading a wallet from a keystore secret key file
+// #### Loading a wallet from a keystore secret key file
 
 // ``` js
 {
@@ -127,7 +127,7 @@ console.log({ words });
 }
 // ```
 
-// ### Loading a wallet from a PEM file
+// #### Loading a wallet from a PEM file
 
 // ``` js
 {

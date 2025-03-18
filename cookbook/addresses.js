@@ -1,6 +1,6 @@
 import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiversx/sdk-core"; // md-ignore
 
-// # Addresses
+// ## Addresses
 
 // Create an `Address` object from a bech32-encoded string:
 
@@ -29,7 +29,7 @@ import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiv
 }
 // ```
 
-// ### Create an address from a raw public key
+// #### Create an address from a raw public key
 
 // ``` js
 {
@@ -38,7 +38,7 @@ import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiv
 }
 // ```
 
-// ### Using an AddressFactory to create addresses
+// #### Using an AddressFactory to create addresses
 // AddressFactory allows creating addresses with a custom HRP, ensuring consistency across your application.
 
 // ``` js
@@ -51,7 +51,7 @@ import { Address, AddressComputer, AddressFactory, LibraryConfig } from "@multiv
 }
 // ```
 
-// ### Getting the shard of an address
+// #### Getting the shard of an address
 // ``` js
 
 const addressComputer = new AddressComputer();
@@ -65,7 +65,7 @@ const contractAddress = Address.newFromBech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0
 console.log("Is contract address:", contractAddress.isSmartContract());
 // ```
 
-// ## Changing the default hrp
+// ### Changing the default hrp
 // The **LibraryConfig** class manages the default **HRP** (human-readable part) for addresses, which is set to `"erd"` by default. 
 // You can change the HRP when creating an address or modify it globally in **LibraryConfig**, affecting all newly created addresses.
 // ``` js

@@ -1,12 +1,12 @@
 
 import { Account, Address, Message, MessageComputer, Transaction, TransactionComputer, UserSecretKey } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
-// # Signing objects
+// ## Signing objects
 
 // Signing is done using an account's secret key. To simplify this process, we provide wrappers like [Account](#creating-accounts), which streamline signing operations. 
 // First, we'll explore how to sign using an Account, followed by signing directly with a secret key.
 
-// ### Signing a Transaction using an Account
+// #### Signing a Transaction using an Account
 // We are going to assume we have an account at this point. If you don't, feel free to check out the [creating an account](#creating-accounts) section.
 // ```js
 {
@@ -26,7 +26,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Signing a Transaction using a SecretKey
+// #### Signing a Transaction using a SecretKey
 // ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
@@ -53,7 +53,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Signing a Transaction by hash
+// #### Signing a Transaction by hash
 // ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -83,7 +83,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Signing a Message using an Account:
+// #### Signing a Message using an Account:
 // ```js
 {
     const filePath = path.join("src", "testdata", "testwallets", "alice.pem");
@@ -98,7 +98,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Signing a Message using an SecretKey:
+// #### Signing a Message using an SecretKey:
 // ```js
 {
     const secretKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9";
