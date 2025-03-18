@@ -1,7 +1,7 @@
 
 import { Account, DevnetEntrypoint, Token, TokenTransfer, TransactionsFactoryConfig, TransfersController, TransferTransactionsFactory } from '@multiversx/sdk-core'; // md-ignore
 import path from 'path'; // md-ignore
-// # Creating transactions
+// ## Creating transactions
 
 // In this section, we’ll explore how to create different types of transactions. To create transactions, we can use either controllers or factories. 
 // Controllers are ideal for quick scripts or network interactions, while factories provide a more granular and lower-level approach, typically required for DApps.
@@ -10,7 +10,7 @@ import path from 'path'; // md-ignore
 // Controllers also include extra functionality, such as waiting for transaction completion and parsing transactions. 
 // The same functionality can be achieved for transactions built using factories, and we’ll see how in the sections below. In the next section, we’ll learn how to create transactions using both methods.
 
-// ## Instantiating Controllers and Factories
+// ### Instantiating Controllers and Factories
 // There are two ways to create controllers and factories:
 // 1. Get them from the entrypoint.
 // 2. Manually instantiate them.
@@ -31,9 +31,9 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ## Token transfers
+// ### Token transfers
 // We can send both native tokens (EGLD) and ESDT tokens using either the controller or the factory.
-// ### Native Token Transfers Using the Controller
+// #### Native Token Transfers Using the Controller
 // When using the controller, the transaction will be signed because we’ll be working with an Account.
 
 // ```js
@@ -63,7 +63,7 @@ import path from 'path'; // md-ignore
 
 // If you know you’ll only be sending native tokens, you can create the transaction using the `createTransactionForNativeTokenTransfer` method.
 
-// ### Native Token Transfers Using the Factory
+// #### Native Token Transfers Using the Factory
 // When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. 
 // You will need to handle these aspects after the transaction is created.
 
@@ -97,7 +97,7 @@ import path from 'path'; // md-ignore
 
 // If you know you’ll only be sending native tokens, you can create the transaction using the `createTransactionForNativeTokenTransfer` method.
 
-// ### Custom token transfers using the controller
+// #### Custom token transfers using the controller
 
 // ```js
 {
@@ -131,7 +131,7 @@ import path from 'path'; // md-ignore
 
 // If you know you'll only send ESDT tokens, the same transaction can be created using createTransactionForEsdtTokenTransfer.
 
-// ### Custom token transfers using the factory
+// #### Custom token transfers using the factory
 // When using the factory, only the sender's address is required. As a result, the transaction won’t be signed, and the nonce field won’t be set correctly. These aspects should be handled after the transaction is created.
 
 // ```js
@@ -172,7 +172,7 @@ import path from 'path'; // md-ignore
 
 // If you know you'll only send ESDT tokens, the same transaction can be created using createTransactionForEsdtTokenTransfer.
 
-// ### Sending native and custom tokens
+// #### Sending native and custom tokens
 // Both native and custom tokens can now be sent. If a `nativeAmount` is provided along with `tokenTransfers`, the native token will be included in the `MultiESDTNFTTransfer` built-in function call.
 // We can send both types of tokens using either the `controller` or the `factory`, but for simplicity, we’ll use the controller in this example.
 

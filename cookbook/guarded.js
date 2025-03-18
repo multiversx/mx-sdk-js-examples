@@ -1,6 +1,6 @@
 import { Account, DevnetEntrypoint } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
-// ## Guarded transactions
+// ### Guarded transactions
 // Similar to relayers, transactions also have two additional fields:
 
 // - guardian
@@ -12,7 +12,7 @@ import path from 'path'; // md-ignore
 
 // Let’s issue a token using a guarded account:
 
-// ### Creating guarded transactions using controllers
+// #### Creating guarded transactions using controllers
 // We can create guarded transactions using any of the available controllers. 
 
 // Each controller method includes a guardian argument, which must be set if we want to create a guarded transaction.
@@ -60,7 +60,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Creating guarded transactions using factories
+// #### Creating guarded transactions using factories
 // Unlike controllers, `transaction factories` do not have a `guardian` argument. Instead, the **guardian must be set after creating the transaction**.
 // This approach is beneficial because the transaction is **not signed by the sender at the time of creation**, allowing flexibility in setting the guardian before signing.
 

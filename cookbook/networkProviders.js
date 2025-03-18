@@ -1,12 +1,12 @@
 import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, Token, Transaction } from "@multiversx/sdk-core"; // md-ignore
-// # Calling the Faucet
+// ## Calling the Faucet
 
-// This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet. For more details about hthe faucet [see this](https://docs.multiversx.com/wallet/web-wallet/#testnet-and-devnet-faucet).
+// This functionality is not yet available through the entrypoint, but we recommend using the faucet available within the Web Wallet. For more details about the faucet [see this](https://docs.multiversx.com/wallet/web-wallet/#testnet-and-devnet-faucet).
 
 // - [Testnet Wallet](https://testnet-wallet.multiversx.com/).
 // - [Devnet Wallet](https://devnet-wallet.multiversx.com/).
 
-// ## Interacting with the network
+// ### Interacting with the network
 
 // The entrypoint exposes a few ways to directly interact with the network, such as:
 
@@ -30,7 +30,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Creating a network provider
+// ### Creating a network provider
 // When manually instantiating a network provider, you can provide a configuration to specify the client name and set custom request options.
 
 // ```js
@@ -59,9 +59,9 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 // The classes returned by the API expose the most commonly used fields directly for convenience. However, each object also contains a `raw` field that stores the original API response, allowing access to additional fields if needed.
 
 
-// # Fetching data from the network
+// ## Fetching data from the network
 
-// ## Fetching the network config
+// ### Fetching the network config
 
 // ```js
 {
@@ -72,7 +72,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching the network status
+// ### Fetching the network status
 
 // ```js
 {
@@ -84,12 +84,12 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching a Block from the Network
+// ### Fetching a Block from the Network
 // To fetch a block, we first instantiate the required arguments and use its hash. The API only supports fetching blocks by hash, whereas the **PROXY** allows fetching blocks by either hash or nonce.
 
 // When using the **PROXY**, keep in mind that the shard must also be specified in the arguments.
 
-// ### Fetching a block using the **API**
+// #### Fetching a block using the **API**
 // ```js
 {
   const api = new ApiNetworkProvider("https://devnet-api.multiversx.com");
@@ -107,7 +107,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ### Fetching a block using the **PROXY**
+// #### Fetching a block using the **PROXY**
 
 // When using the proxy, we have to provide the shard, as well.
 // ```js
@@ -128,7 +128,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching an Account
+// ### Fetching an Account
 // To fetch an account, we need its address. Once we have the address, we create an `Address` object and pass it as an argument to the method.
 
 // ```js
@@ -140,7 +140,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching an Account's Storage
+// ### Fetching an Account's Storage
 // We can also fetch an account's storage, allowing us to retrieve all key-value pairs saved for that account.
 
 // ```js
@@ -163,7 +163,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Waiting for an Account to Meet a Condition
+// ### Waiting for an Account to Meet a Condition
 // There are times when we need to wait for a specific condition to be met before proceeding with an action. 
 // For example, let's say we want to send 7 EGLD from Alice to Bob, but this can only happen once Alice's balance reaches at least 7 EGLD. 
 // This approach is useful in scenarios where you're waiting for external funds to be sent to Alice, enabling her to transfer the required amount to another recipient.
@@ -184,10 +184,10 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Sending and Simulating Transactions
+// ### Sending and Simulating Transactions
 // To execute transactions, we use the network providers to broadcast them to the network. Keep in mind that for transactions to be processed, they must be signed.
 
-// ### Sending a Transaction
+// #### Sending a Transaction
 
 // ```js
 {
@@ -210,7 +210,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ### Sending multiple transactions
+// #### Sending multiple transactions
 // ```js
 {
   const entrypoint = new DevnetEntrypoint();
@@ -250,7 +250,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ### Simulating transactions
+// #### Simulating transactions
 // A transaction can be simulated before being sent for processing by the network. This is primarily used for smart contract calls, allowing you to preview the results produced by the smart contract.
 
 // ```js
@@ -273,7 +273,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ### Estimating the gas cost of a transaction
+// #### Estimating the gas cost of a transaction
 // Before sending a transaction to the network for processing, you can retrieve the estimated gas limit required for the transaction to be executed.
 
 // ```js
@@ -299,7 +299,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Waiting for transaction completion
+// ### Waiting for transaction completion
 // After sending a transaction, you may want to wait until it is processed before proceeding with another action. Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 // ```js
@@ -312,7 +312,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Waiting for a Transaction to Satisfy a Condition
+// ### Waiting for a Transaction to Satisfy a Condition
 // Similar to accounts, we can wait until a transaction meets a specific condition.
 
 // ```js
@@ -327,7 +327,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Waiting for transaction completion
+// ### Waiting for transaction completion
 // After sending a transaction, you may want to wait until it is processed before proceeding with another action. Keep in mind that this method has a default timeout, which can be adjusted using the `AwaitingOptions` class.
 
 // ```js
@@ -340,7 +340,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching Transactions from the Network
+// ### Fetching Transactions from the Network
 // After sending a transaction, we can fetch it from the network using the transaction hash, which we receive after broadcasting the transaction.
 
 // ```js
@@ -353,7 +353,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching a token from an account
+// ### Fetching a token from an account
 // We can fetch a specific token (ESDT, MetaESDT, SFT, NFT) from an account by providing the account's address and the token identifier.
 
 // ```js
@@ -371,7 +371,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching all fungible tokens of an account
+// ### Fetching all fungible tokens of an account
 // Fetches all fungible tokens held by an account. Note that this method does not handle pagination, but it can be achieved using `doGetGeneric`.
 
 // ```js
@@ -384,7 +384,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching all non-fungible tokens of an account
+// ### Fetching all non-fungible tokens of an account
 // Fetches all non-fungible tokens held by an account. Note that this method does not handle pagination, but it can be achieved using `doGetGeneric`.
 
 // ```js
@@ -397,7 +397,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Fetching token metadata
+// ### Fetching token metadata
 // If we want to fetch the metadata of a token (e.g., owner, decimals, etc.), we can use the following methods:
 
 // ```js
@@ -413,7 +413,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Querying Smart Contracts
+// ### Querying Smart Contracts
 // Smart contract queries, or view functions, are endpoints that only read data from the contract. To send a query to the observer nodes, we can proceed as follows:
 
 // ```js
@@ -430,7 +430,7 @@ import { Address, ApiNetworkProvider, DevnetEntrypoint, ProxyNetworkProvider, To
 }
 // ```
 
-// ## Custom Api/Proxy calls
+// ### Custom Api/Proxy calls
 // The methods exposed by the `ApiNetworkProvider` or `ProxyNetworkProvider` are the most common and widely used. However, there may be times when custom API calls are needed. For these cases, we’ve created generic methods for both GET and POST requests.
 // Let’s assume we want to retrieve all the transactions sent by Alice in which the `delegate` function was called.
 

@@ -1,9 +1,9 @@
 import { DevnetEntrypoint } from "@multiversx/sdk-core"; // md-ignore
-// # Overview
+// ## Overview
 
 // This guide walks you through handling common tasks using the MultiversX Javascript SDK (v14, latest stable version).
 
-// # Creating an Entrypoint
+// ## Creating an Entrypoint
 
 // An Entrypoint represents a network client that simplifies access to the most common operations. 
 // There is a dedicated entrypoint for each network: `MainnetEntrypoint`,  `DevnetEntrypoint`, `TestnetEntrypoint`, `LocalnetEntrypoint`.

@@ -1,6 +1,6 @@
 import { Account, Address, DevnetEntrypoint, TokenManagementTransactionsOutcomeParser } from "@multiversx/sdk-core"; // md-ignore
 import path from 'path'; // md-ignore
-// ## Token management
+// ### Token management
 
 // In this section, we're going to create transactions to issue fungible tokens, issue semi-fungible tokens, create NFTs, set token roles, but also parse these transactions to extract their outcome (e.g. get the token identifier of the newly issued token).
 
@@ -10,7 +10,7 @@ import path from 'path'; // md-ignore
 
 // For scripts or quick network interactions, we recommend using the controller. However, for a more granular approach (e.g., DApps), the factory is the better choice.
 
-// ### Issuing fungible tokens using the controller
+// #### Issuing fungible tokens using the controller
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -52,7 +52,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Issuing fungible tokens using the factory
+// #### Issuing fungible tokens using the factory
 // ```js
 {
   // create the entrypoint and the token management transactions factory // md-as-comment
@@ -100,7 +100,7 @@ import path from 'path'; // md-ignore
 // ```
 
 
-// ### Setting special roles for fungible tokens using the controller
+// #### Setting special roles for fungible tokens using the controller
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -139,7 +139,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Setting special roles for fungible tokens using the factory
+// #### Setting special roles for fungible tokens using the factory
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -183,7 +183,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Issuing semi-fungible tokens using the controller
+// #### Issuing semi-fungible tokens using the controller
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -223,7 +223,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Issuing semi-fungible tokens using the factory
+// #### Issuing semi-fungible tokens using the factory
 // ```js
 {
   // create the entrypoint and the token management controller // md-as-comment
@@ -269,7 +269,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Issuing NFT collection & creating NFTs using the controller
+// #### Issuing NFT collection & creating NFTs using the controller
 
 // ```js
 {
@@ -335,7 +335,7 @@ import path from 'path'; // md-ignore
 }
 // ```
 
-// ### Issuing NFT collection & creating NFTs using the factory
+// #### Issuing NFT collection & creating NFTs using the factory
 // ```js
 {
   // create the entrypoint and the token management transdactions factory // md-as-comment
@@ -400,7 +400,7 @@ import path from 'path'; // md-ignore
   // sending the transaction // md-as-comment
   txHash = await entrypoint.sendTransaction(transaction);
 
-  // ## wait for transaction to execute, extract the token identifier // md-as-comment
+  // ### wait for transaction to execute, extract the token identifier // md-as-comment
   transactionOnNetwork = await entrypoint.awaitCompletedTransaction(txHash);
 
   outcome = parser.parseIssueNonFungible(transactionOnNetwork);
