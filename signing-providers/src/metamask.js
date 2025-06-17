@@ -1,17 +1,9 @@
-import {
-  Address,
-  Message,
-  Transaction,
-  TransactionPayload,
-} from "@multiversx/sdk-core";
-import { CHAIN_ID, METAMASK_SNAP_WALLET_ADDRESS } from "./config.devnet";
+import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { IframeProvider } from "@multiversx/sdk-web-wallet-iframe-provider/out";
 import { IframeLoginTypes } from "@multiversx/sdk-web-wallet-iframe-provider/out/constants";
-import {
-  createNativeAuthInitialPart,
-  packNativeAuthToken,
-  verifyNativeAuthToken,
-} from "./auth";
+
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { CHAIN_ID, METAMASK_SNAP_WALLET_ADDRESS } from "./config.devnet";
 import { displayOutcome } from "./helpers";
 
 const callbackUrl = window.location.href;
@@ -50,11 +42,7 @@ export class Metamask {
 
     const address = this._provider.account.address;
     const signature = this._provider.account.signature;
-    const nativeAuthToken = packNativeAuthToken(
-      address,
-      nativeAuthInitialPart,
-      signature
-    );
+    const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
     this._address = address;
 
     verifyNativeAuthToken(nativeAuthToken);
@@ -73,9 +61,7 @@ export class Metamask {
       nonce: 42,
       value: "1",
       sender: new Address(this._address),
-      receiver: new Address(
-        "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
-      ),
+      receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
       gasPrice: 1000000000,
       gasLimit: 50000,
       data: new TransactionPayload(),
@@ -96,9 +82,7 @@ export class Metamask {
       nonce: 42,
       value: "1",
       sender: new Address(sender),
-      receiver: new Address(
-        "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
-      ),
+      receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
       gasPrice: 1000000000,
       gasLimit: 150000,
       data: new TransactionPayload("hello once"),
@@ -110,9 +94,7 @@ export class Metamask {
       nonce: 43,
       value: "100000000",
       sender: new Address(sender),
-      receiver: new Address(
-        "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
-      ),
+      receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
       gasPrice: 1000000000,
       gasLimit: 150000,
       data: new TransactionPayload("hello twice"),
@@ -120,17 +102,14 @@ export class Metamask {
       version: 1,
     });
 
-    const response = await this._provider.signTransactions(
-      [firstTransaction, secondTransaction],
-      {
-        callbackUrl: encodeURIComponent(callbackUrl),
-      }
-    );
+    const response = await this._provider.signTransactions([firstTransaction, secondTransaction], {
+      callbackUrl: encodeURIComponent(callbackUrl),
+    });
     console.log("First transaction, upon signing:", firstTransaction);
     console.log("Second transaction, upon signing:", secondTransaction);
     console.log(
       "Response:",
-      response.map((r) => r.toPlainObject())
+      response.map((r) => r.toPlainObject()),
     );
 
     alert(JSON.stringify(response, null, 4));
@@ -148,7 +127,7 @@ export class Metamask {
 
     displayOutcome(
       "Message signed. Signature: ",
-      Buffer.from(signedMessage?.signature).toString("hex")
+      Buffer.from(signedMessage?.signature).toString("hex"),
     );
   }
 }

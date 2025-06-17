@@ -1,16 +1,8 @@
-import {
-  Address,
-  Message,
-  Transaction,
-  TransactionPayload,
-} from "@multiversx/sdk-core";
-import { CHAIN_ID, WALLET_PROVIDER_URL} from "./config";
+import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
-import {
-  createNativeAuthInitialPart,
-  packNativeAuthToken,
-  verifyNativeAuthToken,
-} from "./auth";
+
+import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
+import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 import { displayOutcome } from "./helpers";
 
 const walletAddress = WALLET_PROVIDER_URL;
@@ -24,8 +16,7 @@ export class CrossWindowWallet {
 
   async init() {
     await CrossWindowProvider.getInstance().init();
-    this._provider =
-      CrossWindowProvider.getInstance().setWalletUrl(walletAddress);
+    this._provider = CrossWindowProvider.getInstance().setWalletUrl(walletAddress);
   }
 
   async login() {
@@ -46,11 +37,7 @@ export class CrossWindowWallet {
 
     const address = this._provider.account.address;
     const signature = this._provider.account.signature;
-    const nativeAuthToken = packNativeAuthToken(
-      address,
-      nativeAuthInitialPart,
-      signature
-    );
+    const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature);
     this._address = address;
 
     verifyNativeAuthToken(nativeAuthToken);
@@ -69,9 +56,7 @@ export class CrossWindowWallet {
       nonce: 42,
       value: "1",
       sender: new Address(this._address),
-      receiver: new Address(
-        "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
-      ),
+      receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
       gasPrice: 1000000000,
       gasLimit: 50000,
       data: new TransactionPayload(),
@@ -92,9 +77,7 @@ export class CrossWindowWallet {
       nonce: 42,
       value: "1",
       sender: new Address(sender),
-      receiver: new Address(
-        "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
-      ),
+      receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
       gasPrice: 1000000000,
       gasLimit: 50000,
       data: new TransactionPayload("hello once"),
@@ -106,9 +89,7 @@ export class CrossWindowWallet {
       nonce: 43,
       value: "100000000",
       sender: new Address(sender),
-      receiver: new Address(
-        "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
-      ),
+      receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
       gasPrice: 1000000000,
       gasLimit: 50000,
       data: new TransactionPayload("hello twice"),
@@ -116,17 +97,14 @@ export class CrossWindowWallet {
       version: 1,
     });
 
-    const response = await this._provider.signTransactions(
-      [firstTransaction, secondTransaction],
-      {
-        callbackUrl: encodeURIComponent(callbackUrl),
-      }
-    );
+    const response = await this._provider.signTransactions([firstTransaction, secondTransaction], {
+      callbackUrl: encodeURIComponent(callbackUrl),
+    });
     console.log("First transaction, upon signing:", firstTransaction);
     console.log("Second transaction, upon signing:", secondTransaction);
     console.log(
       "Response:",
-      response.map((r) => r.toPlainObject())
+      response.map((r) => r.toPlainObject()),
     );
 
     alert(JSON.stringify(response, null, 4));
@@ -137,15 +115,15 @@ export class CrossWindowWallet {
     const address = this._address;
 
     const message = new Message({
-        address: new Address(address),
-        data: Buffer.from("hello"),
+      address: new Address(address),
+      data: Buffer.from("hello"),
     });
 
     const signedMessage = await this._provider.signMessage(message);
 
     displayOutcome(
-        "Message signed. Signature: ",
-        Buffer.from(signedMessage?.signature).toString("hex")
+      "Message signed. Signature: ",
+      Buffer.from(signedMessage?.signature).toString("hex"),
     );
   }
 }
