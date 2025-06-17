@@ -4,7 +4,7 @@ import {
   Transaction,
   TransactionPayload,
 } from "@multiversx/sdk-core";
-import { CHAIN_ID } from "./config";
+import { CHAIN_ID, WALLET_PROVIDER_URL} from "./config";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import {
   createNativeAuthInitialPart,
@@ -13,7 +13,7 @@ import {
 } from "./auth";
 import { displayOutcome } from "./helpers";
 
-const walletAddress = "https://testnet-wallet.multiversx.com";
+const walletAddress = WALLET_PROVIDER_URL;
 const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
