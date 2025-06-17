@@ -1,4 +1,4 @@
-export {
+import {
     WindowProviderRequestEnums,
     WindowProviderResponseEnums,
 } from "@multiversx/sdk-web-wallet-cross-window-provider/out/enums";
@@ -8,11 +8,10 @@ function getEventOrigin(event) {
     return event.origin || event.originalEvent.origin;
 }
 
-export class IframeWallet { 
-    _handshakeEstablished = false;
-    _isIframe = window.self !== window.top;
-
+export class IframeWallet {
     constructor() {
+        this._handshakeEstablished = false;
+        this._isIframe = window.self !== window.top;
         this.provider = ExtensionProvider.getInstance();
         window.addEventListener("message", this.messageListener);
         window.addEventListener("beforeunload", this.closeHandshake);
@@ -27,8 +26,10 @@ export class IframeWallet {
             type: WindowProviderResponseEnums.handshakeResponse,
             data: "",
         });
+
         await this.provider.init();
         const account = await this.provider.login();
+
         this.replyToDapp({
             type: WindowProviderResponseEnums.loginResponse,
             data: {
@@ -62,26 +63,26 @@ export class IframeWallet {
         return true;
     }
 
-    closeHandshake = () => {
+    closeHandshake() {
         this._handshakeEstablished = false;
         this.replyWithCancelled();
         this.replyToDapp({
             type: WindowProviderResponseEnums.handshakeResponse,
             data: "",
         });
-    };
+    }
 
-    replyWithCancelled = () => {
+    replyWithCancelled() {
         this.replyToDapp({
             type: WindowProviderResponseEnums.cancelResponse,
             data: { address: "" },
         });
-    };
+    }
 
     /**
      * @param {MessageEvent<RequestMessageType>} event
      */
-    messageListener = async (event) => {
+    async messageListener(event) {
         const callbackUrl = getEventOrigin(event);
         const isFromSelf = callbackUrl === window.location.origin;
 
@@ -92,6 +93,9 @@ export class IframeWallet {
         }
 
         const { type, payload } = event.data;
+
+        console.log("type", type);
+        console.log("payload", payload);
 
         const isHandshakeEstablished =
             type === WindowProviderRequestEnums.finalizeHandshakeRequest ||
@@ -145,7 +149,7 @@ export class IframeWallet {
             default:
                 break;
         }
-    };
+    }
 
     /**
      * @param {Object} props

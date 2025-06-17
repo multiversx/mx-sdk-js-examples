@@ -34,10 +34,6 @@ export class IframeCommunication {
         throw new Error("Not implemented");
     }
 
-    async logout() {
-        throw new Error("Not implemented");
-    }
-
     async signMessage() {
         throw new Error("Not implemented");
     }
