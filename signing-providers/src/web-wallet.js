@@ -1,6 +1,14 @@
-import { Address, AddressComputer, ApiNetworkProvider, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import {
+    Address,
+    AddressComputer,
+    ApiNetworkProvider,
+    Message,
+    Transaction,
+    TransactionPayload,
+} from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
+
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { API_URL, CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 import { displayOutcome } from "./helpers";
@@ -8,7 +16,9 @@ import { displayOutcome } from "./helpers";
 export class WebWallet {
     constructor() {
         this.provider = new WalletProvider(WALLET_PROVIDER_URL);
-        this.apiNetworkProvider = new ApiNetworkProvider(API_URL, { clientName: "multiversx-sdk-js-examples" });
+        this.apiNetworkProvider = new ApiNetworkProvider(API_URL, {
+            clientName: "multiversx-sdk-js-examples",
+        });
         this._address = "";
     }
 
@@ -19,32 +29,35 @@ export class WebWallet {
 
     async loginWithToken() {
         const nativeAuthInitialPart = await createNativeAuthInitialPart();
-        // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage"). 
+        // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage").
         // In real-life, use the approach that best suits your application.
         localStorage.setItem("web-wallet-example:nativeAuthInitialPart", nativeAuthInitialPart);
         const callbackUrl = getCurrentLocation();
-        await this.provider.login({ callbackUrl: callbackUrl, token: nativeAuthInitialPart });
+        await this.provider.login({
+            callbackUrl: callbackUrl,
+            token: nativeAuthInitialPart,
+        });
     }
 
     async logout() {
         const callbackUrl = getCurrentLocation();
-        await this.provider.logout({ callbackUrl: callbackUrl, redirectDelayMilliseconds: 10 });
+        await this.provider.logout({
+            callbackUrl: callbackUrl,
+            redirectDelayMilliseconds: 10,
+        });
     }
 
     async showAddress() {
         const address = getUrlParams().address;
         this._address = address;
-        displayOutcome(
-            address ? "Address: " : "Error: ",
-            address ? address : "Try to login first."
-        );
+        displayOutcome(address ? "Address: " : "Error: ", address ? address : "Try to login first.");
     }
 
     async showTokenSignature() {
         const signature = getUrlParams().signature;
         displayOutcome(
             signature ? "Signature: " : "Error: ",
-            signature ? signature : "Try to login (with token) first."
+            signature ? signature : "Try to login (with token) first.",
         );
     }
 
@@ -72,7 +85,7 @@ export class WebWallet {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         await this.provider.signTransaction(transaction);
@@ -92,7 +105,7 @@ export class WebWallet {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         const secondTransaction = new Transaction({
@@ -102,7 +115,7 @@ export class WebWallet {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("world"),
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         await this.provider.signTransactions([firstTransaction, secondTransaction]);
@@ -122,7 +135,7 @@ export class WebWallet {
             // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/grace.pem
             1: "erd1r69gk66fmedhhcg24g2c5kn2f2a5k4kvpr6jfw67dn2lyydd8cfswy6ede",
             // https://github.com/multiversx/mx-sdk-testwallets/blob/main/users/carol.pem
-            2: "erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8"
+            2: "erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8",
         }[senderShard];
 
         console.log("Relayer shard:", senderShard);
@@ -140,7 +153,7 @@ export class WebWallet {
             gasPrice: 1000000000,
             gasLimit: 100000 + 1500 * data.length,
             data: data,
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         await this.provider.signTransaction(transaction);
@@ -151,7 +164,7 @@ export class WebWallet {
         alert(JSON.stringify(plainSignedTransactions, null, 4));
 
         // Now let's convert them back to sdk-js' Transaction objects.
-        // Note that the Web Wallet provider returns the data field as a plain string. 
+        // Note that the Web Wallet provider returns the data field as a plain string.
         // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
         // Therefore, we need to apply a workaround (an additional conversion).
         for (const plainTransaction of plainSignedTransactions) {
@@ -177,7 +190,7 @@ export class WebWallet {
 
     async signMessage() {
         if (!this._address) {
-            return displayOutcome("Unable to sign.", "Login & press Show address first.")
+            return displayOutcome("Unable to sign.", "Login & press Show address first.");
         }
 
         const message = new Message({
@@ -191,7 +204,7 @@ export class WebWallet {
 
     async showMessageSignature() {
         const signature = this.provider.getMessageSignatureFromWalletUrl();
-        return displayOutcome("Signature:", signature)
+        return displayOutcome("Signature:", signature);
     }
 
     async recallNonce(address) {

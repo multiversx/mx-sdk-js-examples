@@ -1,6 +1,7 @@
 import { Address, SignableMessage, Transaction, TransactionPayload } from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
+
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { CHAIN_ID, XALIAS_URL } from "./config";
 
@@ -16,16 +17,22 @@ export class XAlias {
 
     async loginWithToken() {
         const nativeAuthInitialPart = await createNativeAuthInitialPart();
-        // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage"). 
+        // This is just an example of how to store the "nativeAuthInitialPart" in-between page changes & redirects (in "localStorage").
         // In real-life, use the approach that best suits your application.
         await localStorage.setItem("x-alias-example:nativeAuthInitialPart", nativeAuthInitialPart);
         const callbackUrl = getCurrentLocation();
-        await this.provider.login({ callbackUrl: callbackUrl, token: nativeAuthInitialPart });
+        await this.provider.login({
+            callbackUrl: callbackUrl,
+            token: nativeAuthInitialPart,
+        });
     }
 
     async logout() {
         const callbackUrl = getCurrentLocation();
-        await this.provider.logout({ callbackUrl: callbackUrl, redirectDelayMilliseconds: 10 });
+        await this.provider.logout({
+            callbackUrl: callbackUrl,
+            redirectDelayMilliseconds: 10,
+        });
     }
 
     async showAddress() {
@@ -60,7 +67,7 @@ export class XAlias {
             gasPrice: 1000000000,
             gasLimit: 50000,
             data: new TransactionPayload(),
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         await this.provider.signTransaction(transaction);
@@ -80,7 +87,7 @@ export class XAlias {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("hello"),
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         const secondTransaction = new Transaction({
@@ -90,7 +97,7 @@ export class XAlias {
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: new TransactionPayload("world"),
-            chainID: CHAIN_ID
+            chainID: CHAIN_ID,
         });
 
         await this.provider.signTransactions([firstTransaction, secondTransaction]);
@@ -101,7 +108,7 @@ export class XAlias {
         alert(JSON.stringify(plainSignedTransactions, null, 4));
 
         // Now let's convert them back to sdk-js' Transaction objects.
-        // Note that the Web Wallet provider returns the data field as a plain string. 
+        // Note that the Web Wallet provider returns the data field as a plain string.
         // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
         // Therefore, we need to apply a workaround (an additional conversion).
         for (const plainTransaction of plainSignedTransactions) {

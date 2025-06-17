@@ -1,26 +1,27 @@
 //@ts-check
-'use strict';
+"use strict";
 
 //@ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+
+const webpack = require("webpack");
 
 /** @type WebpackConfig */
 const config = {
-    mode: 'none',
+    mode: "none",
     entry: {
-        app: './src/index.js'
+        app: "./src/index.js",
     },
     output: {
-        filename: '[name].js',
-        path: path.join(__dirname, './out'),
-        libraryTarget: 'umd',
+        filename: "[name].js",
+        path: path.join(__dirname, "./out"),
+        libraryTarget: "umd",
     },
     resolve: {
-        mainFields: ['browser', 'module', 'main'],
-        extensions: ['.ts', '.js'], // support ts-files and js-files
+        mainFields: ["browser", "module", "main"],
+        extensions: [".ts", ".js"], // support ts-files and js-files
         alias: {
             // provides alternate implementation for node module and source files
         },
@@ -38,20 +39,18 @@ const config = {
         },
     },
     module: {
-        rules: [
-        ],
+        rules: [],
     },
     plugins: [
         new webpack.ProvidePlugin({
-            Buffer: ['buffer', 'Buffer'],
-        })
+            Buffer: ["buffer", "Buffer"],
+        }),
     ],
-    externals: {
-    },
+    externals: {},
     performance: {
         hints: false,
     },
-    devtool: 'eval-source-map', // create a source map that points to the original source file
+    devtool: "eval-source-map", // create a source map that points to the original source file
 };
 
 module.exports = [config];

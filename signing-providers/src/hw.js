@@ -1,7 +1,15 @@
-import { Address, ApiNetworkProvider, Message, Transaction, TransactionOptions, TransactionPayload } from "@multiversx/sdk-core";
+import {
+    Address,
+    ApiNetworkProvider,
+    Message,
+    Transaction,
+    TransactionOptions,
+    TransactionPayload,
+} from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
-import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
+import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
+
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { API_URL, WALLET_PROVIDER_URL, CHAIN_ID } from "./config";
 import { displayOutcome } from "./helpers";
@@ -10,7 +18,9 @@ export class HW {
     constructor() {
         this.hwProvider = new HWProvider();
         this.walletProvider = new WalletProvider(WALLET_PROVIDER_URL);
-        this.apiNetworkProvider = new ApiNetworkProvider(API_URL, { clientName: "multiversx-sdk-js-examples" });
+        this.apiNetworkProvider = new ApiNetworkProvider(API_URL, {
+            clientName: "multiversx-sdk-js-examples",
+        });
     }
 
     async login() {
@@ -36,7 +46,7 @@ export class HW {
 
         const { address, signature } = await this.hwProvider.tokenLogin({
             addressIndex: addressIndex,
-            token: Buffer.from(nativeAuthInitialPart)
+            token: Buffer.from(nativeAuthInitialPart),
         });
 
         const nativeAuthToken = packNativeAuthToken(address, nativeAuthInitialPart, signature.toString("hex"));
@@ -58,7 +68,7 @@ export class HW {
 
         await this.hwProvider.setAddressIndex(addressIndex);
 
-        displayOutcome(`Address has been set: ${await this.hwProvider.getAddress()}.`)
+        displayOutcome(`Address has been set: ${await this.hwProvider.getAddress()}.`);
     }
 
     async signTransaction() {
@@ -78,18 +88,16 @@ export class HW {
             data: new TransactionPayload("hello"),
             chainID: CHAIN_ID,
             guardian: guardian,
-            options: transactionOptions
+            options: transactionOptions,
         });
 
         const signedTransaction = await this.hwProvider.signTransaction(transaction);
 
         if (guardian) {
-            const guardedTransactions = await this.guardTransactions([
-                signedTransaction,
-            ]);
+            const guardedTransactions = await this.guardTransactions([signedTransaction]);
             displayOutcome(
                 "Transaction signed & guarded.",
-                JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
+                JSON.stringify(guardedTransactions.map((tx) => tx.toSendable())),
             );
         } else {
             displayOutcome("Transaction signed.", signedTransaction.toSendable());
@@ -114,7 +122,7 @@ export class HW {
             data: new TransactionPayload(),
             chainID: CHAIN_ID,
             guardian: guardian,
-            options: transactionOptions
+            options: transactionOptions,
         });
 
         const secondTransaction = new Transaction({
@@ -127,22 +135,23 @@ export class HW {
             data: new TransactionPayload("hello world"),
             chainID: CHAIN_ID,
             guardian: guardian,
-            options: transactionOptions
+            options: transactionOptions,
         });
 
         const transactions = [firstTransaction, secondTransaction];
         const signedTransactions = await this.hwProvider.signTransactions(transactions);
 
         if (guardian) {
-            const guardedTransactions = await this.guardTransactions(
-                signedTransactions
-            );
+            const guardedTransactions = await this.guardTransactions(signedTransactions);
             displayOutcome(
                 "Transactions signed & guarded.",
-                JSON.stringify(guardedTransactions.map((tx) => tx.toSendable()))
+                JSON.stringify(guardedTransactions.map((tx) => tx.toSendable())),
             );
         } else {
-            displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
+            displayOutcome(
+                "Transactions signed.",
+                signedTransactions.map((transaction) => transaction.toSendable()),
+            );
         }
     }
 
@@ -156,7 +165,7 @@ export class HW {
         const signedTransactions = [];
 
         // Now let's convert them back to sdk-js' Transaction objects.
-        // Note that the Web Wallet provider returns the data field as a plain string. 
+        // Note that the Web Wallet provider returns the data field as a plain string.
         // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
         // Therefore, we need to apply a workaround (an additional conversion).
         for (const plainTransaction of plainSignedTransactions) {
@@ -166,7 +175,10 @@ export class HW {
             signedTransactions.push(transaction);
         }
 
-        displayOutcome("Transactions signed.", signedTransactions.map((transaction) => transaction.toSendable()));
+        displayOutcome(
+            "Transactions signed.",
+            signedTransactions.map((transaction) => transaction.toSendable()),
+        );
     }
 
     async signMessage() {
@@ -180,10 +192,7 @@ export class HW {
 
         const signedMessage = await this.hwProvider.signMessage(message);
 
-        displayOutcome(
-            "Message signed. Signature: ",
-            Buffer.from(signedMessage?.signature).toString("hex")
-        );
+        displayOutcome("Message signed. Signature: ", Buffer.from(signedMessage?.signature).toString("hex"));
     }
 
     async guardTransactions(transactions) {
@@ -201,9 +210,7 @@ export class HW {
         // user action so the popup is opened
         crossWindowProvider.setShouldShowConsentPopup(true);
 
-        const guardedTransactions = await crossWindowProvider.guardTransactions(
-            transactions
-        );
+        const guardedTransactions = await crossWindowProvider.guardTransactions(transactions);
 
         return guardedTransactions;
     }

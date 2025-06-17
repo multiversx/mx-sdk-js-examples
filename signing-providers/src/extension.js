@@ -47,7 +47,7 @@ export class Extension {
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: CHAIN_ID,
-            version: 1
+            version: 1,
         });
 
         await this.provider.signTransaction(transaction);
@@ -68,7 +68,7 @@ export class Extension {
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: CHAIN_ID,
-            version: 1
+            version: 1,
         });
 
         const secondTransaction = new Transaction({
@@ -80,7 +80,7 @@ export class Extension {
             gasLimit: 50000,
             data: new TransactionPayload("hello world"),
             chainID: CHAIN_ID,
-            version: 1
+            version: 1,
         });
 
         await this.provider.signTransactions([firstTransaction, secondTransaction]);
@@ -102,10 +102,6 @@ export class Extension {
 
         const signedMessage = await this.provider.signMessage(message);
 
-        displayOutcome(
-            "Message signed. Signature: ",
-            Buffer.from(signedMessage?.signature).toString("hex")
-        );
+        displayOutcome("Message signed. Signature: ", Buffer.from(signedMessage?.signature).toString("hex"));
     }
 }
-

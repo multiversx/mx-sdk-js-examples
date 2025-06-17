@@ -1,6 +1,7 @@
 import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
-import { CHAIN_ID } from "./config";
 import { WebviewProvider } from "@multiversx/sdk-webview-provider/out/WebviewProvider";
+
+import { CHAIN_ID } from "./config";
 import { displayOutcome } from "./helpers";
 
 export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
@@ -12,9 +13,9 @@ export class Webview {
         });
     }
 
-    async init(){
+    async init() {
         return await this._provider.init();
-    };
+    }
 
     async login() {
         const response = await this._provider.login();
@@ -25,14 +26,14 @@ export class Webview {
         return response;
     }
 
-    async logout(){
+    async logout() {
         const response = await this._provider.logout();
 
         console.log("Logout response:" + JSON.stringify(response));
         alert("Logout response:" + JSON.stringify(response));
 
         return response;
-    };
+    }
 
     async relogin() {
         const accessToken = await this._provider.relogin();
@@ -41,13 +42,13 @@ export class Webview {
         console.log("accessToken = " + JSON.stringify(accessToken));
 
         if (!accessToken) {
-            console.error('Unable to re-login. Missing accessToken.');
-            alert('Unable to re-login. Missing accessToken.')
+            console.error("Unable to re-login. Missing accessToken.");
+            alert("Unable to re-login. Missing accessToken.");
             return null;
         }
 
         return accessToken;
-    };
+    }
 
     async signTransaction() {
         const transaction = new Transaction({
@@ -59,7 +60,7 @@ export class Webview {
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: CHAIN_ID,
-            version: 1
+            version: 1,
         });
 
         const response = await this._provider.signTransaction(transaction);
@@ -80,7 +81,7 @@ export class Webview {
             gasLimit: 50000,
             data: new TransactionPayload(),
             chainID: CHAIN_ID,
-            version: 1
+            version: 1,
         });
 
         const response = await this._provider.signTransactions([transaction]);
@@ -101,25 +102,21 @@ export class Webview {
             address: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             data: Buffer.from("hello"),
         });
-        
+
         const signedMessage = await this._provider.signMessage(message);
 
-        displayOutcome(
-            "Message signed. Signature: ",
-            Buffer.from(signedMessage?.signature).toString("hex")
-        );
+        displayOutcome("Message signed. Signature: ", Buffer.from(signedMessage?.signature).toString("hex"));
     }
 
     async cancelAction() {
         return await this._provider.cancelAction();
-    };
+    }
 
-    async isInitialized () {
+    async isInitialized() {
         return this._provider.isInitialized();
-    };
+    }
 
-    async isConnected(){
+    async isConnected() {
         return await this._provider.isConnected();
-    };
+    }
 }
-
