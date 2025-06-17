@@ -37,7 +37,10 @@
     <script src="../out/app.js"></script>
 
     <script>
-        const iframeWallet = new IframeWallet();
+        let iframeWallet;
+        document.addEventListener("DOMContentLoaded", () => {
+            iframeWallet = new IframeWallet();
+        });
     </script>
 </body>
 
