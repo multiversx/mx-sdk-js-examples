@@ -3,7 +3,7 @@ import {
     WindowProviderResponseEnums,
     SignMessageStatusEnum,
 } from "@multiversx/sdk-web-wallet-cross-window-provider/out/enums";
-import { Address, Message } from "@multiversx/sdk-core";
+import { Address, Message, Transaction } from "@multiversx/sdk-core";
 import { ExtensionProvider } from "@multiversx/sdk-extension-provider";
 
 function getEventOrigin(event) {
@@ -16,7 +16,6 @@ export class IframeWallet {
         this._isIframe = window.self !== window.top;
         this.provider = ExtensionProvider.getInstance();
         window.addEventListener("message", this.messageListener.bind(this));
-
         window.addEventListener("beforeunload", this.closeHandshake.bind(this));
         this.replyToDapp({
             type: WindowProviderResponseEnums.handshakeResponse,
@@ -48,16 +47,6 @@ export class IframeWallet {
             type: WindowProviderResponseEnums.disconnectResponse,
             data: {},
         });
-    }
-
-    async signTransaction() {
-        console.log("IframeWallet signTransaction");
-        return true;
-    }
-
-    async loginWithToken() {
-        console.log("IframeWallet loginWithToken");
-        return true;
     }
 
     async signMessage(payload) {
@@ -133,7 +122,16 @@ export class IframeWallet {
             }
 
             case WindowProviderRequestEnums.signTransactionsRequest: {
-                console.log("signTransactionsRequest");
+                const transactions = payload.map((plainTransactionObject) =>
+                    Transaction.newFromPlainObject(plainTransactionObject),
+                );
+
+                const signedTransactions = await this.provider.signTransactions(transactions);
+
+                this.replyToDapp({
+                    type: WindowProviderResponseEnums.signTransactionsResponse,
+                    data: signedTransactions.map((transaction) => transaction.toPlainObject()),
+                });
                 break;
             }
 

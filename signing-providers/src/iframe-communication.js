@@ -1,7 +1,8 @@
 import { IframeProvider } from "@multiversx/sdk-web-wallet-iframe-provider/out";
 import { IframeLoginTypes } from "@multiversx/sdk-web-wallet-iframe-provider/out/constants";
+import { CHAIN_ID } from "./config";
 import { displayOutcome } from "./helpers";
-import { Address, Message } from "@multiversx/sdk-core";
+import { Address, Message, Transaction } from "@multiversx/sdk-core";
 
 // IMPORTANT: The iframe wallet must be served over HTTPS on different domain
 // example: http-server -c-1 -S -C ./dummy-certificate.pem -K ./dummy-certificate-key.pem --port=3000
@@ -29,11 +30,41 @@ export class IframeCommunication {
     }
 
     async logout() {
-        throw new Error("Not implemented");
+        await this.provider.logout();
+        this.address = "";
     }
 
-    async signTransaction() {
-        throw new Error("Not implemented");
+    async signTransactions() {
+        const sender = this.address;
+        const firstTransaction = new Transaction({
+            nonce: 42,
+            value: "1",
+            sender: new Address(sender),
+            receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
+            gasPrice: 1000000000,
+            gasLimit: 50000,
+            data: Buffer.from(""),
+            chainID: CHAIN_ID,
+            version: 1,
+        });
+
+        const secondTransaction = new Transaction({
+            nonce: 43,
+            value: "100000000",
+            sender: new Address(sender),
+            receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
+            gasPrice: 1000000000,
+            gasLimit: 50000,
+            data: Buffer.from("hello world"),
+            chainID: CHAIN_ID,
+            version: 1,
+        });
+
+        await this.provider.signTransactions([firstTransaction, secondTransaction]);
+        console.log("First transaction, upon signing:", firstTransaction);
+        console.log("Second transaction, upon signing:", secondTransaction);
+
+        alert(JSON.stringify([firstTransaction.toSendable(), secondTransaction.toSendable()], null, 4));
     }
 
     async signMessage() {
