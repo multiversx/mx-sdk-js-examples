@@ -1,7 +1,9 @@
 import {
     WindowProviderRequestEnums,
     WindowProviderResponseEnums,
+    SignMessageStatusEnum,
 } from "@multiversx/sdk-web-wallet-cross-window-provider/out/enums";
+import { Address, Message } from "@multiversx/sdk-core";
 import { ExtensionProvider } from "@multiversx/sdk-extension-provider";
 
 function getEventOrigin(event) {
@@ -13,8 +15,9 @@ export class IframeWallet {
         this._handshakeEstablished = false;
         this._isIframe = window.self !== window.top;
         this.provider = ExtensionProvider.getInstance();
-        window.addEventListener("message", this.messageListener);
-        window.addEventListener("beforeunload", this.closeHandshake);
+        window.addEventListener("message", this.messageListener.bind(this));
+
+        window.addEventListener("beforeunload", this.closeHandshake.bind(this));
         this.replyToDapp({
             type: WindowProviderResponseEnums.handshakeResponse,
             data: "",
@@ -22,19 +25,18 @@ export class IframeWallet {
     }
 
     async login() {
+        await this.provider.init();
         this.replyToDapp({
             type: WindowProviderResponseEnums.handshakeResponse,
             data: "",
         });
-
-        await this.provider.init();
         const account = await this.provider.login();
 
         this.replyToDapp({
             type: WindowProviderResponseEnums.loginResponse,
             data: {
                 address: account.address,
-                // signature: account.signature,
+                signature: account.signature,
             },
         });
     }
@@ -43,7 +45,7 @@ export class IframeWallet {
         await this.provider.init();
         await this.provider.logout();
         this.replyToDapp({
-            type: WindowProviderResponseEnums.logoutResponse,
+            type: WindowProviderResponseEnums.disconnectResponse,
             data: {},
         });
     }
@@ -58,9 +60,23 @@ export class IframeWallet {
         return true;
     }
 
-    async signMessage() {
-        console.log("IframeWallet signMessage");
-        return true;
+    async signMessage(payload) {
+        const address = await this.provider.getAddress();
+
+        const message = new Message({
+            address: new Address(address),
+            data: Buffer.from(payload.message),
+        });
+
+        const signedMessage = await this.provider.signMessage(message);
+
+        this.replyToDapp({
+            type: WindowProviderResponseEnums.signMessageResponse,
+            data: {
+                signature: Buffer.from(signedMessage?.signature).toString("hex"),
+                status: SignMessageStatusEnum.signed,
+            },
+        });
     }
 
     closeHandshake() {
@@ -86,16 +102,11 @@ export class IframeWallet {
         const callbackUrl = getEventOrigin(event);
         const isFromSelf = callbackUrl === window.location.origin;
 
-        console.log("messageListener", event);
-
         if (isFromSelf) {
             return;
         }
 
         const { type, payload } = event.data;
-
-        console.log("type", type);
-        console.log("payload", payload);
 
         const isHandshakeEstablished =
             type === WindowProviderRequestEnums.finalizeHandshakeRequest ||
@@ -117,7 +128,7 @@ export class IframeWallet {
             }
 
             case WindowProviderRequestEnums.signMessageRequest: {
-                console.log("signMessageRequest");
+                await this.signMessage(payload);
                 break;
             }
 
