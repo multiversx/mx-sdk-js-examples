@@ -220,7 +220,23 @@
         </div>
     </div>
 
-    <iframe id="webviewChild" src="./webviewChild.html" style="width: 100%; height: 200px;"></iframe>
+    <div class="card mt-3 mb-3">
+        <div class="card-header">
+            <div class="card-title">
+                <h3>[🖼️] Iframe Communication</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                <button class="btn btn-info" onclick="iframeCommunication.login()">Iframe Login</button>
+                <button class="btn btn-info" onclick="iframeCommunication.signTransactions()">Sign transactions</button>
+                <button class="btn btn-info" onclick="iframeCommunication.signMessage()">Sign message</button>
+                <button class="btn btn-info" onclick="iframeCommunication.logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <iframe id="webview-child" src="./webview-child.html" style="width: 100%; height: 200px;"></iframe>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -241,14 +257,15 @@
         const walletConnectV2 = new WalletConnectV2();
         const metamask = new Metamask();
         const hw = new HW();
+        const iframeCommunication = new IframeCommunication();
 
-        const webviewChild = document.getElementById('webviewChild');
+        const webviewChild = document.getElementById('webview-child');
         const targetWindow = webviewChild.contentWindow;
 
         const crossWindowWallet = new CrossWindowWallet();
 
         /**
-         * NOTE: The following event listener must be commented out in order for **crossWindowWallet** to work
+         * NOTE: The following event listener must be commented out in order for **crossWindowWallet** and **iframeCommunication** to work
          */
         window.addEventListener('message', async (e) => {
           const { type, payload } = e.data;
