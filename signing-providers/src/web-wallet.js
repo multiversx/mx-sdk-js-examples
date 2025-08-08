@@ -102,7 +102,7 @@ export class WebWallet {
       ),
       gasPrice: 1000000000,
       gasLimit: 50000,
-      data: Uint8Array.from(Buffer.from("hello world")),
+      data: Buffer.from("hello world"),
       chainID: CHAIN_ID,
     });
 
@@ -126,7 +126,7 @@ export class WebWallet {
       receiver: new Address(
         "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
       ),
-      data: Uint8Array.from(Buffer.from("hello")),
+      data: Buffer.from("hello"),
       chainID: CHAIN_ID,
     });
 
@@ -138,7 +138,7 @@ export class WebWallet {
       receiver: new Address(
         "erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
       ),
-      data: Uint8Array.from(Buffer.from("world")),
+      data: Buffer.from("world"),
       chainID: CHAIN_ID,
     });
 
