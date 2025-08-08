@@ -93,7 +93,6 @@ export class WebWallet {
 
     const senderNonce = await this.recallNonce(sender);
 
-    console.log({ senderNonce });
     const transaction = new Transaction({
       nonce: senderNonce,
       value: "1000000000000000000",

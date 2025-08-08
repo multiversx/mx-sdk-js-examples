@@ -117,14 +117,13 @@ export class CrossWindowWallet {
         callbackUrl: encodeURIComponent(callbackUrl),
       }
     );
+
+    const plainResponse = response.map((r) => r.toPlainObject());
     console.log("First transaction, upon signing:", firstTransaction);
     console.log("Second transaction, upon signing:", secondTransaction);
-    console.log(
-      "Response:",
-      response.map((r) => r.toPlainObject())
-    );
+    console.log("Response:", plainResponse);
 
-    alert(JSON.stringify(response, null, 4));
+    alert(JSON.stringify(plainResponse, null, 4));
   }
 
   async signMessage() {
