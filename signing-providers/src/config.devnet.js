@@ -2,7 +2,6 @@ import { WALLET_PROVIDER_DEVNET } from "@multiversx/sdk-web-wallet-provider";
 
 export const CHAIN_ID = "D";
 export const NETWORK_NAME = "Devnet";
-export const XALIAS_URL = "https://devnet.xalias.com";
 export const WALLET_PROVIDER_URL = WALLET_PROVIDER_DEVNET;
 export const API_URL = "https://devnet-api.multiversx.com";
 

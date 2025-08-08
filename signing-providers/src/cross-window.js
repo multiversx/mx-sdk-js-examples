@@ -1,9 +1,4 @@
-import {
-  Address,
-  Message,
-  Transaction,
-  TransactionPayload,
-} from "@multiversx/sdk-core";
+import { Address, Message, Transaction } from "@multiversx/sdk-core";
 import { CHAIN_ID } from "./config";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import {
@@ -13,7 +8,7 @@ import {
 } from "./auth";
 import { displayOutcome } from "./helpers";
 
-const walletAddress = "https://testnet-wallet.multiversx.com";
+const walletAddress = "https://devnet-wallet.multiversx.com";
 const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
@@ -74,7 +69,7 @@ export class CrossWindowWallet {
       ),
       gasPrice: 1000000000,
       gasLimit: 50000,
-      data: new TransactionPayload(),
+      data: Uint8Array.from(Buffer.from("hello world")),
       chainID: CHAIN_ID,
       version: 1,
     });
@@ -97,7 +92,7 @@ export class CrossWindowWallet {
       ),
       gasPrice: 1000000000,
       gasLimit: 50000,
-      data: new TransactionPayload("hello once"),
+      data: Uint8Array.from(Buffer.from("hello once")),
       chainID: CHAIN_ID,
       version: 1,
     });
@@ -111,7 +106,7 @@ export class CrossWindowWallet {
       ),
       gasPrice: 1000000000,
       gasLimit: 50000,
-      data: new TransactionPayload("hello twice"),
+      data: Uint8Array.from(Buffer.from("hello twice")),
       chainID: CHAIN_ID,
       version: 1,
     });
@@ -137,15 +132,15 @@ export class CrossWindowWallet {
     const address = this._address;
 
     const message = new Message({
-        address: new Address(address),
-        data: Buffer.from("hello"),
+      address: new Address(address),
+      data: Buffer.from("hello"),
     });
 
     const signedMessage = await this._provider.signMessage(message);
 
     displayOutcome(
-        "Message signed. Signature: ",
-        Buffer.from(signedMessage?.signature).toString("hex")
+      "Message signed. Signature: ",
+      Buffer.from(signedMessage?.signature).toString("hex")
     );
   }
 }
