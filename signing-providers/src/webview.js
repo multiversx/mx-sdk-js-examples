@@ -127,6 +127,6 @@ export class Webview {
   }
 
   async isConnected() {
-    return await this._provider.isConnected();
+    return this._provider.isConnected();
   }
 }
