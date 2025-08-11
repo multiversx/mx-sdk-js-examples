@@ -6,12 +6,12 @@
  * @returns {void}
  */
 export const displayOutcome = (message, outcome) => {
-  if (!outcome) {
-    console.log(message);
-    alert(message);
-    return;
-  }
+    if (!outcome) {
+        console.log(message);
+        alert(message);
+        return;
+    }
 
-  console.log(message, outcome);
-  alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
+    console.log(message, outcome);
+    alert(`${message}\n${JSON.stringify(outcome, null, 4)}`);
 };

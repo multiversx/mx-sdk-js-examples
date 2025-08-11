@@ -5,3 +5,5 @@ export * from "./wallet-connect-v2";
 export * from "./web-wallet";
 export * from "./webview";
 export * from "./cross-window";
+export * from "./iframe-communication";
+export * from "./iframe-wallet";
