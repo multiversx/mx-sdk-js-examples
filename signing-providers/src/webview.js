@@ -2,7 +2,6 @@ import { Address, Message, Transaction } from "@multiversx/sdk-core";
 import { CHAIN_ID } from "./config";
 import { WebviewProvider } from "@multiversx/sdk-webview-provider/out/WebviewProvider";
 
-import { CHAIN_ID } from "./config";
 import { displayOutcome } from "./helpers";
 
 export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
