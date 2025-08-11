@@ -141,7 +141,7 @@ export class WebWallet {
         const data = Buffer.from("hello");
 
         const transaction = new Transaction({
-            nonce: Number(senderNonce),
+            nonce: senderNonce,
             value: "10000000000000000",
             sender: Address.newFromBech32(sender),
             receiver: Address.newFromBech32("erd1testnlersh4z0wsv8kjx39me4rmnvjkwu8dsaea7ukdvvc9z396qykv7z7"),
