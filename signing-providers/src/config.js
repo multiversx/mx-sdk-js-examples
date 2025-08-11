@@ -2,7 +2,6 @@ import { WALLET_PROVIDER_TESTNET } from "@multiversx/sdk-web-wallet-provider";
 
 export const CHAIN_ID = "T";
 export const NETWORK_NAME = "Testnet";
-export const XALIAS_URL = "https://testnet.xalias.com";
 export const WALLET_PROVIDER_URL = WALLET_PROVIDER_TESTNET;
 export const API_URL = "https://testnet-api.multiversx.com";
 export const PROXY_URL = "https://testnet-gateway.multiversx.com";
