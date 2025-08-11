@@ -8,6 +8,7 @@ import {
 } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
+import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { API_URL, WALLET_PROVIDER_URL, CHAIN_ID, PROXY_URL } from "./config";
 import { displayOutcome } from "./helpers";
