@@ -1,5 +1,5 @@
 import { Address, Message, Transaction } from "@multiversx/sdk-core";
-import { CHAIN_ID } from "./config";
+import { CHAIN_ID, WALLET_URL } from "./config";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import {
   createNativeAuthInitialPart,
@@ -8,7 +8,6 @@ import {
 } from "./auth";
 import { displayOutcome } from "./helpers";
 
-const walletAddress = "https://devnet-wallet.multiversx.com";
 const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
@@ -19,8 +18,7 @@ export class CrossWindowWallet {
 
   async init() {
     await CrossWindowProvider.getInstance().init();
-    this._provider =
-      CrossWindowProvider.getInstance().setWalletUrl(walletAddress);
+    this._provider = CrossWindowProvider.getInstance().setWalletUrl(WALLET_URL);
   }
 
   async login() {

@@ -5,6 +5,7 @@ export const NETWORK_NAME = "Devnet";
 export const WALLET_PROVIDER_URL = WALLET_PROVIDER_DEVNET;
 export const API_URL = "https://devnet-api.multiversx.com";
 export const PROXY_URL = "https://devnet-gateway.multiversx.com";
+export const WALLET_URL = "https://devnet-wallet.multiversx.com";
 
 // Generate your own WalletConnect 2 ProjectId here: https://cloud.walletconnect.com/app
 export const WALLET_CONNECT_PROJECT_ID = "9b1a9564f91cb659ffe21b73d5c4e2d8";
