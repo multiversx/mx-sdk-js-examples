@@ -3,7 +3,6 @@ import { CHAIN_ID, WALLET_URL } from "./config";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 import { displayOutcome } from "./helpers";
 
 const callbackUrl = window.location.href;
