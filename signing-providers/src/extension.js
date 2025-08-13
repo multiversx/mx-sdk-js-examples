@@ -45,7 +45,7 @@ export class Extension {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -66,7 +66,7 @@ export class Extension {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -78,7 +78,7 @@ export class Extension {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload("hello world"),
+            data: Buffer.from("hello world"),
             chainID: CHAIN_ID,
             version: 1,
         });

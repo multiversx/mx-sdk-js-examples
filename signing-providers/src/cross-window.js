@@ -1,11 +1,10 @@
-import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction } from "@multiversx/sdk-core";
+import { CHAIN_ID, WALLET_URL } from "./config";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 import { displayOutcome } from "./helpers";
 
-const walletAddress = WALLET_PROVIDER_URL;
 const callbackUrl = window.location.href;
 
 export class CrossWindowWallet {
@@ -16,7 +15,7 @@ export class CrossWindowWallet {
 
     async init() {
         await CrossWindowProvider.getInstance().init();
-        this._provider = CrossWindowProvider.getInstance().setWalletUrl(walletAddress);
+        this._provider = CrossWindowProvider.getInstance().setWalletUrl(WALLET_URL);
     }
 
     async login() {
@@ -59,7 +58,7 @@ export class CrossWindowWallet {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Uint8Array.from(Buffer.from("hello world")),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -80,7 +79,7 @@ export class CrossWindowWallet {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload("hello once"),
+            data: Uint8Array.from(Buffer.from("hello once")),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -92,7 +91,7 @@ export class CrossWindowWallet {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload("hello twice"),
+            data: Uint8Array.from(Buffer.from("hello twice")),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -100,14 +99,13 @@ export class CrossWindowWallet {
         const response = await this._provider.signTransactions([firstTransaction, secondTransaction], {
             callbackUrl: encodeURIComponent(callbackUrl),
         });
+
+        const plainResponse = response.map((r) => r.toPlainObject());
         console.log("First transaction, upon signing:", firstTransaction);
         console.log("Second transaction, upon signing:", secondTransaction);
-        console.log(
-            "Response:",
-            response.map((r) => r.toPlainObject()),
-        );
+        console.log("Response:", plainResponse);
 
-        alert(JSON.stringify(response, null, 4));
+        alert(JSON.stringify(plainResponse, null, 4));
     }
 
     async signMessage() {
