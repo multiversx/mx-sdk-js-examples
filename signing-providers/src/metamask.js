@@ -64,7 +64,7 @@ export class Metamask {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -85,7 +85,7 @@ export class Metamask {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 150000,
-            data: new TransactionPayload("hello once"),
+            data: Buffer.from("hello once"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -97,7 +97,7 @@ export class Metamask {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 150000,
-            data: new TransactionPayload("hello twice"),
+            data: Buffer.from("hello twice"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -107,12 +107,11 @@ export class Metamask {
         });
         console.log("First transaction, upon signing:", firstTransaction);
         console.log("Second transaction, upon signing:", secondTransaction);
-        console.log(
-            "Response:",
-            response.map((r) => r.toPlainObject()),
-        );
 
-        alert(JSON.stringify(response, null, 4));
+        const plainResponse = response.map((r) => r.toPlainObject());
+        console.log("Response:", plainResponse);
+
+        alert(JSON.stringify(plainResponse, null, 4));
     }
 
     async signMessage() {

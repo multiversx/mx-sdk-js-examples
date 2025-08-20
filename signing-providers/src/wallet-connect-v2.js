@@ -1,7 +1,6 @@
-import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction } from "@multiversx/sdk-core";
 import { WalletConnectV2Provider } from "@multiversx/sdk-wallet-connect-provider";
 import QRCode from "qrcode";
-
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { CHAIN_ID, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from "./config";
 import { displayOutcome } from "./helpers";
@@ -88,7 +87,7 @@ export class WalletConnectV2 {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -109,7 +108,7 @@ export class WalletConnectV2 {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -121,7 +120,7 @@ export class WalletConnectV2 {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload("hello world"),
+            data: Buffer.from("hello world"),
             chainID: CHAIN_ID,
             version: 1,
         });

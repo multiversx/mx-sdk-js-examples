@@ -1,7 +1,7 @@
-import { Address, Message, Transaction, TransactionPayload } from "@multiversx/sdk-core";
+import { Address, Message, Transaction } from "@multiversx/sdk-core";
+import { CHAIN_ID } from "./config";
 import { WebviewProvider } from "@multiversx/sdk-webview-provider/out/WebviewProvider";
 
-import { CHAIN_ID } from "./config";
 import { displayOutcome } from "./helpers";
 
 export const addressOfAlice = new Address("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
@@ -58,7 +58,7 @@ export class Webview {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("world"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -79,7 +79,7 @@ export class Webview {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("world"),
             chainID: CHAIN_ID,
             version: 1,
         });
@@ -117,6 +117,6 @@ export class Webview {
     }
 
     async isConnected() {
-        return await this._provider.isConnected();
+        return this._provider.isConnected();
     }
 }

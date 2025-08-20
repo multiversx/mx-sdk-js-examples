@@ -1,14 +1,6 @@
-import {
-    Address,
-    AddressComputer,
-    ApiNetworkProvider,
-    Message,
-    Transaction,
-    TransactionPayload,
-} from "@multiversx/sdk-core";
+import { Address, AddressComputer, ApiNetworkProvider, Message, Transaction } from "@multiversx/sdk-core";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
 import qs from "qs";
-
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
 import { API_URL, CHAIN_ID, WALLET_PROVIDER_URL } from "./config";
 import { displayOutcome } from "./helpers";
@@ -77,14 +69,16 @@ export class WebWallet {
             return;
         }
 
+        const senderNonce = await this.recallNonce(sender);
+
         const transaction = new Transaction({
-            nonce: 42,
+            nonce: senderNonce,
             value: "1000000000000000000",
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello world"),
             chainID: CHAIN_ID,
         });
 
@@ -98,23 +92,25 @@ export class WebWallet {
             return;
         }
 
+        const senderNonce = await this.recallNonce(sender);
+
         const firstTransaction = new Transaction({
-            nonce: 42,
+            nonce: senderNonce,
             value: "1000000000000000000",
             gasLimit: 70000,
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
-            data: new TransactionPayload("hello"),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
         });
 
         const secondTransaction = new Transaction({
-            nonce: 43,
+            nonce: senderNonce + 1n,
             value: "3000000000000000000",
             gasLimit: 70000,
             sender: new Address(sender),
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
-            data: new TransactionPayload("world"),
+            data: Buffer.from("world"),
             chainID: CHAIN_ID,
         });
 
@@ -170,7 +166,7 @@ export class WebWallet {
         for (const plainTransaction of plainSignedTransactions) {
             const plainTransactionClone = structuredClone(plainTransaction);
             plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
-            const transaction = Transaction.fromPlainObject(plainTransactionClone);
+            const transaction = Transaction.newFromPlainObject(plainTransactionClone);
 
             console.log(transaction.toSendable());
         }
@@ -182,7 +178,7 @@ export class WebWallet {
         for (const plainTransaction of plainSignedTransactions) {
             const plainTransactionClone = structuredClone(plainTransaction);
             plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
-            const transaction = Transaction.fromPlainObject(plainTransactionClone);
+            const transaction = Transaction.newFromPlainObject(plainTransactionClone);
 
             await this.apiNetworkProvider.sendTransaction(transaction);
         }
@@ -209,7 +205,7 @@ export class WebWallet {
 
     async recallNonce(address) {
         const accountOnNetwork = await this.apiNetworkProvider.getAccount(Address.newFromBech32(address));
-        const nonce = accountOnNetwork.nonce;
+        const nonce = BigInt(accountOnNetwork.nonce);
 
         console.log(`recallNonce(), address = ${address}, nonce = ${nonce}`);
 

@@ -1,334 +1,341 @@
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Examples</title>
 
-<head>
-    <meta charset="utf-8">
-    <title>Examples</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css" rel="stylesheet" />
+    </head>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css" rel="stylesheet" />
-</head>
+    <body>
+        <div class="container mt-4">
+            <h1>Examples of using sdk-js' signing providers</h1>
 
-<body>
-    <div class="container mt-4">
-        <h1>Examples of using sdk-js' signing providers</h1>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[🌐] Web Wallet URL</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="webWallet.login()">Login</button>
-                    <button class="btn btn-info" onclick="webWallet.loginWithToken()">Login with token</button>
-                    <button class="btn btn-info" onclick="webWallet.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="webWallet.signRelayedTransaction()">Sign relayed transaction</button>
-                    <button class="btn btn-info" onclick="webWallet.signMessage()">Sign
-                        message</button>
-                    <button class="btn btn-info" onclick="webWallet.logout()">Logout</button>
-                </div>
-                <div class="mt-4">
-                    <h5>Extract data from URL (query string)</h5>
-
-                    <button class="btn btn-info" onclick="webWallet.showAddress()">Show address</button>
-                    <button class="btn btn-info" onclick="webWallet.showTokenSignature()">Show token signature</button>
-                    <button class="btn btn-info" onclick="webWallet.validateTokenSignature()">Validate token
-                        signature</button>
-                    <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">Show signed
-                        transactions</button>
-                    <button class="btn btn-info" onclick="webWallet.showMessageSignature()">Show message
-                        signature</button>
-                </div>
-                <div class="mt-4">
-                    <h5>Broadcast</h5>
-
-                    <button class="btn btn-info" onclick="webWallet.sendSignedTransactions()">Send signed transactions</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[🗂️] Web Wallet Cross-Window</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="crossWindowWallet.login()">Login</button>
-                    <button class="btn btn-info" onclick="crossWindowWallet.loginWithToken()">Login with token</button>
-                    <button class="btn btn-info" onclick="crossWindowWallet.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="crossWindowWallet.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="crossWindowWallet.signMessage()">Sign
-                        message</button>
-                    <button class="btn btn-info" onclick="crossWindowWallet.logout()">Logout</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[🦊] Metamask</h3>
-                    <p style="display: inline;"><b>NOTE:</b> use <u><b><pre style="display: inline;">localhost:8080</pre></b></u> to connect</p>                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="metamask.login()">Login</button>
-                    <button class="btn btn-info" onclick="metamask.loginWithToken()">Login with token</button>
-                    <button class="btn btn-info" onclick="metamask.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="metamask.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="metamask.signMessage()">Sign
-                        message</button>
-                    <button class="btn btn-info" onclick="metamask.logout()">Logout</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[﹫] xAlias</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="xAlias.login()">Login</button>
-                    <button class="btn btn-info" onclick="xAlias.loginWithToken()">Login with token</button>
-                    <button class="btn btn-info" onclick="xAlias.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="xAlias.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="xAlias.signMessage()">Sign
-                        message</button>
-                    <button class="btn btn-info" onclick="xAlias.logout()">Logout</button>
-                </div>
-                <div class="mt-4">
-                    <h5>Extract data from URL (query string)</h5>
-
-                    <button class="btn btn-info" onclick="xAlias.showAddress()">Show address</button>
-                    <button class="btn btn-info" onclick="xAlias.showTokenSignature()">Show token signature</button>
-                    <button class="btn btn-info" onclick="xAlias.validateTokenSignature()">Validate token
-                        signature</button>
-                    <button class="btn btn-info" onclick="xAlias.showSignedTransactions()">Show signed
-                        transactions</button>
-                    <button class="btn btn-info" onclick="xAlias.showMessageSignature()">Show message
-                        signature</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[🧩] Extension (MultiversX DeFi Wallet)</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="extension.login()">Login</button>
-                    <button class="btn btn-info" onclick="extension.loginWithToken()">Login with token</button>
-                    <button class="btn btn-info" onclick="extension.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="extension.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="extension.signMessage()">Sign message</button>
-                    <button class="btn btn-info" onclick="extension.logout()">Logout</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[📱] Wallet Connect V2 ( xPortal )</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <button class="btn btn-info" onclick="walletConnectV2.login()">Login</button>
-                    <button class="btn btn-info" onclick="walletConnectV2.loginWithToken()">Login with
-                        token</button>
-                    <button class="btn btn-info" onclick="walletConnectV2.signTransaction()">Sign transaction</button>
-                    <button class="btn btn-info" onclick="walletConnectV2.signTransactions()">Sign transactions</button>
-                    <button class="btn btn-info" onclick="walletConnectV2.signMessage()">Sign
-                        message</button>
-                    <button class="btn btn-info" onclick="walletConnectV2.logout()">Logout</button>
-                </div>
-            </div>
-            <div class="modal" id="MyWalletConnectV2Modal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Connect using xPortal on your phone</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div id="MyWalletConnectV2QRContainer"></div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>[🌐] Web Wallet URL</h3>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="card mt-3 mb-3">
-            <div class="card-header">
-                <div class="card-title">
-                    <h3>[𝍍] Hardware Wallet</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
+                <div class="card-body">
                     <div>
-                        <button class="btn btn-info" onclick="hw.displayAddresses()">Display addresses</button>
+                        <button class="btn btn-info" onclick="webWallet.login()">Login</button>
+                        <button class="btn btn-info" onclick="webWallet.loginWithToken()">Login with token</button>
+                        <button class="btn btn-info" onclick="webWallet.signTransaction()">Sign transaction</button>
+                        <button class="btn btn-info" onclick="webWallet.signTransactions()">Sign transactions</button>
+                        <button class="btn btn-info" onclick="webWallet.signRelayedTransaction()">
+                            Sign relayed transaction
+                        </button>
+                        <button class="btn btn-info" onclick="webWallet.signMessage()">Sign message</button>
+                        <button class="btn btn-info" onclick="webWallet.logout()">Logout</button>
                     </div>
-                    <div class="form-group row mt-2">
-                        <div class="col-sm-2">
-                            <input class="form-control" value="0" type="number" min="0" id="addressIndexForLogin"
-                                title="Address index" />
-                        </div>
-                        <div class="col-sm-3">
-                            <button class="btn btn-info" onclick="hw.login()">Login</button>
-                            <button class="btn btn-info" onclick="hw.loginWithToken()">Login with token</button>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-2">
-                        <div class="col-sm-2">
-                            <input class="form-control" value="0" type="number" min="0" id="addressIndexForSetAddress"
-                                title="Address index" />
-                        </div>
-                        <div class="col-sm-3">
-                            <button class="btn btn-info" onclick="hw.setAddressIndex()">Set address
-                                index</button>
-                        </div>
-                    </div>
+                    <div class="mt-4">
+                        <h5>Extract data from URL (query string)</h5>
 
-                    <div>
-                        <button class="btn btn-info" onclick="hw.signTransaction()">Sign transaction</button>
-                        <button class="btn btn-info" onclick="hw.signTransactions()">Sign transactions</button>
-                        <button class="btn btn-info" onclick="hw.signMessage()">Sign
-                            message</button>
+                        <button class="btn btn-info" onclick="webWallet.showAddress()">Show address</button>
+                        <button class="btn btn-info" onclick="webWallet.showTokenSignature()">
+                            Show token signature
+                        </button>
+                        <button class="btn btn-info" onclick="webWallet.validateTokenSignature()">
+                            Validate token signature
+                        </button>
+                        <button class="btn btn-info" onclick="webWallet.showSignedTransactions()">
+                            Show signed transactions
+                        </button>
+                        <button class="btn btn-info" onclick="webWallet.showMessageSignature()">
+                            Show message signature
+                        </button>
                     </div>
-                    <div class="mt-2">
-                        <button class="btn btn-info" onclick="hw.showSignedTransactionsWhenGuarded()">Show completely
-                            signed transactions (when guarded)</button>
+                    <div class="mt-4">
+                        <h5>Broadcast</h5>
+
+                        <button class="btn btn-info" onclick="webWallet.sendSignedTransactions()">
+                            Send signed transactions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>[🗂️] Web Wallet Cross-Window</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <button class="btn btn-info" onclick="crossWindowWallet.login()">Login</button>
+                        <button class="btn btn-info" onclick="crossWindowWallet.loginWithToken()">
+                            Login with token
+                        </button>
+                        <button class="btn btn-info" onclick="crossWindowWallet.signTransaction()">
+                            Sign transaction
+                        </button>
+                        <button class="btn btn-info" onclick="crossWindowWallet.signTransactions()">
+                            Sign transactions
+                        </button>
+                        <button class="btn btn-info" onclick="crossWindowWallet.signMessage()">Sign message</button>
+                        <button class="btn btn-info" onclick="crossWindowWallet.logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>[🦊] Metamask</h3>
+                        <p style="display: inline">
+                            <b>NOTE:</b> use
+                            <u
+                                ><b><pre style="display: inline">localhost:8080</pre></b></u
+                            >
+                            to connect
+                        </p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <button class="btn btn-info" onclick="metamask.login()">Login</button>
+                        <button class="btn btn-info" onclick="metamask.loginWithToken()">Login with token</button>
+                        <button class="btn btn-info" onclick="metamask.signTransaction()">Sign transaction</button>
+                        <button class="btn btn-info" onclick="metamask.signTransactions()">Sign transactions</button>
+                        <button class="btn btn-info" onclick="metamask.signMessage()">Sign message</button>
+                        <button class="btn btn-info" onclick="metamask.logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>[🧩] Extension (MultiversX DeFi Wallet)</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <button class="btn btn-info" onclick="extension.login()">Login</button>
+                        <button class="btn btn-info" onclick="extension.loginWithToken()">Login with token</button>
+                        <button class="btn btn-info" onclick="extension.signTransaction()">Sign transaction</button>
+                        <button class="btn btn-info" onclick="extension.signTransactions()">Sign transactions</button>
+                        <button class="btn btn-info" onclick="extension.signMessage()">Sign message</button>
+                        <button class="btn btn-info" onclick="extension.logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>[📱] Wallet Connect V2 ( xPortal )</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <button class="btn btn-info" onclick="walletConnectV2.login()">Login</button>
+                        <button class="btn btn-info" onclick="walletConnectV2.loginWithToken()">
+                            Login with token
+                        </button>
+                        <button class="btn btn-info" onclick="walletConnectV2.signTransaction()">
+                            Sign transaction
+                        </button>
+                        <button class="btn btn-info" onclick="walletConnectV2.signTransactions()">
+                            Sign transactions
+                        </button>
+                        <button class="btn btn-info" onclick="walletConnectV2.signMessage()">Sign message</button>
+                        <button class="btn btn-info" onclick="walletConnectV2.logout()">Logout</button>
+                    </div>
+                </div>
+                <div class="modal" id="MyWalletConnectV2Modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Connect using xPortal on your phone</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div id="MyWalletConnectV2QRContainer"></div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>[𝍍] Hardware Wallet</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div>
+                            <button class="btn btn-info" onclick="hw.displayAddresses()">Display addresses</button>
+                        </div>
+                        <div class="form-group row mt-2">
+                            <div class="col-sm-2">
+                                <input
+                                    class="form-control"
+                                    value="0"
+                                    type="number"
+                                    min="0"
+                                    id="addressIndexForLogin"
+                                    title="Address index"
+                                />
+                            </div>
+                            <div class="col-sm-3">
+                                <button class="btn btn-info" onclick="hw.login()">Login</button>
+                                <button class="btn btn-info" onclick="hw.loginWithToken()">Login with token</button>
+                            </div>
+                        </div>
+                        <div class="form-group row mt-2">
+                            <div class="col-sm-2">
+                                <input
+                                    class="form-control"
+                                    value="0"
+                                    type="number"
+                                    min="0"
+                                    id="addressIndexForSetAddress"
+                                    title="Address index"
+                                />
+                            </div>
+                            <div class="col-sm-3">
+                                <button class="btn btn-info" onclick="hw.setAddressIndex()">Set address index</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-info" onclick="hw.signTransaction()">Sign transaction</button>
+                            <button class="btn btn-info" onclick="hw.signTransactions()">Sign transactions</button>
+                            <button class="btn btn-info" onclick="hw.signMessage()">Sign message</button>
+                        </div>
+                        <div class="mt-2">
+                            <button class="btn btn-info" onclick="hw.showSignedTransactionsWhenGuarded()">
+                                Show completely signed transactions (when guarded)
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="card mt-3 mb-3">
-        <div class="card-header">
-            <div class="card-title">
-                <h3>[🖼️] Iframe Communication</h3>
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>[🖼️] Iframe Communication</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <button class="btn btn-info" onclick="iframeCommunication.login()">Iframe Login</button>
+                    <button class="btn btn-info" onclick="iframeCommunication.signTransactions()">
+                        Sign transactions
+                    </button>
+                    <button class="btn btn-info" onclick="iframeCommunication.signMessage()">Sign message</button>
+                    <button class="btn btn-info" onclick="iframeCommunication.logout()">Logout</button>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            <div>
-                <button class="btn btn-info" onclick="iframeCommunication.login()">Iframe Login</button>
-                <button class="btn btn-info" onclick="iframeCommunication.signTransactions()">Sign transactions</button>
-                <button class="btn btn-info" onclick="iframeCommunication.signMessage()">Sign message</button>
-                <button class="btn btn-info" onclick="iframeCommunication.logout()">Logout</button>
-            </div>
-        </div>
-    </div>
 
-    <iframe id="webview-child" src="./webview-child.html" style="width: 100%; height: 200px;"></iframe>
+        <iframe id="webview-child" src="./webview-child.html" style="width: 100%; height: 200px"></iframe>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"
+        ></script>
 
-    <script src="./out/app.js"></script>
+        <script src="./out/app.js"></script>
 
-    <script>
-        const webWallet = new WebWallet();
-        const xAlias = new XAlias();
-        const extension = new Extension();
-        const walletConnectV2 = new WalletConnectV2();
-        const metamask = new Metamask();
-        const hw = new HW();
-        const iframeCommunication = new IframeCommunication();
+        <script>
+            const webWallet = new WebWallet();
+            const extension = new Extension();
+            const walletConnectV2 = new WalletConnectV2();
+            const metamask = new Metamask();
+            const hw = new HW();
+            const iframeCommunication = new IframeCommunication();
 
-        const webviewChild = document.getElementById('webview-child');
-        const targetWindow = webviewChild.contentWindow;
+            const webviewChild = document.getElementById("webviewChild");
+            const targetWindow = webviewChild.contentWindow;
 
-        const crossWindowWallet = new CrossWindowWallet();
+            const crossWindowWallet = new CrossWindowWallet();
 
-        /**
-         * NOTE: The following event listener must be commented out in order for **crossWindowWallet** and **iframeCommunication** to work
-         */
-        window.addEventListener('message', async (e) => {
-          const { type, payload } = e.data;
+            /**
+             * NOTE: The following event listener must be commented out in order for **crossWindowWallet** to work
+             */
+            window.addEventListener("message", async (e) => {
+                const { type, payload } = e.data;
 
-          switch (type) {
-            case 'LOGIN_REQUEST':
-              await extension.login();
+                switch (type) {
+                    case "LOGIN_REQUEST":
+                        await extension.login();
 
-              // get address after login
-              const address =
-        'erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th';
-              // generate accessToken using native auth client
-              const accessToken =
-        'ZXJkMXdqeXRmbjZ6aHFmY3NlanZod3Y3cTR1c2F6czVyeWMzajhoYzc4ZmxkZ2pueWN0OHdlanFrYXN1bmM.Ykc5allXeG9iM04wLmY2ODE3NzUxMDc1NmVkY2U0NWVjYTg0Yjk0NTQ0YTZlYWNkZmEzNmU2OWRmZDNiOGYyNGM0MDEwZDE5OTA3NTEuMzAwLmV5SjBhVzFsYzNSaGJYQWlPakUyTnpNNU56SXlORFI5.a29dba3f0d2fb4712cb662bc8050c87bf9f0e7fd28f3c98efe0fda074be5b087bd75c075243e832c2985a9da044496b2cff3c852c8c963f9d3d840aed8799c07';
+                        // get address after login
+                        const address = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th";
+                        // generate accessToken using native auth client
+                        const accessToken =
+                            "ZXJkMXdqeXRmbjZ6aHFmY3NlanZod3Y3cTR1c2F6czVyeWMzajhoYzc4ZmxkZ2pueWN0OHdlanFrYXN1bmM.Ykc5allXeG9iM04wLmY2ODE3NzUxMDc1NmVkY2U0NWVjYTg0Yjk0NTQ0YTZlYWNkZmEzNmU2OWRmZDNiOGYyNGM0MDEwZDE5OTA3NTEuMzAwLmV5SjBhVzFsYzNSaGJYQWlPakUyTnpNNU56SXlORFI5.a29dba3f0d2fb4712cb662bc8050c87bf9f0e7fd28f3c98efe0fda074be5b087bd75c075243e832c2985a9da044496b2cff3c852c8c963f9d3d840aed8799c07";
 
-              targetWindow?.postMessage({
-                type: 'LOGIN_RESPONSE',
-                payload: {
-                  data: {
-                    address,
-                    accessToken
-                  }
+                        targetWindow?.postMessage({
+                            type: "LOGIN_RESPONSE",
+                            payload: {
+                                data: {
+                                    address,
+                                    accessToken,
+                                },
+                            },
+                        });
+                        break;
+                    case "SIGN_TRANSACTIONS_REQUEST":
+                        console.log("transactions", payload);
+
+                        // Normally, the `payload` (the transactions to be signed) should be sent to the signing provider
+                        const signedTransactions = await extension.signTransactions();
+
+                        targetWindow?.postMessage({
+                            type: "SIGN_TRANSACTIONS_RESPONSE",
+                            payload: {
+                                data: signedTransactions,
+                            },
+                        });
+                        break;
+                    case "SIGN_MESSAGE_REQUEST":
+                        const messageToSign = payload?.message;
+
+                        await extension.signMessage(messageToSign);
+
+                        // Extract the signature from the signing provider response
+                        const signature =
+                            "1b7e8842c9f9716af4ca06ca0c4893e15b54489d0310ff829f5d42cbba44ce651d30d0c67e48c8d4347b57b3c28f973540db113122d928a852d00ed90e005c02";
+
+                        targetWindow?.postMessage({
+                            type: "SIGN_MESSAGE_RESPONSE",
+                            payload: {
+                                data: {
+                                    signature,
+                                    status: "signed",
+                                },
+                            },
+                        });
+                        break;
+                    default:
+                        // handle other message types
+                        break;
                 }
-              });
-              break;
-            case 'SIGN_TRANSACTIONS_REQUEST':
-              console.log('transactions', payload);
-
-              // Normally, the `payload` (the transactions to be signed) should be sent to the signing provider
-              const signedTransactions = await extension.signTransactions();
-
-              targetWindow?.postMessage({
-                type: 'SIGN_TRANSACTIONS_RESPONSE',
-                payload: {
-                  data: signedTransactions
-                }
-              });
-              break;
-            case 'SIGN_MESSAGE_REQUEST':
-              const messageToSign = payload?.message;
-
-              await extension.signMessage(messageToSign);
-
-              // Extract the signature from the signing provider response
-              const signature =
-        '1b7e8842c9f9716af4ca06ca0c4893e15b54489d0310ff829f5d42cbba44ce651d30d0c67e48c8d4347b57b3c28f973540db113122d928a852d00ed90e005c02';
-
-              targetWindow?.postMessage({
-                type: 'SIGN_MESSAGE_RESPONSE',
-                payload: {
-                  data: {
-                    signature,
-                    status: 'signed'
-                  }
-                }
-              });
-              break;
-            default:
-              // handle other message types
-              break;
-          }
-        });
-    </script>
-</body>
-
+            });
+        </script>
+    </body>
 </html>

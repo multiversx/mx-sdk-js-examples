@@ -2,16 +2,15 @@ import {
     Address,
     ApiNetworkProvider,
     Message,
+    ProxyNetworkProvider,
     Transaction,
     TransactionOptions,
-    TransactionPayload,
 } from "@multiversx/sdk-core";
 import { HWProvider } from "@multiversx/sdk-hw-provider";
 import { CrossWindowProvider } from "@multiversx/sdk-web-wallet-cross-window-provider";
 import { WalletProvider } from "@multiversx/sdk-web-wallet-provider";
-
 import { createNativeAuthInitialPart, packNativeAuthToken, verifyNativeAuthToken } from "./auth";
-import { API_URL, WALLET_PROVIDER_URL, CHAIN_ID } from "./config";
+import { API_URL, WALLET_PROVIDER_URL, CHAIN_ID, PROXY_URL } from "./config";
 import { displayOutcome } from "./helpers";
 
 export class HW {
@@ -19,6 +18,10 @@ export class HW {
         this.hwProvider = new HWProvider();
         this.walletProvider = new WalletProvider(WALLET_PROVIDER_URL);
         this.apiNetworkProvider = new ApiNetworkProvider(API_URL, {
+            clientName: "multiversx-sdk-js-examples",
+        });
+
+        this.proxyNetworkProvider = new ProxyNetworkProvider(PROXY_URL, {
             clientName: "multiversx-sdk-js-examples",
         });
     }
@@ -77,6 +80,7 @@ export class HW {
         const senderBech32 = await this.hwProvider.getAddress();
         const sender = new Address(senderBech32);
         const guardian = await this.getGuardian(sender);
+
         const transactionOptions = guardian ? TransactionOptions.withOptions({ guarded: true }) : undefined;
 
         const transaction = new Transaction({
@@ -85,7 +89,7 @@ export class HW {
             gasLimit: 70000,
             sender: sender,
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
-            data: new TransactionPayload("hello"),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             guardian: guardian,
             options: transactionOptions,
@@ -119,7 +123,7 @@ export class HW {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload(),
+            data: Buffer.from("hello"),
             chainID: CHAIN_ID,
             guardian: guardian,
             options: transactionOptions,
@@ -132,7 +136,7 @@ export class HW {
             receiver: new Address("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"),
             gasPrice: 1000000000,
             gasLimit: 50000,
-            data: new TransactionPayload("hello world"),
+            data: Buffer.from("hello world"),
             chainID: CHAIN_ID,
             guardian: guardian,
             options: transactionOptions,
@@ -156,7 +160,7 @@ export class HW {
     }
 
     async getGuardian(sender) {
-        const guardianData = await this.apiNetworkProvider.getGuardianData(sender);
+        const guardianData = await this.proxyNetworkProvider.getGuardianData(sender);
         return guardianData.getCurrentGuardianAddress();
     }
 
@@ -166,12 +170,12 @@ export class HW {
 
         // Now let's convert them back to sdk-js' Transaction objects.
         // Note that the Web Wallet provider returns the data field as a plain string.
-        // However, sdk-js' Transaction.fromPlainObject expects it to be base64-encoded.
+        // However, sdk-js' Transaction.newFromPlainObject expects it to be base64-encoded.
         // Therefore, we need to apply a workaround (an additional conversion).
         for (const plainTransaction of plainSignedTransactions) {
             const plainTransactionClone = structuredClone(plainTransaction);
             plainTransactionClone.data = Buffer.from(plainTransactionClone.data).toString("base64");
-            const transaction = Transaction.fromPlainObject(plainTransactionClone);
+            const transaction = Transaction.newFromPlainObject(plainTransactionClone);
             signedTransactions.push(transaction);
         }
 
